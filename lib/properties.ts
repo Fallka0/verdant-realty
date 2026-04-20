@@ -390,6 +390,8 @@ export async function getAdminPropertyById(id: string) {
 
 function slugify(value: string) {
   return value
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .trim()
     .replace(/[^a-z0-9]+/g, "-")
@@ -419,13 +421,16 @@ function parseGalleryUrls(value: FormDataEntryValue | null) {
 
 export function parsePropertyFormData(formData: FormData) {
   const title = String(formData.get("title") ?? "").trim();
+  const referenceCode = String(formData.get("referenceCode") ?? "").trim().toUpperCase();
   const rawSlug = String(formData.get("slug") ?? "").trim();
-  const slug = slugify(rawSlug || title);
+  const galleryUrls = parseGalleryUrls(formData.get("galleryUrls"));
+  const mainImageUrl = String(formData.get("mainImageUrl") ?? "").trim() || galleryUrls[0] || "";
+  const slug = slugify(rawSlug || title) || slugify(referenceCode) || `property-${Date.now()}`;
   const typeValue = String(formData.get("type") ?? "apartment");
   const statusValue = String(formData.get("status") ?? "draft");
 
   return {
-    reference_code: String(formData.get("referenceCode") ?? "").trim().toUpperCase(),
+    reference_code: referenceCode,
     title,
     slug,
     location: String(formData.get("location") ?? "").trim(),
@@ -441,8 +446,8 @@ export function parsePropertyFormData(formData: FormData) {
     featured: formData.get("featured") === "on",
     short_description: String(formData.get("shortDescription") ?? "").trim(),
     description: String(formData.get("description") ?? "").trim(),
-    main_image_url: String(formData.get("mainImageUrl") ?? "").trim(),
-    gallery_urls: parseGalleryUrls(formData.get("galleryUrls")),
+    main_image_url: mainImageUrl,
+    gallery_urls: galleryUrls,
     updated_at: new Date().toISOString(),
   };
 }
@@ -456,7 +461,15 @@ export function buildPropertyContentFromInput(input: ReturnType<typeof parseProp
 }
 
 export function validatePropertyInput(input: ReturnType<typeof parsePropertyFormData>) {
-  if (!input.reference_code || !input.title || !input.slug || !input.location || !input.main_image_url) {
-    throw new Error("Reference, title, slug, location, and main image are required.");
+  const missingFields = [
+    !input.reference_code ? "reference" : null,
+    !input.title ? "title" : null,
+    !input.slug ? "slug" : null,
+    !input.location ? "location" : null,
+    !input.main_image_url ? "main image" : null,
+  ].filter(Boolean);
+
+  if (missingFields.length > 0) {
+    throw new Error(`Missing required fields: ${missingFields.join(", ")}.`);
   }
 }
