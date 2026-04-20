@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { PropertyCard } from "@/components/property-card";
+import { ReactBitsMasonry } from "@/components/react-bits-masonry";
 import { formatPrice, type PropertyRecord } from "@/lib/property-shared";
 
 type HomepageProps = {
@@ -33,7 +34,17 @@ const advantages = [
   },
 ];
 
+const masonryHeights = [300, 420, 340, 390, 460, 320];
+
 export function Homepage({ featuredProperties, latestProperties }: HomepageProps) {
+  const masonryItems = latestProperties.map((property, index) => ({
+    id: property.id,
+    img: property.mainImageUrl,
+    title: property.title,
+    url: `/properties/${property.slug}`,
+    height: masonryHeights[index % masonryHeights.length],
+  }));
+
   return (
     <main className="site-shell">
       <section className="hero-shell">
@@ -177,18 +188,24 @@ export function Homepage({ featuredProperties, latestProperties }: HomepageProps
       <section className="section">
         <div className="section-heading with-action">
           <div>
-            <p className="eyebrow">Latest Listings</p>
-            <h2>Fresh inventory for buyers browsing the coast.</h2>
+            <p className="eyebrow">Visual Browse</p>
+            <h2>A masonry-style property wall with React Bits.</h2>
           </div>
-          <Link className="button button-ghost" href="/admin">
-            Manage Inventory
+          <Link className="button button-ghost" href="/properties">
+            Open Full Listings
           </Link>
         </div>
 
-        <div className="property-grid">
-          {latestProperties.map((property) => (
-            <PropertyCard key={property.id} property={property} />
-          ))}
+        <div className="masonry-desktop">
+          <ReactBitsMasonry items={masonryItems} />
+        </div>
+
+        <div className="masonry-mobile-fallback">
+          <div className="property-grid">
+            {latestProperties.map((property) => (
+              <PropertyCard key={property.id} property={property} />
+            ))}
+          </div>
         </div>
       </section>
     </main>

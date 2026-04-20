@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import useEmblaCarousel from "embla-carousel-react";
 
 type ImageCarouselProps = {
   images: string[];
@@ -9,11 +10,34 @@ type ImageCarouselProps = {
 };
 
 export function ImageCarousel({ images, title }: ImageCarouselProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: false,
+    align: "start",
+  });
 
   const hasMultipleImages = images.length > 1;
-  const activeImage = images[activeIndex];
+  const activeImage = images[selectedIndex];
+
+  useEffect(() => {
+    if (!emblaApi) {
+      return;
+    }
+
+    const onSelect = () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+    };
+
+    onSelect();
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
+
+    return () => {
+      emblaApi.off("select", onSelect);
+      emblaApi.off("reInit", onSelect);
+    };
+  }, [emblaApi]);
 
   useEffect(() => {
     if (!isZoomed) {
@@ -26,11 +50,11 @@ export function ImageCarousel({ images, title }: ImageCarouselProps) {
       }
 
       if (event.key === "ArrowRight" && hasMultipleImages) {
-        setActiveIndex((current) => (current + 1) % images.length);
+        emblaApi?.scrollNext();
       }
 
       if (event.key === "ArrowLeft" && hasMultipleImages) {
-        setActiveIndex((current) => (current - 1 + images.length) % images.length);
+        emblaApi?.scrollPrev();
       }
     }
 
@@ -39,55 +63,65 @@ export function ImageCarousel({ images, title }: ImageCarouselProps) {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [hasMultipleImages, images.length, isZoomed]);
+  }, [emblaApi, hasMultipleImages, isZoomed]);
 
-  function goToPrevious() {
-    setActiveIndex((current) => (current - 1 + images.length) % images.length);
-  }
-
-  function goToNext() {
-    setActiveIndex((current) => (current + 1) % images.length);
+  function scrollTo(index: number) {
+    emblaApi?.scrollTo(index);
   }
 
   return (
     <>
       <section className="carousel-shell">
-        <div className="carousel-stage">
-          <button
-            className="carousel-image-button"
-            type="button"
-            onClick={() => setIsZoomed(true)}
-            aria-label={`Zoom image ${activeIndex + 1} of ${images.length}`}
-          >
-            <Image
-              className="carousel-image"
-              src={activeImage}
-              alt={`${title} image ${activeIndex + 1}`}
-              fill
-              sizes="(max-width: 1024px) 100vw, 70vw"
-              priority
-            />
-          </button>
+        <div className="embla">
+          <div className="embla__viewport" ref={emblaRef}>
+            <div className="embla__container">
+              {images.map((image, index) => (
+                <div className="embla__slide" key={`${image}-${index}`}>
+                  <button
+                    className="carousel-image-button"
+                    type="button"
+                    onClick={() => setIsZoomed(true)}
+                    aria-label={`Zoom image ${index + 1} of ${images.length}`}
+                  >
+                    <Image
+                      className="carousel-image"
+                      src={image}
+                      alt={`${title} image ${index + 1}`}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 70vw"
+                      priority={index === 0}
+                    />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
 
           {hasMultipleImages ? (
-            <>
-              <button
-                className="carousel-control carousel-control-left"
-                type="button"
-                onClick={goToPrevious}
-                aria-label="Previous image"
-              >
-                ‹
-              </button>
-              <button
-                className="carousel-control carousel-control-right"
-                type="button"
-                onClick={goToNext}
-                aria-label="Next image"
-              >
-                ›
-              </button>
-            </>
+            <div className="carousel-toolbar">
+              <div className="carousel-actions">
+                <button
+                  className="carousel-nav-button"
+                  type="button"
+                  onClick={() => emblaApi?.scrollPrev()}
+                  aria-label="Previous image"
+                >
+                  <span>Previous</span>
+                </button>
+                <button
+                  className="carousel-nav-button"
+                  type="button"
+                  onClick={() => emblaApi?.scrollNext()}
+                  aria-label="Next image"
+                >
+                  <span>Next</span>
+                </button>
+              </div>
+
+              <div className="carousel-counter" aria-live="polite">
+                {selectedIndex + 1} / {images.length}
+              </div>
+            </div>
           ) : null}
         </div>
 
@@ -95,20 +129,14 @@ export function ImageCarousel({ images, title }: ImageCarouselProps) {
           <div className="carousel-thumbnails" aria-label="Property gallery thumbnails">
             {images.map((image, index) => (
               <button
-                key={`${image}-${index}`}
-                className={`carousel-thumb ${index === activeIndex ? "active" : ""}`}
+                key={`${image}-thumb-${index}`}
+                className={`carousel-thumb ${index === selectedIndex ? "active" : ""}`}
                 type="button"
-                onClick={() => setActiveIndex(index)}
+                onClick={() => scrollTo(index)}
                 aria-label={`Show image ${index + 1}`}
-                aria-pressed={index === activeIndex}
+                aria-pressed={index === selectedIndex}
               >
-                <Image
-                  className="carousel-thumb-image"
-                  src={image}
-                  alt=""
-                  fill
-                  sizes="120px"
-                />
+                <Image className="carousel-thumb-image" src={image} alt="" fill sizes="120px" />
               </button>
             ))}
           </div>
@@ -137,7 +165,7 @@ export function ImageCarousel({ images, title }: ImageCarouselProps) {
               <Image
                 className="zoom-image"
                 src={activeImage}
-                alt={`${title} image ${activeIndex + 1}`}
+                alt={`${title} image ${selectedIndex + 1}`}
                 fill
                 sizes="100vw"
               />
@@ -145,13 +173,13 @@ export function ImageCarousel({ images, title }: ImageCarouselProps) {
 
             {hasMultipleImages ? (
               <div className="zoom-actions">
-                <button className="button button-secondary" type="button" onClick={goToPrevious}>
+                <button className="button button-secondary" type="button" onClick={() => emblaApi?.scrollPrev()}>
                   Previous
                 </button>
                 <span>
-                  {activeIndex + 1} / {images.length}
+                  {selectedIndex + 1} / {images.length}
                 </span>
-                <button className="button button-secondary" type="button" onClick={goToNext}>
+                <button className="button button-secondary" type="button" onClick={() => emblaApi?.scrollNext()}>
                   Next
                 </button>
               </div>
