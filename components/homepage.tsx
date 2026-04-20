@@ -1,10 +1,11 @@
+import type { CSSProperties } from "react";
 import Link from "next/link";
 
 import { PublicHeader } from "@/components/public-header";
 import { PropertyCard } from "@/components/property-card";
 import { ReactBitsMasonry } from "@/components/react-bits-masonry";
 import { formatPrice, type PropertyRecord } from "@/lib/property-shared";
-import { areaNames, type PublicCopy, type PublicLocale } from "@/lib/public-copy";
+import { areaNames, neighborhoodImages, type PublicCopy, type PublicLocale } from "@/lib/public-copy";
 
 type HomepageProps = {
   copy: PublicCopy;
@@ -108,6 +109,24 @@ export function Homepage({ copy, currentLocale, featuredProperties, latestProper
             </span>
           ))}
         </div>
+
+        <div className="section-heading compact neighborhood-heading">
+          <p className="eyebrow">{copy.neighborhoods.eyebrow}</p>
+          <h3>{copy.neighborhoods.title}</h3>
+        </div>
+        <div className="neighborhood-grid">
+          {copy.neighborhoods.cards.map((card) => (
+            <article
+              className="neighborhood-card"
+              key={card.area}
+              style={{ "--neighborhood-image": `url("${neighborhoodImages[card.area as keyof typeof neighborhoodImages]}")` } as CSSProperties}
+            >
+              <p className="eyebrow">{card.area}</p>
+              <h3>{card.title}</h3>
+              <p>{card.summary}</p>
+            </article>
+          ))}
+        </div>
       </section>
 
       <section className="section">
@@ -147,6 +166,26 @@ export function Homepage({ copy, currentLocale, featuredProperties, latestProper
             <article className="info-card" key={item.title}>
               <h3>{item.title}</h3>
               <p>{item.copy}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="section-heading">
+          <p className="eyebrow">{copy.testimonials.eyebrow}</p>
+          <h2>{copy.testimonials.title}</h2>
+          <p>{copy.testimonials.summary}</p>
+        </div>
+
+        <div className="testimonial-grid">
+          {copy.testimonials.items.map((item) => (
+            <article className="testimonial-card" key={`${item.name}-${item.role}`}>
+              <p className="testimonial-quote">{item.quote}</p>
+              <div className="testimonial-meta">
+                <strong>{item.name}</strong>
+                <span>{item.role}</span>
+              </div>
             </article>
           ))}
         </div>

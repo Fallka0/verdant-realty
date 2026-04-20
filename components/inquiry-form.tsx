@@ -115,8 +115,22 @@ export function InquiryForm({ copy, locale, property }: InquiryFormProps) {
           />
         </label>
       </div>
-      <button className="button button-primary submit-button" type="submit" disabled={isSubmitting}>
-        {isSubmitting ? copy.buttons.sending : copy.buttons.sendInquiry}
+      <button
+        aria-busy={isSubmitting}
+        aria-label={isSubmitting ? copy.inquiry.sendingAria : copy.buttons.sendInquiry}
+        className={`button button-primary submit-button ${isSubmitting ? "is-loading" : ""}`}
+        type="submit"
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? (
+          <>
+            <span aria-hidden="true" className="loading-spinner" />
+            <span>{copy.buttons.sending}</span>
+            <span className="sr-only">{copy.inquiry.sendingAria}</span>
+          </>
+        ) : (
+          copy.buttons.sendInquiry
+        )}
       </button>
       <p className={`form-status ${submission.type}`} aria-live="polite">
         {submission.message}

@@ -38,6 +38,30 @@ body {
   font-family: var(--font-body);
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --background: #0f1b15;
+    --surface: rgba(24, 40, 31, 0.86);
+    --surface-strong: #182821;
+    --surface-deep: #0b1712;
+    --surface-admin: #132119;
+    --text: #f3ead5;
+    --muted: #cabb9a;
+    --border: rgba(212, 178, 106, 0.18);
+    --gold: #e0bf78;
+    --gold-soft: rgba(224, 191, 120, 0.18);
+    --danger: #d48e6d;
+    --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+  }
+
+  body {
+    background:
+      radial-gradient(circle at top left, rgba(224, 191, 120, 0.16), transparent 22%),
+      linear-gradient(180deg, #102019 0%, #0d1814 55%, #09120f 100%);
+  }
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -140,13 +164,15 @@ img {
 }
 
 .brand-mark {
-  width: 2.8rem;
-  height: 2.8rem;
-  border-radius: 999px;
+  width: 2.7rem;
+  height: 2.25rem;
+  flex: 0 0 auto;
+  border-radius: 18px;
   border: 1px solid rgba(212, 178, 106, 0.5);
   background:
     radial-gradient(circle at 35% 35%, rgba(212, 178, 106, 0.95), rgba(212, 178, 106, 0) 42%),
     linear-gradient(160deg, #123524 20%, #35634b 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 251, 244, 0.35);
 }
 
 .primary-nav,
@@ -164,6 +190,7 @@ img {
 .language-switcher {
   display: inline-flex;
   align-items: center;
+  flex-wrap: nowrap;
   gap: 0.35rem;
   padding: 0.28rem;
   border: 1px solid var(--border);
@@ -173,6 +200,7 @@ img {
 
 .language-button {
   min-height: 2.25rem;
+  min-width: 3.2rem;
   padding: 0.45rem 0.75rem;
   border: 0;
   border-radius: 999px;
@@ -183,6 +211,7 @@ img {
   font-size: 0.76rem;
   font-weight: 800;
   letter-spacing: 0.08em;
+  white-space: nowrap;
 }
 
 .language-button.active {
@@ -242,12 +271,16 @@ img {
 
 .hero-copy {
   padding: 1rem 0.75rem 1rem 0;
+  opacity: 0;
+  animation: rise-fade 720ms cubic-bezier(0.2, 0.7, 0.2, 1) 60ms forwards;
 }
 
 .hero-side-card {
   background:
     linear-gradient(180deg, rgba(255, 252, 245, 0.92), rgba(244, 234, 215, 0.82)),
     linear-gradient(180deg, rgba(18, 53, 36, 0.02), rgba(18, 53, 36, 0.07));
+  opacity: 0;
+  animation: rise-fade 720ms cubic-bezier(0.2, 0.7, 0.2, 1) 180ms forwards;
 }
 
 .eyebrow {
@@ -406,7 +439,6 @@ p {
 }
 
 .section-heading > h2,
-.coverage-pills-heading > h3,
 .hero-copy > h1 {
   font-family: var(--font-heading);
   font-weight: 600;
@@ -418,6 +450,10 @@ p {
 
 .coverage-pills-heading {
   margin-top: 2rem;
+}
+
+.neighborhood-heading {
+  margin-top: 1.5rem;
 }
 
 .stat-card {
@@ -496,6 +532,107 @@ p {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
+.neighborhood-grid,
+.testimonial-grid {
+  display: grid;
+  gap: 1.4rem;
+}
+
+.neighborhood-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 1.4rem;
+}
+
+.neighborhood-card,
+.testimonial-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.neighborhood-card {
+  isolation: isolate;
+  min-height: 15rem;
+  padding: 1.5rem;
+}
+
+.neighborhood-card::before,
+.neighborhood-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.neighborhood-card::before {
+  background-image: var(--neighborhood-image);
+  background-position: center;
+  background-size: cover;
+  filter: grayscale(0.38) saturate(0.68) blur(1.2px);
+  opacity: 0.36;
+  transform: scale(1.05);
+}
+
+.neighborhood-card::after {
+  background:
+    linear-gradient(180deg, rgba(18, 53, 36, 0.08), rgba(18, 53, 36, 0.78)),
+    linear-gradient(180deg, rgba(255, 252, 245, 0.16), rgba(255, 252, 245, 0));
+}
+
+.neighborhood-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.neighborhood-card > * + * {
+  margin-top: 0.8rem;
+}
+
+.neighborhood-card p:last-child {
+  color: rgba(255, 250, 241, 0.82);
+}
+
+.testimonial-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.testimonial-card {
+  display: grid;
+  gap: 1.15rem;
+  padding: 1.5rem;
+}
+
+.testimonial-quote {
+  color: var(--text);
+  font-size: 1.02rem;
+  line-height: 1.75;
+}
+
+.testimonial-quote::before {
+  content: "“";
+}
+
+.testimonial-quote::after {
+  content: "”";
+}
+
+.testimonial-meta {
+  display: grid;
+  gap: 0.22rem;
+}
+
+.testimonial-meta strong {
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+}
+
+.testimonial-meta span {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
 .pill {
   background: linear-gradient(180deg, rgba(22, 57, 40, 0.9), rgba(18, 53, 36, 0.82));
   color: #fffaf1;
@@ -563,7 +700,7 @@ p {
 }
 
 .property-card h3 {
-  font-size: 1.28rem;
+  font-size: 1.24rem;
   line-height: 1.25;
 }
 
@@ -622,6 +759,31 @@ textarea {
   background: rgba(255, 255, 255, 0.75);
   color: var(--text);
   outline: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .button-secondary,
+  .button-ghost,
+  .region-pill,
+  .language-switcher,
+  input,
+  select,
+  textarea,
+  .empty-state {
+    background: rgba(17, 28, 22, 0.88);
+  }
+
+  .hero-side-card {
+    background:
+      linear-gradient(180deg, rgba(26, 43, 33, 0.94), rgba(18, 32, 25, 0.86)),
+      linear-gradient(180deg, rgba(224, 191, 120, 0.06), rgba(224, 191, 120, 0.02));
+  }
+
+  .neighborhood-card::after {
+    background:
+      linear-gradient(180deg, rgba(8, 18, 13, 0.16), rgba(8, 18, 13, 0.86)),
+      linear-gradient(180deg, rgba(224, 191, 120, 0.08), rgba(224, 191, 120, 0));
+  }
 }
 
 input:focus,
@@ -700,6 +862,41 @@ textarea:focus {
 
 .inquiry-context {
   margin-bottom: 1.1rem;
+}
+
+.submit-button {
+  margin-top: 1.2rem;
+}
+
+.submit-button.is-loading {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(120deg, rgba(18, 53, 36, 1) 0%, rgba(49, 90, 66, 1) 50%, rgba(18, 53, 36, 1) 100%);
+  background-size: 220% 100%;
+  animation: submit-shimmer 1.15s linear infinite;
+}
+
+.loading-spinner {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+  border: 2px solid rgba(255, 250, 241, 0.35);
+  border-top-color: #fffaf1;
+  border-radius: 999px;
+  animation: spin 700ms linear infinite;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .full-span {
@@ -984,6 +1181,45 @@ textarea:focus {
   font-size: 0.92rem;
 }
 
+@keyframes rise-fade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes submit-shimmer {
+  from {
+    background-position: 0% 50%;
+  }
+
+  to {
+    background-position: 200% 50%;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-copy,
+  .hero-side-card,
+  .submit-button.is-loading,
+  .loading-spinner {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
 [data-locale="ru"] .eyebrow,
 [data-locale="ru"] .region-pill,
 [data-locale="ru"] .pill,
@@ -1012,7 +1248,7 @@ textarea:focus {
 }
 
 [data-locale="ru"] .property-card h3 {
-  font-size: 1.18rem;
+  font-size: 1.12rem;
   line-height: 1.3;
 }
 
@@ -1059,6 +1295,8 @@ textarea:focus {
   .property-detail-hero,
   .stats-grid,
   .property-grid,
+  .neighborhood-grid,
+  .testimonial-grid,
   .advantage-grid,
   .fact-grid {
     grid-template-columns: 1fr;
@@ -1084,6 +1322,18 @@ textarea:focus {
     align-items: flex-start;
   }
 
+  .language-switcher {
+    width: 100%;
+    justify-content: space-between;
+    gap: 0.25rem;
+  }
+
+  .language-button {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-inline: 0.55rem;
+  }
+
   .embla-frame {
     padding: 0 0.2rem;
   }
@@ -1105,6 +1355,10 @@ textarea:focus {
   .admin-fields,
   .form-grid {
     grid-template-columns: 1fr;
+  }
+
+  .submit-button {
+    margin-top: 1.45rem;
   }
 
   h1 {

@@ -91,11 +91,22 @@ export type PublicCopy = {
     optional: string;
     phone: string;
     propertyInquiry: string;
+    rateLimited: string;
+    sendingAria: string;
     success: string;
     yourName: string;
   };
   languageLabel: string;
   masonry: {
+    eyebrow: string;
+    title: string;
+  };
+  neighborhoods: {
+    cards: Array<{
+      area: string;
+      summary: string;
+      title: string;
+    }>;
     eyebrow: string;
     title: string;
   };
@@ -117,6 +128,12 @@ export type PublicCopy = {
     text: string;
     title: string;
   };
+  seo: {
+    description: string;
+    ogDescription: string;
+    ogTitle: string;
+    title: string;
+  };
   propertyMeta: {
     bathroomsShort: string;
     bedroomsShort: string;
@@ -126,6 +143,16 @@ export type PublicCopy = {
     homesSelectedLabel: string;
     updatedListings: string;
   };
+  testimonials: {
+    eyebrow: string;
+    items: Array<{
+      name: string;
+      quote: string;
+      role: string;
+    }>;
+    summary: string;
+    title: string;
+  };
 };
 
 export const areaNames = [
@@ -134,6 +161,17 @@ export const areaNames = [
   "Orihuela Costa",
   "Guardamar del Segura",
 ] as const;
+
+export const neighborhoodImages: Record<(typeof areaNames)[number], string> = {
+  Torrevieja:
+    "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
+  "La Mata":
+    "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80",
+  "Orihuela Costa":
+    "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
+  "Guardamar del Segura":
+    "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=80",
+};
 
 export const publicCopy: Record<PublicLocale, PublicCopy> = {
   en: {
@@ -216,6 +254,8 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       optional: "Optional",
       phone: "Phone Number",
       propertyInquiry: "Property Inquiry",
+      rateLimited: "Too many inquiries were sent just now. Please wait a few minutes and try again.",
+      sendingAria: "Sending your property inquiry",
       success: "Inquiry sent successfully.",
       yourName: "Your name",
     },
@@ -223,6 +263,32 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     masonry: {
       eyebrow: "Visual Browse",
       title: "Explore the collection through a more visual layout.",
+    },
+    neighborhoods: {
+      cards: [
+        {
+          area: "Torrevieja",
+          title: "Year-round life by the marina",
+          summary: "A broad mix of apartments, villas, and walkable neighborhoods close to the water.",
+        },
+        {
+          area: "La Mata",
+          title: "Beachfront calm with open light",
+          summary: "Known for sea views, long beach walks, and homes that feel a little more relaxed.",
+        },
+        {
+          area: "Orihuela Costa",
+          title: "Resort energy with strong inventory",
+          summary: "Popular with international buyers looking for polished developments and coastal access.",
+        },
+        {
+          area: "Guardamar del Segura",
+          title: "Green edges and softer pace",
+          summary: "A quieter coastal rhythm with dunes, parks, and homes that feel tucked away.",
+        },
+      ],
+      eyebrow: "Neighborhoods",
+      title: "Different corners of the coast, each with its own mood.",
     },
     nav: {
       home: "Home",
@@ -253,6 +319,12 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       text: "Browse current inventory, refine the search, and open any listing for more detail.",
       title: "Available homes in Torrevieja and the surrounding coast.",
     },
+    seo: {
+      description: "Browse homes for sale in Torrevieja, La Mata, Orihuela Costa, and nearby coastal areas with Verdant Realty.",
+      ogDescription: "Discover refined property listings across Torrevieja and the surrounding coast.",
+      ogTitle: "Verdant Realty | Coastal Homes in Torrevieja",
+      title: "Verdant Realty | Homes For Sale In Torrevieja",
+    },
     propertyMeta: {
       bathroomsShort: "bath",
       bedroomsShort: "bed",
@@ -261,6 +333,28 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       homesSelected: "featured slots on the homepage",
       homesSelectedLabel: "core target areas nearby",
       updatedListings: "updated listings",
+    },
+    testimonials: {
+      eyebrow: "Client Impressions",
+      items: [
+        {
+          name: "Private buyer",
+          quote: "The search felt calm and clear from the start. We always knew which homes were genuinely worth opening.",
+          role: "Relocating from Northern Europe",
+        },
+        {
+          name: "Second-home couple",
+          quote: "The presentation made it easier to compare areas, not just properties, which helped us decide much faster.",
+          role: "Buying near the coast",
+        },
+        {
+          name: "Family purchaser",
+          quote: "Everything felt more personal than a generic portal. The listings gave us confidence before we even reached out.",
+          role: "Looking for a year-round home",
+        },
+      ],
+      summary: "A relationship-first approach shows up in how the listings are explained, paced, and presented.",
+      title: "Buyers remember when the search feels calm, human, and well-guided.",
     },
   },
   es: {
@@ -343,6 +437,8 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       optional: "Opcional",
       phone: "Teléfono",
       propertyInquiry: "Consulta sobre la propiedad",
+      rateLimited: "Se han enviado demasiadas consultas en este momento. Espera unos minutos y vuelve a intentarlo.",
+      sendingAria: "Enviando tu consulta sobre la propiedad",
       success: "Consulta enviada correctamente.",
       yourName: "Tu nombre",
     },
@@ -350,6 +446,32 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     masonry: {
       eyebrow: "Exploración Visual",
       title: "Descubre la colección con una presentación más visual.",
+    },
+    neighborhoods: {
+      cards: [
+        {
+          area: "Torrevieja",
+          title: "Vida activa junto al puerto",
+          summary: "Una mezcla amplia de apartamentos, villas y zonas caminables cerca del mar.",
+        },
+        {
+          area: "La Mata",
+          title: "Calma frente al mar y mucha luz",
+          summary: "Conocida por sus vistas, sus paseos junto a la playa y un ritmo más sereno.",
+        },
+        {
+          area: "Orihuela Costa",
+          title: "Ambiente residencial con oferta sólida",
+          summary: "Muy buscada por compradores internacionales que quieren costa y urbanizaciones cuidadas.",
+        },
+        {
+          area: "Guardamar del Segura",
+          title: "Entorno verde y ritmo más suave",
+          summary: "Una zona costera más tranquila, con dunas, parques y viviendas más resguardadas.",
+        },
+      ],
+      eyebrow: "Zonas destacadas",
+      title: "Distintas partes de la costa, cada una con una forma de vivir diferente.",
     },
     nav: {
       home: "Inicio",
@@ -380,6 +502,12 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       text: "Explora el inventario actual, ajusta la búsqueda y abre cualquier propiedad para más detalle.",
       title: "Viviendas disponibles en Torrevieja y la costa cercana.",
     },
+    seo: {
+      description: "Descubre propiedades en venta en Torrevieja, La Mata, Orihuela Costa y otras zonas cercanas con Verdant Realty.",
+      ogDescription: "Explora una selección cuidada de viviendas en Torrevieja y la costa cercana.",
+      ogTitle: "Verdant Realty | Viviendas en Torrevieja",
+      title: "Verdant Realty | Viviendas En Venta En Torrevieja",
+    },
     propertyMeta: {
       bathroomsShort: "baño",
       bedroomsShort: "hab",
@@ -388,6 +516,28 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       homesSelected: "espacios destacados en la portada",
       homesSelectedLabel: "zonas clave cercanas",
       updatedListings: "listados actualizados",
+    },
+    testimonials: {
+      eyebrow: "Experiencias",
+      items: [
+        {
+          name: "Compradora internacional",
+          quote: "La búsqueda se sintió clara y tranquila desde el principio. Era fácil entender qué viviendas merecían una visita.",
+          role: "Mudanza a la costa",
+        },
+        {
+          name: "Pareja compradora",
+          quote: "Nos ayudó mucho comparar zonas y no solo viviendas. La presentación tenía orden y criterio.",
+          role: "Segunda residencia",
+        },
+        {
+          name: "Familia compradora",
+          quote: "La web transmite cercanía. Antes de escribir ya sentíamos que entendíamos mejor el mercado.",
+          role: "Compra para todo el año",
+        },
+      ],
+      summary: "Una experiencia más humana se nota en cómo se presenta cada propiedad y en el ritmo de la búsqueda.",
+      title: "Cuando la búsqueda se siente más personal, los compradores avanzan con más confianza.",
     },
   },
   ru: {
@@ -470,6 +620,8 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       optional: "Необязательно",
       phone: "Телефон",
       propertyInquiry: "Запрос по объекту",
+      rateLimited: "Слишком много запросов за короткое время. Подождите несколько минут и попробуйте снова.",
+      sendingAria: "Отправка запроса по объекту",
       success: "Запрос успешно отправлен.",
       yourName: "Ваше имя",
     },
@@ -477,6 +629,32 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     masonry: {
       eyebrow: "Фотоподборка",
       title: "Изучайте объекты через более визуальную подачу.",
+    },
+    neighborhoods: {
+      cards: [
+        {
+          area: "Torrevieja",
+          title: "Городская жизнь у воды",
+          summary: "Широкий выбор апартаментов, вилл и районов, где удобно жить круглый год.",
+        },
+        {
+          area: "La Mata",
+          title: "Пляжный ритм и больше света",
+          summary: "Район с морскими видами, длинной набережной и более спокойной атмосферой.",
+        },
+        {
+          area: "Orihuela Costa",
+          title: "Сильный выбор у побережья",
+          summary: "Популярная зона среди международных покупателей благодаря курортной инфраструктуре и новому фонду.",
+        },
+        {
+          area: "Guardamar del Segura",
+          title: "Более зеленая и тихая сторона",
+          summary: "Дюны, парки и более мягкий темп жизни для тех, кто хочет меньше шума.",
+        },
+      ],
+      eyebrow: "Районы",
+      title: "У каждого участка побережья свой темп, настроение и тип покупателей.",
     },
     nav: {
       home: "Главная",
@@ -507,6 +685,12 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       text: "Просматривайте текущие объекты, используйте фильтры и открывайте подробные карточки.",
       title: "Доступные объекты в Торревьехе и на побережье рядом.",
     },
+    seo: {
+      description: "Смотрите объекты в Торревьехе, Ла Мата, Ориуэла Коста и соседних прибрежных районах вместе с Verdant Realty.",
+      ogDescription: "Подборка домов и квартир у побережья Торревьехи с более ясной и спокойной подачей.",
+      ogTitle: "Verdant Realty | Недвижимость в Торревьехе",
+      title: "Verdant Realty | Недвижимость На Побережье Торревьехи",
+    },
     propertyMeta: {
       bathroomsShort: "ван.",
       bedroomsShort: "спал.",
@@ -515,6 +699,28 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       homesSelected: "объектов на главной",
       homesSelectedLabel: "ключевых районов рядом",
       updatedListings: "актуальные объекты",
+    },
+    testimonials: {
+      eyebrow: "Впечатления клиентов",
+      items: [
+        {
+          name: "Частный покупатель",
+          quote: "Поиск ощущался спокойным и понятным. Было легко понять, какие объекты действительно стоит открыть.",
+          role: "Переезд к морю",
+        },
+        {
+          name: "Пара покупателей",
+          quote: "Нам помогло то, что сайт показывает не только дома, но и характер районов. Решение стало принимать проще.",
+          role: "Покупка второй резиденции",
+        },
+        {
+          name: "Семья покупателя",
+          quote: "Подача выглядела более человечной, чем на обычных порталах. Это сразу вызвало доверие.",
+          role: "Покупка для постоянного проживания",
+        },
+      ],
+      summary: "Когда поиск выглядит более спокойным и личным, людям легче перейти от просмотра к реальному контакту.",
+      title: "Хороший опыт поиска запоминается не меньше, чем сами объекты.",
     },
   },
   de: {
@@ -597,6 +803,8 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       optional: "Optional",
       phone: "Telefonnummer",
       propertyInquiry: "Anfrage zur Immobilie",
+      rateLimited: "Es wurden gerade zu viele Anfragen gesendet. Bitte warten Sie einige Minuten und versuchen Sie es erneut.",
+      sendingAria: "Ihre Immobilienanfrage wird gesendet",
       success: "Anfrage erfolgreich gesendet.",
       yourName: "Ihr Name",
     },
@@ -604,6 +812,32 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     masonry: {
       eyebrow: "Visuelles Entdecken",
       title: "Die Auswahl in einer visuellen Darstellung erkunden.",
+    },
+    neighborhoods: {
+      cards: [
+        {
+          area: "Torrevieja",
+          title: "Ganzjähriges Leben am Wasser",
+          summary: "Ein breiter Mix aus Apartments, Villen und gut angebundenen Wohnlagen nahe der Promenade.",
+        },
+        {
+          area: "La Mata",
+          title: "Mehr Ruhe direkt am Strand",
+          summary: "Bekannt für Meerblick, lange Strandwege und ein etwas entspannteres Wohngefühl.",
+        },
+        {
+          area: "Orihuela Costa",
+          title: "Starke Auswahl an der Küste",
+          summary: "Beliebt bei internationalen Käufern, die gepflegte Anlagen und Küstennähe suchen.",
+        },
+        {
+          area: "Guardamar del Segura",
+          title: "Grüner, weicher, ruhiger",
+          summary: "Eine leisere Küstenlage mit Dünen, Parks und Häusern, die etwas geschützter wirken.",
+        },
+      ],
+      eyebrow: "Lagen",
+      title: "Jeder Teil der Küste hat seine eigene Stimmung und spricht andere Käufer an.",
     },
     nav: {
       home: "Start",
@@ -634,6 +868,12 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       text: "Durchsuchen Sie das aktuelle Angebot, nutzen Sie Filter und öffnen Sie jede Immobilie im Detail.",
       title: "Verfügbare Immobilien in Torrevieja und an der umliegenden Küste.",
     },
+    seo: {
+      description: "Entdecken Sie Immobilien in Torrevieja, La Mata, Orihuela Costa und weiteren Küstenlagen mit Verdant Realty.",
+      ogDescription: "Ausgewählte Immobilien an der Costa Blanca, klar und hochwertig präsentiert.",
+      ogTitle: "Verdant Realty | Immobilien in Torrevieja",
+      title: "Verdant Realty | Immobilien An Der Küste Von Torrevieja",
+    },
     propertyMeta: {
       bathroomsShort: "Bad",
       bedroomsShort: "SZ",
@@ -642,6 +882,28 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       homesSelected: "hervorgehobene Plätze auf der Startseite",
       homesSelectedLabel: "wichtige Zielgebiete in der Nähe",
       updatedListings: "aktualisierte Angebote",
+    },
+    testimonials: {
+      eyebrow: "Stimmen zum Ablauf",
+      items: [
+        {
+          name: "Privater Käufer",
+          quote: "Die Suche fühlte sich von Anfang an ruhig und klar an. Man wusste sofort, welche Objekte wirklich interessant sind.",
+          role: "Umzug an die Küste",
+        },
+        {
+          name: "Kaufinteressiertes Paar",
+          quote: "Uns half besonders, dass nicht nur die Immobilien, sondern auch die Lagen verständlich dargestellt wurden.",
+          role: "Zweitwohnsitz an der Costa Blanca",
+        },
+        {
+          name: "Familienkauf",
+          quote: "Alles wirkte persönlicher als auf klassischen Portalen. Das gab uns schon vor der Anfrage mehr Vertrauen.",
+          role: "Suche nach einem dauerhaften Zuhause",
+        },
+      ],
+      summary: "Ein beziehungsorientierter Auftritt zeigt sich darin, wie Immobilien erklärt, sortiert und erlebbar gemacht werden.",
+      title: "Wenn sich die Suche klar und menschlich anfühlt, entsteht schneller echtes Vertrauen.",
     },
   },
 };

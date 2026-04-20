@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { publicCopy, resolvePublicLocale } from "@/lib/public-copy";
+import { consumeInquiryRateLimit } from "@/lib/rate-limit";
 import { createAdminClient } from "@/lib/supabase/server";
 
 type InquiryPayload = {
@@ -38,6 +39,27 @@ export async function POST(request: Request) {
 
   const inquiry = normalizeInput(payload);
   const copy = publicCopy[inquiry.locale];
+  const forwardedFor = request.headers.get("x-forwarded-for");
+  const ip =
+    forwardedFor?.split(",")[0]?.trim() ||
+    request.headers.get("cf-connecting-ip") ||
+    request.headers.get("x-real-ip") ||
+    "unknown";
+  const rateLimit = consumeInquiryRateLimit(`${ip}:${inquiry.email || "anonymous"}`);
+
+  if (!rateLimit.allowed) {
+    const retryAfterSeconds = Math.max(1, Math.ceil((rateLimit.resetAt - Date.now()) / 1000));
+
+    return NextResponse.json(
+      { error: copy.inquiry.rateLimited },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(retryAfterSeconds),
+        },
+      },
+    );
+  }
 
   if (!inquiry.name || !inquiry.email || !inquiry.message) {
     return NextResponse.json(
