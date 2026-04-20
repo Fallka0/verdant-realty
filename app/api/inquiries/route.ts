@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { sendInquiryEmail } from "@/lib/inquiry-email";
 import { publicCopy, resolvePublicLocale } from "@/lib/public-copy";
 import { consumeInquiryRateLimit } from "@/lib/rate-limit";
 import { createAdminClient } from "@/lib/supabase/server";
@@ -96,6 +97,22 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { error: copy.inquiry.error },
       { status: 500 },
+    );
+  }
+
+  const emailResult = await sendInquiryEmail({
+    name: inquiry.name,
+    email: inquiry.email,
+    phone: inquiry.phone,
+    locale: inquiry.locale,
+    message: inquiry.message,
+    propertyTitle: inquiry.propertyTitle,
+  });
+
+  if (!emailResult.ok) {
+    return NextResponse.json(
+      { error: copy.inquiry.error },
+      { status: emailResult.reason === "missing-config" ? 503 : 500 },
     );
   }
 

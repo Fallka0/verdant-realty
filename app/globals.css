@@ -271,6 +271,12 @@ textarea {
   margin-top: 2rem;
 }
 
+.contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+}
+
 .button {
   display: inline-flex;
   align-items: center;
@@ -1173,6 +1179,7 @@ textarea {
 .price-tag {
   font-size: 1.15rem;
   font-weight: 700;
+  font-family: var(--font-ui);
   color: var(--text);
   letter-spacing: -0.01em;
 }
@@ -1956,8 +1963,8 @@ textarea {
 
 .detail-price-card strong {
   font-size: clamp(1.75rem, 3vw, 2.35rem);
-  font-weight: 700;
-  font-family: var(--font-display);
+  font-weight: 800;
+  font-family: var(--font-ui);
   color: var(--text);
   letter-spacing: -0.02em;
 }
@@ -2213,6 +2220,11 @@ textarea {
   margin: 0.4rem 0 1.25rem;
 }
 
+.sticky-contact-actions,
+.detail-contact-actions {
+  margin-bottom: 1.2rem;
+}
+
 .sticky-card .inquiry-form {
   padding: 0;
   border: 0;
@@ -2443,6 +2455,7 @@ textarea {
   .carousel-toolbar { align-items: flex-start; flex-direction: column; }
   .carousel-hint { text-align: left; }
   .sticky-card { position: static; }
+  .contact-actions { flex-direction: column; align-items: stretch; }
 
   .section-heading.with-action {
     flex-direction: column;
