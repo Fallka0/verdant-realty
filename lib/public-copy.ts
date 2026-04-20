@@ -150,8 +150,11 @@ export type PublicCopy = {
     bedroomsShort: string;
     featuredSnapshot: string;
     homesOnline: string;
+    homesOnlineValue: string;
     homesSelected: string;
+    homesSelectedValue: string;
     homesSelectedLabel: string;
+    targetAreasValue: string;
     updatedListings: string;
   };
   testimonials: {
@@ -316,26 +319,6 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       home: "Home",
       properties: "Properties",
     },
-    overview: {
-      body:
-        "The site is shaped around real listings, strong presentation, and an easier path from browsing to inquiry.",
-      eyebrow: "Why Buyers Stay Longer",
-      items: [
-        {
-          title: "Clean listing-first experience",
-          copy: "Visitors land directly in the properties, the areas, and the homes that matter.",
-        },
-        {
-          title: "Clear, elegant presentation",
-          copy: "Photography, pricing, and key details stay readable and well-organized across the site.",
-        },
-        {
-          title: "Built for active inventory",
-          copy: "The experience is designed to keep available homes current and easy to browse.",
-        },
-      ],
-      title: "A property website built around the homes themselves.",
-    },
     propertiesPage: {
       eyebrow: "Property Listings",
       text: "Browse current inventory, refine the search, and open any listing for more detail.",
@@ -352,8 +335,11 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       bedroomsShort: "bed",
       featuredSnapshot: "Featured Snapshot",
       homesOnline: "sample listings ready",
+      homesOnlineValue: "2",
       homesSelected: "featured slots on the homepage",
+      homesSelectedValue: "1",
       homesSelectedLabel: "core target areas nearby",
+      targetAreasValue: "4",
       updatedListings: "updated listings",
     },
     testimonials: {
@@ -546,8 +532,11 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       bedroomsShort: "hab",
       featuredSnapshot: "Propiedad destacada",
       homesOnline: "propiedades listas para mostrar",
+      homesOnlineValue: "2",
       homesSelected: "espacios destacados en la portada",
+      homesSelectedValue: "1",
       homesSelectedLabel: "zonas clave cercanas",
+      targetAreasValue: "4",
       updatedListings: "listados actualizados",
     },
     testimonials: {
@@ -740,8 +729,11 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       bedroomsShort: "спал.",
       featuredSnapshot: "Выбранный объект",
       homesOnline: "объектов в каталоге",
+      homesOnlineValue: "2",
       homesSelected: "объектов на главной",
+      homesSelectedValue: "1",
       homesSelectedLabel: "ключевых районов рядом",
+      targetAreasValue: "4",
       updatedListings: "актуальные объекты",
     },
     testimonials: {
@@ -934,8 +926,11 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       bedroomsShort: "SZ",
       featuredSnapshot: "Ausgewähltes Objekt",
       homesOnline: "vorbereitete Immobilien online",
+      homesOnlineValue: "2",
       homesSelected: "hervorgehobene Plätze auf der Startseite",
+      homesSelectedValue: "1",
       homesSelectedLabel: "wichtige Zielgebiete in der Nähe",
+      targetAreasValue: "4",
       updatedListings: "aktualisierte Angebote",
     },
     testimonials: {
