@@ -66,11 +66,9 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
               <span className="pill pill-secondary">
                 {getLocalizedPropertyTypeLabel(locale, localizedProperty.type)}
               </span>
-              <span>{localizedProperty.referenceCode}</span>
             </div>
           </div>
           <aside className="detail-price-card">
-            <span>{localizedProperty.referenceCode}</span>
             <strong>{formatPrice(localizedProperty.priceEuro)}</strong>
             <ContactActions
               callLabel={copy.buttons.callNow}

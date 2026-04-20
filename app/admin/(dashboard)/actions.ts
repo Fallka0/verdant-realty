@@ -4,8 +4,10 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { requireAdminUser } from "@/lib/auth";
+import { generatePropertyTranslations } from "@/lib/property-translations";
 import { createAdminClient } from "@/lib/supabase/server";
 import {
+  buildPropertyContentFromInput,
   parsePropertyFormData,
   validatePropertyInput,
 } from "@/lib/properties";
@@ -34,7 +36,13 @@ export async function createPropertyAction(formData: FormData) {
 
   validatePropertyInput(payload);
 
-  const { data, error } = await supabase.from("properties").insert(payload).select("id, slug").single();
+  const contentTranslations = await generatePropertyTranslations(buildPropertyContentFromInput(payload));
+
+  const { data, error } = await supabase
+    .from("properties")
+    .insert({ ...payload, content_translations: contentTranslations })
+    .select("id, slug")
+    .single();
 
   if (error || !data) {
     throw new Error(error?.message ?? "Property could not be created.");
@@ -50,10 +58,11 @@ export async function updatePropertyAction(propertyId: string, currentSlug: stri
   const payload = parsePropertyFormData(formData);
 
   validatePropertyInput(payload);
+  const contentTranslations = await generatePropertyTranslations(buildPropertyContentFromInput(payload));
 
   const { data, error } = await supabase
     .from("properties")
-    .update(payload)
+    .update({ ...payload, content_translations: contentTranslations })
     .eq("id", propertyId)
     .select("slug")
     .single();
@@ -80,4 +89,3 @@ export async function deletePropertyAction(propertyId: string, slug: string) {
   revalidatePropertyPaths(slug);
   redirect("/admin");
 }
-

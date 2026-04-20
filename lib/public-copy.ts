@@ -247,7 +247,7 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       propertyType: "Property Type",
       results: "properties currently match.",
       search: "Search",
-      searchPlaceholder: "Area, reference, or title",
+      searchPlaceholder: "Area or title",
       sort: "Sort",
       title: "Find the right listing faster.",
       types: {
@@ -441,7 +441,7 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       propertyType: "Tipo de propiedad",
       results: "propiedades coinciden.",
       search: "Buscar",
-      searchPlaceholder: "Zona, referencia o título",
+      searchPlaceholder: "Zona o título",
       sort: "Ordenar",
       title: "Encuentra la propiedad adecuada más rápido.",
       types: {
@@ -635,7 +635,7 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       propertyType: "Тип недвижимости",
       results: "объектов найдено.",
       search: "Поиск",
-      searchPlaceholder: "Район, референс или название",
+      searchPlaceholder: "Район или название",
       sort: "Сортировка",
       title: "Найдите нужный объект быстрее.",
       types: {
@@ -829,7 +829,7 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       propertyType: "Objektart",
       results: "Immobilien passen aktuell.",
       search: "Suche",
-      searchPlaceholder: "Lage, Referenz oder Titel",
+      searchPlaceholder: "Lage oder Titel",
       sort: "Sortieren",
       title: "Schneller zur passenden Immobilie.",
       types: {

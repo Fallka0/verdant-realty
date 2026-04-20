@@ -45,7 +45,6 @@ export function PropertyCard({
       <div className="property-card-body">
         <div className="property-card-topline">
           <span>{property.location}</span>
-          <strong>{property.referenceCode}</strong>
         </div>
         <h3>{property.title}</h3>
         <p>{property.shortDescription}</p>
