@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 
 import { Homepage } from "@/components/homepage";
+import { adminCopy, resolveAdminLocale } from "@/lib/admin-copy";
+import { getAdminAuthState } from "@/lib/auth";
 import { publicCopy, resolvePublicLocale } from "@/lib/public-copy";
 import { getFeaturedProperties, getLatestPublicProperties, localizeProperties } from "@/lib/properties";
 
@@ -56,15 +58,18 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Home() {
   const cookieStore = await cookies();
   const locale = resolvePublicLocale(cookieStore.get("verdant-locale")?.value);
-  const [rawFeaturedProperties, rawLatestProperties] = await Promise.all([
+  const [rawFeaturedProperties, rawLatestProperties, authState] = await Promise.all([
     getFeaturedProperties(3),
     getLatestPublicProperties(6),
+    getAdminAuthState(),
   ]);
+  const adminLocale = resolveAdminLocale(locale);
   const featuredProperties = localizeProperties(rawFeaturedProperties, locale);
   const latestProperties = localizeProperties(rawLatestProperties, locale);
 
   return (
     <Homepage
+      adminLabel={authState.status === "authorized" ? adminCopy[adminLocale].layout.adminLabel : undefined}
       copy={publicCopy[locale]}
       currentLocale={locale}
       featuredProperties={featuredProperties}

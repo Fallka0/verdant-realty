@@ -2,6 +2,8 @@ import { cookies } from "next/headers";
 
 import { PropertyFilters } from "@/components/property-filters";
 import { PublicHeader } from "@/components/public-header";
+import { adminCopy, resolveAdminLocale } from "@/lib/admin-copy";
+import { getAdminAuthState } from "@/lib/auth";
 import { publicCopy, resolvePublicLocale } from "@/lib/public-copy";
 import { getPublicProperties, localizeProperties } from "@/lib/properties";
 
@@ -11,11 +13,14 @@ export default async function PropertiesPage() {
   const cookieStore = await cookies();
   const locale = resolvePublicLocale(cookieStore.get("verdant-locale")?.value);
   const copy = publicCopy[locale];
-  const properties = localizeProperties(await getPublicProperties(), locale);
+  const [rawProperties, authState] = await Promise.all([getPublicProperties(), getAdminAuthState()]);
+  const properties = localizeProperties(rawProperties, locale);
+  const adminLocale = resolveAdminLocale(locale);
 
   return (
     <main className="site-shell section-stack" data-locale={locale} lang={locale}>
       <PublicHeader
+        adminLabel={authState.status === "authorized" ? adminCopy[adminLocale].layout.adminLabel : undefined}
         brandSubtitle={copy.brandSubtitle}
         compact
         currentLocale={locale}

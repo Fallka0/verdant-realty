@@ -6,6 +6,8 @@ import { notFound } from "next/navigation";
 import { ImageCarousel } from "@/components/image-carousel";
 import { InquiryForm } from "@/components/inquiry-form";
 import { PublicHeader } from "@/components/public-header";
+import { adminCopy, resolveAdminLocale } from "@/lib/admin-copy";
+import { getAdminAuthState } from "@/lib/auth";
 import {
   getLocalizedPropertyStatusLabel,
   getLocalizedPropertyTypeLabel,
@@ -28,7 +30,8 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
   const locale = resolvePublicLocale(cookieStore.get("verdant-locale")?.value);
   const copy = publicCopy[locale];
   const { slug } = await params;
-  const property = await getPropertyBySlug(slug);
+  const [property, authState] = await Promise.all([getPropertyBySlug(slug), getAdminAuthState()]);
+  const adminLocale = resolveAdminLocale(locale);
 
   if (!property) {
     notFound();
@@ -41,6 +44,7 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
   return (
     <main className="site-shell section-stack" data-locale={locale} lang={locale}>
       <PublicHeader
+        adminLabel={authState.status === "authorized" ? adminCopy[adminLocale].layout.adminLabel : undefined}
         brandSubtitle={copy.brandSubtitle}
         compact
         currentLocale={locale}

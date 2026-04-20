@@ -1,10 +1,11 @@
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { PropertyForm } from "@/components/admin/property-form";
-import { getAdminPropertyById } from "@/lib/properties";
-
 import { deletePropertyAction, updatePropertyAction } from "@/app/admin/(dashboard)/actions";
+import { PropertyForm } from "@/components/admin/property-form";
+import { adminCopy, resolveAdminLocale } from "@/lib/admin-copy";
+import { getAdminPropertyById } from "@/lib/properties";
 
 type EditPropertyPageProps = {
   params: Promise<{
@@ -13,7 +14,9 @@ type EditPropertyPageProps = {
 };
 
 export default async function EditPropertyPage({ params }: EditPropertyPageProps) {
-  const { id } = await params;
+  const [{ id }, cookieStore] = await Promise.all([params, cookies()]);
+  const locale = resolveAdminLocale(cookieStore.get("verdant-locale")?.value);
+  const copy = adminCopy[locale];
   const property = await getAdminPropertyById(id);
 
   if (!property) {
@@ -27,26 +30,30 @@ export default async function EditPropertyPage({ params }: EditPropertyPageProps
     <section className="admin-card">
       <div className="section-heading compact with-action">
         <div>
-          <p className="eyebrow">Edit Listing</p>
+          <p className="eyebrow">{copy.form.editEyebrow}</p>
           <h2>{property.title}</h2>
-          <p>
-            Update the public presentation, pricing, status, or gallery. Changes will flow through
-            to the public site after save.
-          </p>
+          <p>{copy.form.editBody}</p>
         </div>
         <Link className="button button-secondary" href={`/properties/${property.slug}`}>
-          View Public Page
+          {copy.form.actions.viewPublicPage}
         </Link>
       </div>
 
-      <PropertyForm action={updateAction} property={property} submitLabel="Save changes" />
+      <PropertyForm
+        action={updateAction}
+        copy={copy.form}
+        localeLabels={{ statuses: copy.statusLabels, types: copy.typeLabels }}
+        property={property}
+        referenceSeed={property.referenceCode.replace(/^VR-/, "")}
+        submitLabel={copy.form.actions.save}
+        uploadCopy={copy.upload}
+      />
 
       <form className="delete-form" action={deleteAction}>
         <button className="button button-danger" type="submit">
-          Delete property
+          {copy.form.actions.delete}
         </button>
       </form>
     </section>
   );
 }
-

@@ -1,7 +1,10 @@
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { SignOutButton } from "@/components/admin/sign-out-button";
+import { adminCopy, adminLocales, resolveAdminLocale } from "@/lib/admin-copy";
 import { getAdminAuthState } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -11,7 +14,9 @@ export default async function AdminDashboardLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const authState = await getAdminAuthState();
+  const [authState, cookieStore] = await Promise.all([getAdminAuthState(), cookies()]);
+  const locale = resolveAdminLocale(cookieStore.get("verdant-locale")?.value);
+  const copy = adminCopy[locale];
 
   if (authState.status === "unauthenticated") {
     redirect("/admin/login");
@@ -23,35 +28,31 @@ export default async function AdminDashboardLayout({
 
   if (authState.status === "missing-config") {
     return (
-      <main className="admin-shell">
+      <main className="admin-shell" lang={locale}>
         <div className="setup-card">
-          <h1>Admin setup incomplete</h1>
-          <p>
-            Add `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` or
-            `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, and `ADMIN_EMAILS` to
-            `.env.local`, run the property migrations, and create your mother’s admin user in
-            Supabase Auth.
-          </p>
+          <h1>{copy.layout.missingConfigTitle}</h1>
+          <p>{copy.layout.missingConfigBody}</p>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="admin-shell">
+    <main className="admin-shell" lang={locale}>
       <header className="admin-topbar">
         <div>
-          <p className="eyebrow">Verdant Realty Admin</p>
-          <h1>Property management</h1>
+          <p className="eyebrow">Verdant Realty {copy.layout.adminLabel}</p>
+          <h1>{copy.layout.title}</h1>
         </div>
 
         <div className="admin-topbar-actions">
-          <nav className="primary-nav" aria-label="Admin">
-            <Link href="/admin">Dashboard</Link>
-            <Link href="/admin/properties/new">New Listing</Link>
-            <Link href="/properties">View Site</Link>
+          <nav className="primary-nav" aria-label={copy.layout.adminLabel}>
+            <Link href="/admin">{copy.layout.dashboard}</Link>
+            <Link href="/admin/properties/new">{copy.layout.newListing}</Link>
+            <Link href="/properties">{copy.layout.viewSite}</Link>
           </nav>
-          <SignOutButton />
+          <LanguageSwitcher currentLocale={locale} label={copy.languageLabel} locales={adminLocales} />
+          <SignOutButton label={copy.layout.signOut} />
         </div>
       </header>
 

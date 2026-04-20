@@ -1,7 +1,10 @@
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { AdminLoginForm } from "@/components/admin/login-form";
+import { LanguageSwitcher } from "@/components/language-switcher";
+import { adminCopy, adminLocales, resolveAdminLocale } from "@/lib/admin-copy";
 import { getAdminAuthState } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -13,49 +16,45 @@ type AdminLoginPageProps = {
 };
 
 export default async function AdminLoginPage({ searchParams }: AdminLoginPageProps) {
-  const [authState, params] = await Promise.all([getAdminAuthState(), searchParams]);
+  const [authState, params, cookieStore] = await Promise.all([getAdminAuthState(), searchParams, cookies()]);
+  const locale = resolveAdminLocale(cookieStore.get("verdant-locale")?.value);
+  const copy = adminCopy[locale];
 
   if (authState.status === "authorized") {
     redirect("/admin");
   }
 
   return (
-    <main className="admin-login-shell">
+    <main className="admin-login-shell" lang={locale}>
       <div className="admin-login-card">
-        <Link className="brand-link" href="/">
-          <span className="brand-mark" />
-          <span>
-            <strong>Verdant Realty</strong>
-            <small>Admin access</small>
-          </span>
-        </Link>
+        <div className="admin-login-topline">
+          <Link className="brand-link" href="/">
+            <span className="brand-mark" />
+            <span>
+              <strong>Verdant Realty</strong>
+              <small>{copy.layout.adminLabel}</small>
+            </span>
+          </Link>
+          <LanguageSwitcher currentLocale={locale} label={copy.languageLabel} locales={adminLocales} />
+        </div>
 
         <div className="section-heading compact">
-          <p className="eyebrow">Private Admin</p>
-          <h1>Sign in to manage property listings.</h1>
-          <p>
-            Your mother can add new homes, update prices, mark properties reserved, and keep the
-            site inventory current from one place.
-          </p>
+          <p className="eyebrow">{copy.login.privateAdmin}</p>
+          <h1>{copy.login.title}</h1>
+          <p>{copy.login.body}</p>
         </div>
 
         {authState.status === "missing-config" ? (
           <div className="setup-card">
-            <h2>Admin setup still needed</h2>
-            <p>
-              Add `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` or
-              `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, and `ADMIN_EMAILS` to
-              `.env.local`, then create the admin user in Supabase Auth.
-            </p>
+            <h2>{copy.login.setupTitle}</h2>
+            <p>{copy.login.setupBody}</p>
           </div>
         ) : (
           <>
             {params.reason === "unauthorized" ? (
-              <p className="form-status error">
-                This account signed in successfully, but it is not listed in `ADMIN_EMAILS`.
-              </p>
+              <p className="form-status error">{copy.login.unauthorized}</p>
             ) : null}
-            <AdminLoginForm />
+            <AdminLoginForm copy={copy.login} />
           </>
         )}
       </div>

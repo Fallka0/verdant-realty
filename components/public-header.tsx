@@ -4,6 +4,7 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { type PublicLocale } from "@/lib/public-copy";
 
 type PublicHeaderProps = {
+  adminLabel?: string;
   brandSubtitle: string;
   compact?: boolean;
   currentLocale: PublicLocale;
@@ -15,6 +16,7 @@ type PublicHeaderProps = {
 };
 
 export function PublicHeader({
+  adminLabel,
   brandSubtitle,
   compact = false,
   currentLocale,
@@ -35,6 +37,7 @@ export function PublicHeader({
         <nav className="primary-nav" aria-label="Primary">
           <Link href="/">{nav.home}</Link>
           <Link href="/properties">{nav.properties}</Link>
+          {adminLabel ? <Link href="/admin">{adminLabel}</Link> : null}
         </nav>
         <LanguageSwitcher currentLocale={currentLocale} label={languageLabel} />
       </div>
