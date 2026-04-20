@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
+import type { CSSProperties } from "react";
 
-import "@fontsource/lato/300.css";
-import "@fontsource/lato/400.css";
-import "@fontsource/lato/700.css";
-import "@fontsource/lato/900.css";
+import { siteFontVariables } from "@/app/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -18,7 +16,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body style={siteFontVariables as CSSProperties}>
+        {children}
+      </body>
     </html>
   );
 }

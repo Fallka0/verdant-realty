@@ -158,7 +158,7 @@ export function Homepage({ copy, currentLocale, featuredProperties, latestProper
             <p className="eyebrow">{copy.masonry.eyebrow}</p>
             <h2>{copy.masonry.title}</h2>
           </div>
-          <Link className="button button-ghost" href="/properties">
+          <Link className="button button-ghost button-wide" href="/properties">
             {copy.buttons.openListings}
           </Link>
         </div>
