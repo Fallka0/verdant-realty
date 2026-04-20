@@ -2,7 +2,17 @@
 
 import { FormEvent, useState } from "react";
 
-import { type InquiryFormCopy, type Locale } from "@/lib/site-copy";
+import { type PublicCopy, type PublicLocale } from "@/lib/public-copy";
+
+type InquiryFormProps = {
+  copy: PublicCopy;
+  locale: PublicLocale;
+  property?: {
+    id: string;
+    location: string;
+    title: string;
+  };
+};
 
 type SubmissionState = {
   message: string;
@@ -14,12 +24,7 @@ const initialState: SubmissionState = {
   type: "idle",
 };
 
-type InquiryFormProps = {
-  copy: InquiryFormCopy;
-  locale: Locale;
-};
-
-export function InquiryForm({ copy, locale }: InquiryFormProps) {
+export function InquiryForm({ copy, locale, property }: InquiryFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submission, setSubmission] = useState(initialState);
 
@@ -38,12 +43,13 @@ export function InquiryForm({ copy, locale }: InquiryFormProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          locale,
           name: formData.get("name"),
           email: formData.get("email"),
+          locale,
           phone: formData.get("phone"),
-          timeline: formData.get("timeline"),
           message: formData.get("message"),
+          propertyId: property?.id,
+          propertyTitle: property?.title,
         }),
       });
 
@@ -52,7 +58,7 @@ export function InquiryForm({ copy, locale }: InquiryFormProps) {
       if (!response.ok) {
         setSubmission({
           type: "error",
-          message: data.error ?? copy.errorFallback,
+          message: data.error ?? copy.inquiry.error,
         });
         setIsSubmitting(false);
         return;
@@ -61,12 +67,12 @@ export function InquiryForm({ copy, locale }: InquiryFormProps) {
       form.reset();
       setSubmission({
         type: "success",
-        message: data.message ?? copy.successFallback,
+        message: data.message ?? copy.inquiry.success,
       });
     } catch {
       setSubmission({
         type: "error",
-        message: copy.errorFallback,
+        message: copy.inquiry.error,
       });
     } finally {
       setIsSubmitting(false);
@@ -75,44 +81,56 @@ export function InquiryForm({ copy, locale }: InquiryFormProps) {
 
   return (
     <form className="inquiry-form" onSubmit={handleSubmit}>
+      {property ? (
+        <div className="inquiry-context">
+          <p className="eyebrow">{copy.inquiry.propertyInquiry}</p>
+          <h3>{property.title}</h3>
+          <p>{property.location}</p>
+        </div>
+      ) : null}
       <div className="form-grid">
         <label>
-          {copy.fullNameLabel}
-          <input name="name" type="text" placeholder={copy.namePlaceholder} required />
+          {copy.inquiry.fullName}
+          <input name="name" type="text" placeholder={copy.inquiry.yourName} required />
         </label>
         <label>
-          {copy.emailLabel}
-          <input name="email" type="email" placeholder={copy.emailPlaceholder} required />
+          {copy.inquiry.email}
+          <input name="email" type="email" placeholder={copy.inquiry.emailPlaceholder} required />
         </label>
         <label>
-          {copy.phoneLabel}
-          <input name="phone" type="tel" placeholder={copy.optionalPhonePlaceholder} />
-        </label>
-        <label>
-          {copy.timelineLabel}
-          <select name="timeline" defaultValue="">
-            <option value="" disabled>
-              {copy.timelinePlaceholder}
-            </option>
-            {copy.timelineOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+          {copy.inquiry.phone}
+          <input name="phone" type="tel" placeholder={copy.inquiry.optional} />
         </label>
         <label className="full-width">
-          {copy.messageLabel}
+          {copy.inquiry.message}
           <textarea
             name="message"
-            placeholder={copy.messagePlaceholder}
+            placeholder={
+              property
+                ? `${copy.inquiry.messagePlaceholder} ${property.title}.`
+                : copy.inquiry.messagePlaceholder
+            }
             rows={5}
             required
           />
         </label>
       </div>
-      <button className="button button-primary submit-button" type="submit" disabled={isSubmitting}>
-        {isSubmitting ? copy.sendingButton : copy.sendButton}
+      <button
+        aria-busy={isSubmitting}
+        aria-label={isSubmitting ? copy.inquiry.sendingAria : copy.buttons.sendInquiry}
+        className={`button button-primary submit-button ${isSubmitting ? "is-loading" : ""}`}
+        type="submit"
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? (
+          <>
+            <span aria-hidden="true" className="loading-spinner" />
+            <span>{copy.buttons.sending}</span>
+            <span className="sr-only">{copy.inquiry.sendingAria}</span>
+          </>
+        ) : (
+          copy.buttons.sendInquiry
+        )}
       </button>
       <p className={`form-status ${submission.type}`} aria-live="polite">
         {submission.message}
