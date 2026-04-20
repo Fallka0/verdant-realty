@@ -20,8 +20,8 @@ export function PropertyCard({ property }: PropertyCardProps) {
           className="property-image"
           src={property.mainImageUrl}
           alt={property.title}
-          width={1200}
-          height={800}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
         <div className="property-badges">
           <span className={`pill status-${property.status}`}>{getPropertyStatusLabel(property.status)}</span>

@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { ImageCarousel } from "@/components/image-carousel";
 import { InquiryForm } from "@/components/inquiry-form";
 import { formatPrice, getPropertyTypeLabel } from "@/lib/property-shared";
 import { getPropertyBySlug } from "@/lib/properties";
@@ -54,18 +54,7 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
         </div>
       </section>
 
-      <section className="detail-gallery">
-        {gallery.map((imageUrl, index) => (
-          <Image
-            key={`${property.id}-${imageUrl}-${index}`}
-            className={index === 0 ? "detail-main-image" : "detail-side-image"}
-            src={imageUrl}
-            alt={`${property.title} image ${index + 1}`}
-            width={1400}
-            height={900}
-          />
-        ))}
-      </section>
+      <ImageCarousel images={gallery} title={property.title} />
 
       <section className="detail-grid">
         <div className="detail-main">
