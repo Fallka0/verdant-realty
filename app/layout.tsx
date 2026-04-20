@@ -9,7 +9,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Verdant Realty",
   description:
-    "Verdant Realty is a boutique real estate brand with calm strategy, polished presentation, and concierge-level client care.",
+    "Verdant Realty showcases homes for sale in Torrevieja and nearby areas, with a private Supabase-backed admin panel for managing listings.",
 };
 
 export default function RootLayout({

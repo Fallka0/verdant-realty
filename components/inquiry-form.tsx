@@ -2,7 +2,13 @@
 
 import { FormEvent, useState } from "react";
 
-import { type InquiryFormCopy, type Locale } from "@/lib/site-copy";
+type InquiryFormProps = {
+  property?: {
+    id: string;
+    location: string;
+    title: string;
+  };
+};
 
 type SubmissionState = {
   message: string;
@@ -14,12 +20,7 @@ const initialState: SubmissionState = {
   type: "idle",
 };
 
-type InquiryFormProps = {
-  copy: InquiryFormCopy;
-  locale: Locale;
-};
-
-export function InquiryForm({ copy, locale }: InquiryFormProps) {
+export function InquiryForm({ property }: InquiryFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submission, setSubmission] = useState(initialState);
 
@@ -38,12 +39,12 @@ export function InquiryForm({ copy, locale }: InquiryFormProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          locale,
           name: formData.get("name"),
           email: formData.get("email"),
           phone: formData.get("phone"),
-          timeline: formData.get("timeline"),
           message: formData.get("message"),
+          propertyId: property?.id,
+          propertyTitle: property?.title,
         }),
       });
 
@@ -52,7 +53,7 @@ export function InquiryForm({ copy, locale }: InquiryFormProps) {
       if (!response.ok) {
         setSubmission({
           type: "error",
-          message: data.error ?? copy.errorFallback,
+          message: data.error ?? "Something went wrong. Please try again.",
         });
         setIsSubmitting(false);
         return;
@@ -61,12 +62,12 @@ export function InquiryForm({ copy, locale }: InquiryFormProps) {
       form.reset();
       setSubmission({
         type: "success",
-        message: data.message ?? copy.successFallback,
+        message: data.message ?? "Inquiry sent successfully.",
       });
     } catch {
       setSubmission({
         type: "error",
-        message: copy.errorFallback,
+        message: "Something went wrong. Please try again.",
       });
     } finally {
       setIsSubmitting(false);
@@ -75,44 +76,42 @@ export function InquiryForm({ copy, locale }: InquiryFormProps) {
 
   return (
     <form className="inquiry-form" onSubmit={handleSubmit}>
+      {property ? (
+        <div className="inquiry-context">
+          <p className="eyebrow">Property Inquiry</p>
+          <h3>{property.title}</h3>
+          <p>{property.location}</p>
+        </div>
+      ) : null}
       <div className="form-grid">
         <label>
-          {copy.fullNameLabel}
-          <input name="name" type="text" placeholder={copy.namePlaceholder} required />
+          Full Name
+          <input name="name" type="text" placeholder="Your name" required />
         </label>
         <label>
-          {copy.emailLabel}
-          <input name="email" type="email" placeholder={copy.emailPlaceholder} required />
+          Email Address
+          <input name="email" type="email" placeholder="you@example.com" required />
         </label>
         <label>
-          {copy.phoneLabel}
-          <input name="phone" type="tel" placeholder={copy.optionalPhonePlaceholder} />
-        </label>
-        <label>
-          {copy.timelineLabel}
-          <select name="timeline" defaultValue="">
-            <option value="" disabled>
-              {copy.timelinePlaceholder}
-            </option>
-            {copy.timelineOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+          Phone Number
+          <input name="phone" type="tel" placeholder="Optional" />
         </label>
         <label className="full-width">
-          {copy.messageLabel}
+          Message
           <textarea
             name="message"
-            placeholder={copy.messagePlaceholder}
+            placeholder={
+              property
+                ? `I’m interested in ${property.title}. Please share more details or arrange a viewing.`
+                : "Tell us what kind of property you are looking for."
+            }
             rows={5}
             required
           />
         </label>
       </div>
       <button className="button button-primary submit-button" type="submit" disabled={isSubmitting}>
-        {isSubmitting ? copy.sendingButton : copy.sendButton}
+        {isSubmitting ? "Sending..." : "Send Inquiry"}
       </button>
       <p className={`form-status ${submission.type}`} aria-live="polite">
         {submission.message}

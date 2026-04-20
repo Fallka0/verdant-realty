@@ -1,133 +1,172 @@
-"use client";
+import Link from "next/link";
 
-import { useEffect, useState } from "react";
+import { PropertyCard } from "@/components/property-card";
+import { formatPrice, type PropertyRecord } from "@/lib/property-shared";
 
-import { InquiryForm } from "@/components/inquiry-form";
-import { defaultLocale, isSupportedLocale, localeOptions, siteCopy, type Locale } from "@/lib/site-copy";
+type HomepageProps = {
+  featuredProperties: PropertyRecord[];
+  latestProperties: PropertyRecord[];
+};
 
-const storageKey = "verdant-realty-locale";
+const regions = [
+  "Torrevieja",
+  "La Mata",
+  "Orihuela Costa",
+  "Guardamar del Segura",
+];
 
-export function Homepage() {
-  const [locale, setLocale] = useState<Locale>(() => {
-    if (typeof window === "undefined") {
-      return defaultLocale;
-    }
+const advantages = [
+  {
+    title: "Fresh inventory, not brochure filler",
+    copy:
+      "The website is built to showcase real homes currently available in and near Torrevieja, not just generic branding copy.",
+  },
+  {
+    title: "A private panel your mother can actually use",
+    copy:
+      "The admin side is designed for day-to-day listing management: publish, update, mark reserved, and keep the site current without needing a developer.",
+  },
+  {
+    title: "Ready for growth",
+    copy:
+      "This structure can expand into uploads, multilingual listing content, lead workflows, and agent notes without splitting into a second app.",
+  },
+];
 
-    const storedLocale = window.localStorage.getItem(storageKey);
-
-    if (storedLocale && isSupportedLocale(storedLocale)) {
-      return storedLocale;
-    }
-
-    return defaultLocale;
-  });
-
-  useEffect(() => {
-    document.documentElement.lang = locale;
-    window.localStorage.setItem(storageKey, locale);
-  }, [locale]);
-
-  const copy = siteCopy[locale];
-
+export function Homepage({ featuredProperties, latestProperties }: HomepageProps) {
   return (
-    <main className="page-shell" lang={locale}>
-      <section className="hero">
-        <div className="hero-glow" />
-        <header className="site-header">
-          <div className="brand-lockup">
+    <main className="site-shell">
+      <section className="hero-shell">
+        <header className="public-header">
+          <Link className="brand-link" href="/">
             <span className="brand-mark" />
-            <div>
-              <p className="brand-name">Verdant Realty</p>
-              <p className="brand-tag">{copy.brandTag}</p>
-            </div>
-          </div>
+            <span>
+              <strong>Verdant Realty</strong>
+              <small>Torrevieja Property Collection</small>
+            </span>
+          </Link>
 
-          <div className="header-actions">
-            <nav className="site-nav" aria-label={copy.nav.ariaLabel}>
-              <a href="#services">{copy.nav.services}</a>
-              <a href="#approach">{copy.nav.approach}</a>
-              <a href="#contact">{copy.nav.contact}</a>
-            </nav>
-
-            <div className="language-switcher" aria-label={copy.languageSwitcherLabel} role="group">
-              {localeOptions.map((option) => (
-                <button
-                  key={option.code}
-                  className={`language-button ${locale === option.code ? "active" : ""}`}
-                  type="button"
-                  onClick={() => setLocale(option.code)}
-                  aria-pressed={locale === option.code}
-                  title={option.label}
-                >
-                  {option.shortLabel}
-                </button>
-              ))}
-            </div>
-          </div>
+          <nav className="primary-nav" aria-label="Primary">
+            <Link href="/">Home</Link>
+            <Link href="/properties">Properties</Link>
+            <Link href="/admin">Admin</Link>
+          </nav>
         </header>
 
-        <div className="hero-grid">
+        <div className="hero-panel">
           <div className="hero-copy">
-            <p className="eyebrow">{copy.hero.eyebrow}</p>
-            <h1>{copy.hero.title}</h1>
-            <p className="hero-text">{copy.hero.text}</p>
+            <p className="eyebrow">Homes for sale in Torrevieja and nearby coastal areas</p>
+            <h1>List, manage, and present available properties with real depth.</h1>
+            <p className="hero-text">
+              Verdant Realty is now positioned as a listings-first platform: featured homes on the
+              public site, a clear inventory overview, and a private admin panel so your mother can
+              keep everything current herself.
+            </p>
             <div className="hero-actions">
-              <a className="button button-primary" href="#contact">
-                {copy.hero.primaryCta}
-              </a>
-              <a className="button button-secondary" href="#services">
-                {copy.hero.secondaryCta}
-              </a>
-            </div>
-            <div className="hero-stats" aria-label={copy.hero.statsAriaLabel}>
-              {copy.hero.stats.map((stat) => (
-                <div key={`${stat.value}-${stat.label}`}>
-                  <strong>{stat.value}</strong>
-                  <span>{stat.label}</span>
-                </div>
-              ))}
+              <Link className="button button-primary" href="/properties">
+                Browse Properties
+              </Link>
+              <Link className="button button-secondary" href="/admin">
+                Open Admin Panel
+              </Link>
             </div>
           </div>
 
-          <aside className="hero-card">
-            <p className="card-kicker">{copy.heroCard.kicker}</p>
-            <h2>{copy.heroCard.title}</h2>
-            <p>{copy.heroCard.text}</p>
-            <ul className="feature-list">
-              {copy.heroCard.highlights.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
+          <aside className="hero-side-card">
+            <p className="eyebrow">Featured Snapshot</p>
+            {featuredProperties[0] ? (
+              <>
+                <h2>{featuredProperties[0].title}</h2>
+                <p>{featuredProperties[0].shortDescription}</p>
+                <div className="hero-side-facts">
+                  <span>{featuredProperties[0].location}</span>
+                  <span>{formatPrice(featuredProperties[0].priceEuro)}</span>
+                  <span>
+                    {featuredProperties[0].bedrooms} bed • {featuredProperties[0].bathrooms} bath
+                  </span>
+                </div>
+                <Link className="button button-ghost" href={`/properties/${featuredProperties[0].slug}`}>
+                  View Listing
+                </Link>
+              </>
+            ) : (
+              <>
+                <h2>Admin-ready from day one</h2>
+                <p>
+                  As soon as listings are entered into Supabase, they can appear here automatically
+                  as featured properties.
+                </p>
+              </>
+            )}
           </aside>
         </div>
       </section>
 
-      <section className="content-section" id="services">
+      <section className="section">
         <div className="section-heading">
-          <p className="eyebrow">{copy.servicesSection.eyebrow}</p>
-          <h2>{copy.servicesSection.title}</h2>
-          <p>{copy.servicesSection.text}</p>
+          <p className="eyebrow">Coverage</p>
+          <h2>The website is built around active inventory near Torrevieja.</h2>
+          <p>
+            Instead of centering the business around a generic personal brand page, the public
+            experience now points visitors straight toward listings, areas, and available homes.
+          </p>
         </div>
-        <div className="card-grid">
-          {copy.servicesSection.items.map((service) => (
-            <article className="info-card" key={service.title}>
-              <h3>{service.title}</h3>
-              <p>{service.copy}</p>
-            </article>
+
+        <div className="stats-grid">
+          <article className="stat-card">
+            <strong>{latestProperties.length}</strong>
+            <span>sample listings ready</span>
+          </article>
+          <article className="stat-card">
+            <strong>{featuredProperties.length}</strong>
+            <span>featured slots on the homepage</span>
+          </article>
+          <article className="stat-card">
+            <strong>{regions.length}</strong>
+            <span>core target areas nearby</span>
+          </article>
+        </div>
+
+        <div className="region-row">
+          {regions.map((region) => (
+            <span className="region-pill" key={region}>
+              {region}
+            </span>
           ))}
         </div>
       </section>
 
-      <section className="content-section split-section" id="approach">
-        <div className="section-heading">
-          <p className="eyebrow">{copy.approachSection.eyebrow}</p>
-          <h2>{copy.approachSection.title}</h2>
-          <p>{copy.approachSection.text}</p>
+      <section className="section">
+        <div className="section-heading with-action">
+          <div>
+            <p className="eyebrow">Featured Properties</p>
+            <h2>Homes that deserve the front row.</h2>
+          </div>
+          <Link className="button button-secondary" href="/properties">
+            See All Properties
+          </Link>
         </div>
-        <div className="process-list">
-          {copy.approachSection.items.map((item) => (
-            <article className="process-card" key={item.step}>
-              <span>{item.step}</span>
+
+        <div className="property-grid">
+          {featuredProperties.map((property) => (
+            <PropertyCard key={property.id} property={property} />
+          ))}
+        </div>
+      </section>
+
+      <section className="section split-section">
+        <div className="market-panel">
+          <p className="eyebrow">Why This Build Fits The Business</p>
+          <h2>A property website and admin panel in one project.</h2>
+          <p>
+            Keeping the public site and admin together makes updates faster, reduces maintenance,
+            and lets the listing data drive every page from a single source of truth.
+          </p>
+        </div>
+
+        <div className="advantage-grid">
+          {advantages.map((item) => (
+            <article className="info-card" key={item.title}>
               <h3>{item.title}</h3>
               <p>{item.copy}</p>
             </article>
@@ -135,37 +174,22 @@ export function Homepage() {
         </div>
       </section>
 
-      <section className="content-section">
-        <div className="section-heading">
-          <p className="eyebrow">{copy.neighborhoodsSection.eyebrow}</p>
-          <h2>{copy.neighborhoodsSection.title}</h2>
-          <p>{copy.neighborhoodsSection.text}</p>
+      <section className="section">
+        <div className="section-heading with-action">
+          <div>
+            <p className="eyebrow">Latest Listings</p>
+            <h2>Fresh inventory for buyers browsing the coast.</h2>
+          </div>
+          <Link className="button button-ghost" href="/admin">
+            Manage Inventory
+          </Link>
         </div>
-        <div className="neighborhood-grid">
-          {copy.neighborhoodsSection.items.map((area) => (
-            <article className="neighborhood-card" key={area.title}>
-              <h3>{area.title}</h3>
-              <p>{area.copy}</p>
-            </article>
+
+        <div className="property-grid">
+          {latestProperties.map((property) => (
+            <PropertyCard key={property.id} property={property} />
           ))}
         </div>
-      </section>
-
-      <section className="content-section contact-section" id="contact">
-        <div className="contact-copy">
-          <p className="eyebrow">{copy.contactSection.eyebrow}</p>
-          <h2>{copy.contactSection.title}</h2>
-          <p>{copy.contactSection.text}</p>
-          <div className="contact-details">
-            {copy.contactSection.details.map((detail) => (
-              <div key={detail.label}>
-                <span>{detail.label}</span>
-                <strong>{detail.value}</strong>
-              </div>
-            ))}
-          </div>
-        </div>
-        <InquiryForm locale={locale} copy={copy.form} />
       </section>
     </main>
   );
