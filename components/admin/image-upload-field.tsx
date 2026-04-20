@@ -7,8 +7,17 @@ type ImageUploadFieldProps = {
   label: string;
   mode: "gallery" | "single";
   name: string;
+  placeholder: string;
   required?: boolean;
   title: string;
+  uploadCopy: {
+    imageUploaded: string;
+    uploadFailed: string;
+    uploadGallery: string;
+    uploadImage: string;
+    uploading: string;
+    uploadedCount: (count: number) => string;
+  };
 };
 
 type UploadState = {
@@ -26,8 +35,10 @@ export function ImageUploadField({
   label,
   mode,
   name,
+  placeholder,
   required = false,
   title,
+  uploadCopy,
 }: ImageUploadFieldProps) {
   const [value, setValue] = useState(defaultValue);
   const [isUploading, setIsUploading] = useState(false);
@@ -47,7 +58,7 @@ export function ImageUploadField({
     const data = (await response.json().catch(() => ({}))) as { error?: string; url?: string };
 
     if (!response.ok || !data.url) {
-      throw new Error(data.error ?? "Image upload failed.");
+      throw new Error(data.error ?? uploadCopy.uploadFailed);
     }
 
     return data.url;
@@ -77,12 +88,12 @@ export function ImageUploadField({
       }
 
       setUploadState({
-        message: mode === "single" ? "Image uploaded." : `${urls.length} image${urls.length === 1 ? "" : "s"} uploaded.`,
+        message: mode === "single" ? uploadCopy.imageUploaded : uploadCopy.uploadedCount(urls.length),
         type: "success",
       });
     } catch (error) {
       setUploadState({
-        message: error instanceof Error ? error.message : "Image upload failed.",
+        message: error instanceof Error ? error.message : uploadCopy.uploadFailed,
         type: "error",
       });
     } finally {
@@ -104,7 +115,7 @@ export function ImageUploadField({
             type="url"
             value={value}
             onChange={(event) => setValue(event.target.value)}
-            placeholder="Upload an image or paste an image URL"
+            placeholder={placeholder}
             required={required}
           />
         ) : (
@@ -113,7 +124,7 @@ export function ImageUploadField({
             rows={6}
             value={value}
             onChange={(event) => setValue(event.target.value)}
-            placeholder="Upload images or paste one image URL per line."
+            placeholder={placeholder}
           />
         )}
       </label>
@@ -126,7 +137,7 @@ export function ImageUploadField({
           multiple={mode === "gallery"}
           onChange={handleUpload}
         />
-        <span>{isUploading ? "Uploading..." : mode === "single" ? "Upload image" : "Upload gallery images"}</span>
+        <span>{isUploading ? uploadCopy.uploading : mode === "single" ? uploadCopy.uploadImage : uploadCopy.uploadGallery}</span>
       </div>
 
       <p className={`form-status ${uploadState.type}`}>{uploadState.message}</p>

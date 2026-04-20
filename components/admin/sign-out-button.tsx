@@ -4,7 +4,11 @@ import { useRouter } from "next/navigation";
 
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
-export function SignOutButton() {
+type SignOutButtonProps = {
+  label: string;
+};
+
+export function SignOutButton({ label }: SignOutButtonProps) {
   const router = useRouter();
 
   return (
@@ -22,7 +26,7 @@ export function SignOutButton() {
         router.refresh();
       }}
     >
-      Sign out
+      {label}
     </button>
   );
 }

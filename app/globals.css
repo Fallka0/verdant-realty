@@ -1417,6 +1417,18 @@ textarea {
   margin-bottom: 2rem;
 }
 
+.admin-login-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.admin-login-topline .brand-link {
+  margin-bottom: 0;
+}
+
 .admin-login-card .section-heading h1,
 .setup-card h1,
 .setup-card h2 {
@@ -1513,6 +1525,39 @@ textarea {
 .admin-grid {
   display: grid;
   gap: 1.25rem;
+}
+
+.admin-help-card {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 1.5rem;
+  padding: 1.35rem 1.5rem;
+  border: 1px solid rgba(18, 53, 36, 0.08);
+  border-radius: 22px;
+  background: rgba(255, 251, 244, 0.52);
+}
+
+.admin-help-card p {
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.admin-help-card ul {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-help-card li {
+  padding: 0.85rem 1rem;
+  border-left: 3px solid var(--gold);
+  border-radius: 0 14px 14px 0;
+  background: rgba(255, 255, 255, 0.48);
+  color: var(--text);
+  line-height: 1.55;
 }
 
 .admin-dashboard-hero {
@@ -2339,6 +2384,7 @@ textarea {
     justify-content: flex-start;
   }
 
+  .admin-help-card,
   .admin-stat-grid,
   .admin-fields {
     grid-template-columns: 1fr;
@@ -2380,6 +2426,11 @@ textarea {
   .admin-topbar .primary-nav {
     flex-wrap: wrap;
     gap: 0.9rem 1.25rem;
+  }
+
+  .admin-login-topline {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .public-header {

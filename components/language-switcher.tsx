@@ -7,6 +7,7 @@ import { publicLocales, type PublicLocale } from "@/lib/public-copy";
 type LanguageSwitcherProps = {
   currentLocale: PublicLocale;
   label: string;
+  locales?: PublicLocale[];
 };
 
 const labels: Record<PublicLocale, string> = {
@@ -16,12 +17,12 @@ const labels: Record<PublicLocale, string> = {
   de: "DE",
 };
 
-export function LanguageSwitcher({ currentLocale, label }: LanguageSwitcherProps) {
+export function LanguageSwitcher({ currentLocale, label, locales = [...publicLocales] }: LanguageSwitcherProps) {
   const router = useRouter();
 
   return (
     <div className="language-switcher" aria-label={label} role="group">
-      {publicLocales.map((locale) => (
+      {locales.map((locale) => (
         <button
           key={locale}
           className={`language-button ${locale === currentLocale ? "active" : ""}`}

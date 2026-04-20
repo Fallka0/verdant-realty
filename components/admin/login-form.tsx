@@ -3,23 +3,28 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { type AdminCopy } from "@/lib/admin-copy";
 import { createSupabaseBrowserClient, hasSupabaseBrowserEnv } from "@/lib/supabase/client";
 
-export function AdminLoginForm() {
+type AdminLoginFormProps = {
+  copy: AdminCopy["login"];
+};
+
+export function AdminLoginForm({ copy }: AdminLoginFormProps) {
   const router = useRouter();
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(formData: FormData) {
     if (!hasSupabaseBrowserEnv()) {
-      setError("Supabase environment variables are missing.");
+      setError(copy.envError);
       return;
     }
 
     const supabase = createSupabaseBrowserClient();
 
     if (!supabase) {
-      setError("Supabase browser client could not be created.");
+      setError(copy.envError);
       return;
     }
 
@@ -35,7 +40,7 @@ export function AdminLoginForm() {
     });
 
     if (signInError) {
-      setError(signInError.message);
+      setError(signInError.message || copy.loginErrorFallback);
       setIsSubmitting(false);
       return;
     }
@@ -52,18 +57,17 @@ export function AdminLoginForm() {
       }}
     >
       <label>
-        Email
-        <input name="email" type="email" placeholder="admin@example.com" required />
+        {copy.email}
+        <input name="email" type="email" placeholder={copy.emailPlaceholder} required />
       </label>
       <label>
-        Password
-        <input name="password" type="password" placeholder="••••••••" required />
+        {copy.password}
+        <input name="password" type="password" placeholder="********" required />
       </label>
       <button className="button button-primary full-width-button" type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Signing in..." : "Sign in to admin"}
+        {isSubmitting ? copy.signingIn : copy.submit}
       </button>
       <p className="form-status error">{error}</p>
     </form>
   );
 }
-

@@ -3,13 +3,20 @@
 import { useState } from "react";
 
 import { ImageUploadField } from "@/components/admin/image-upload-field";
+import { type AdminCopy } from "@/lib/admin-copy";
 import { propertyStatuses, propertyTypes, type PropertyRecord } from "@/lib/property-shared";
 
 type PropertyFormProps = {
   action: (formData: FormData) => void | Promise<void>;
+  copy: AdminCopy["form"];
+  localeLabels: {
+    statuses: Record<string, string>;
+    types: Record<string, string>;
+  };
   property?: PropertyRecord;
   referenceSeed: string;
   submitLabel: string;
+  uploadCopy: AdminCopy["upload"];
 };
 
 function slugify(value: string) {
@@ -35,7 +42,15 @@ function createReferenceCode(title: string, seed: string) {
   return `VR-${prefix || "NEW"}-${seed}`;
 }
 
-export function PropertyForm({ action, property, referenceSeed, submitLabel }: PropertyFormProps) {
+export function PropertyForm({
+  action,
+  copy,
+  localeLabels,
+  property,
+  referenceSeed,
+  submitLabel,
+  uploadCopy,
+}: PropertyFormProps) {
   const [title, setTitle] = useState(property?.title ?? "");
   const [slug, setSlug] = useState(property?.slug ?? "");
   const [referenceCode, setReferenceCode] = useState(property?.referenceCode ?? "");
@@ -58,7 +73,7 @@ export function PropertyForm({ action, property, referenceSeed, submitLabel }: P
     <form className="property-form" action={action}>
       <div className="admin-fields">
         <label>
-          Reference Code
+          {copy.fields.reference}
           <input
             name="referenceCode"
             type="text"
@@ -67,26 +82,26 @@ export function PropertyForm({ action, property, referenceSeed, submitLabel }: P
               setReferenceEdited(true);
               setReferenceCode(event.target.value.toUpperCase());
             }}
-            placeholder="Generated from title"
+            placeholder={copy.fields.reference}
             required
           />
-          <span className="field-note">Generated from the title. You can still edit it.</span>
+          <span className="field-note">{copy.fieldNotes.reference}</span>
         </label>
 
         <label>
-          Title
+          {copy.fields.title}
           <input
             name="title"
             type="text"
             value={title}
             onChange={(event) => handleTitleChange(event.target.value)}
-            placeholder="Stylish villa near the salt lakes"
+            placeholder={copy.placeholders.title}
             required
           />
         </label>
 
         <label>
-          Slug
+          {copy.fields.slug}
           <input
             name="slug"
             type="text"
@@ -95,120 +110,101 @@ export function PropertyForm({ action, property, referenceSeed, submitLabel }: P
               setSlugEdited(true);
               setSlug(slugify(event.target.value));
             }}
-            placeholder="Generated from title"
+            placeholder={copy.fields.slug}
           />
-          <span className="field-note">Used in the public page URL.</span>
+          <span className="field-note">{copy.fieldNotes.slug}</span>
         </label>
 
         <label>
-          Location
+          {copy.fields.location}
           <input
             name="location"
             type="text"
             defaultValue={property?.location ?? ""}
-            placeholder="Torrevieja"
+            placeholder={copy.placeholders.location}
             required
           />
         </label>
 
         <label>
-          Price (EUR)
-          <input
-            name="priceEuro"
-            type="number"
-            min="0"
-            defaultValue={property?.priceEuro ?? 0}
-            required
-          />
+          {copy.fields.price}
+          <input name="priceEuro" type="number" min="0" defaultValue={property?.priceEuro ?? 0} required />
         </label>
 
         <label>
-          Property Type
+          {copy.fields.type}
           <select name="type" defaultValue={property?.type ?? "apartment"}>
             {propertyTypes.map((type) => (
               <option key={type} value={type}>
-                {type[0].toUpperCase() + type.slice(1)}
+                {localeLabels.types[type] ?? type}
               </option>
             ))}
           </select>
         </label>
 
         <label>
-          Status
+          {copy.fields.status}
           <select name="status" defaultValue={property?.status ?? "draft"}>
             {propertyStatuses.map((status) => (
               <option key={status} value={status}>
-                {status[0].toUpperCase() + status.slice(1)}
+                {localeLabels.statuses[status] ?? status}
               </option>
             ))}
           </select>
         </label>
 
         <label>
-          Bedrooms
+          {copy.fields.bedrooms}
           <input name="bedrooms" type="number" min="0" defaultValue={property?.bedrooms ?? 0} required />
         </label>
 
         <label>
-          Bathrooms
-          <input
-            name="bathrooms"
-            type="number"
-            min="0"
-            defaultValue={property?.bathrooms ?? 0}
-            required
-          />
+          {copy.fields.bathrooms}
+          <input name="bathrooms" type="number" min="0" defaultValue={property?.bathrooms ?? 0} required />
         </label>
 
         <label>
-          Interior m²
-          <input
-            name="interiorSqm"
-            type="number"
-            min="0"
-            defaultValue={property?.interiorSqm ?? undefined}
-          />
+          {copy.fields.interior}
+          <input name="interiorSqm" type="number" min="0" defaultValue={property?.interiorSqm ?? undefined} />
         </label>
 
         <label>
-          Plot m²
-          <input
-            name="plotSqm"
-            type="number"
-            min="0"
-            defaultValue={property?.plotSqm ?? undefined}
-          />
+          {copy.fields.plot}
+          <input name="plotSqm" type="number" min="0" defaultValue={property?.plotSqm ?? undefined} />
         </label>
 
         <div className="full-span">
           <ImageUploadField
             defaultValue={property?.mainImageUrl ?? ""}
-            label="Main Image"
+            label={copy.fields.mainImage}
             mode="single"
             name="mainImageUrl"
+            placeholder={copy.placeholders.imageUrl}
             required
             title={title}
+            uploadCopy={uploadCopy}
           />
+          <span className="field-note">{copy.fieldNotes.mainImage}</span>
         </div>
 
         <label className="full-span">
-          Short Description
+          {copy.fields.shortDescription}
           <textarea
             name="shortDescription"
             rows={3}
             defaultValue={property?.shortDescription ?? ""}
-            placeholder="One concise paragraph used in cards and previews."
+            placeholder={copy.placeholders.shortDescription}
             required
           />
         </label>
 
         <label className="full-span">
-          Full Description
+          {copy.fields.description}
           <textarea
             name="description"
             rows={7}
             defaultValue={property?.description ?? ""}
-            placeholder="Full listing description for the property detail page."
+            placeholder={copy.placeholders.description}
             required
           />
         </label>
@@ -216,17 +212,20 @@ export function PropertyForm({ action, property, referenceSeed, submitLabel }: P
         <div className="full-span">
           <ImageUploadField
             defaultValue={property?.galleryUrls.join("\n") ?? ""}
-            label="Gallery Images"
+            label={copy.fields.galleryImages}
             mode="gallery"
             name="galleryUrls"
+            placeholder={uploadCopy.galleryPlaceholder}
             title={title}
+            uploadCopy={uploadCopy}
           />
+          <span className="field-note">{copy.fieldNotes.galleryImages}</span>
         </div>
       </div>
 
       <label className="admin-checkbox">
         <input name="featured" type="checkbox" defaultChecked={property?.featured ?? false} />
-        Feature this listing on the homepage
+        {copy.checkboxFeatured}
       </label>
 
       <div className="admin-actions">
