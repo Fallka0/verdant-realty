@@ -45,7 +45,7 @@ export function Homepage({ adminLabel, copy, currentLocale, featuredProperties, 
             <h1>{copy.hero.title}</h1>
             <p className="hero-text">{copy.hero.text}</p>
             <div className="hero-actions">
-              <Link className="button button-primary" href="/properties">
+              <Link className="button button-primary hero-primary-button" href="/properties">
                 {copy.buttons.browseProperties}
               </Link>
               <ContactActions
