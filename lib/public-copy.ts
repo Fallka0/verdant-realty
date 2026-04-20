@@ -125,7 +125,7 @@ export type PublicCopy = {
     home: string;
     properties: string;
   };
-  overview: {
+  overview?: {
     body: string;
     eyebrow: string;
     items: Array<{
