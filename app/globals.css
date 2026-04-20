@@ -9,7 +9,7 @@
   --gold: #d4b26a;
   --gold-soft: rgba(212, 178, 106, 0.24);
   --shadow: 0 24px 70px rgba(18, 53, 36, 0.14);
-  --font-sans: "Avenir Next", Avenir, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-sans: "Lato", "Avenir Next", Avenir, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
 }
 
@@ -223,7 +223,7 @@ textarea {
 .hero h1 {
   max-width: 14ch;
   margin-top: 1rem;
-  font-size: clamp(3.8rem, 8vw, 7rem);
+  font-size: clamp(3.3rem, 7vw, 6rem);
 }
 
 .hero-text,
@@ -590,7 +590,7 @@ textarea {
   }
 
   .hero h1 {
-    font-size: clamp(3rem, 15vw, 4.6rem);
+    font-size: clamp(2.7rem, 13vw, 4rem);
   }
 
   .hero-stats,
