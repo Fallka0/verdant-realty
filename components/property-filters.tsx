@@ -5,6 +5,7 @@ import { useDeferredValue, useState } from "react";
 import { PropertyCard } from "@/components/property-card";
 import { propertyTypes, type PropertyRecord, type PropertyType } from "@/lib/property-shared";
 import {
+  getLocalizedResultsLabel,
   getLocalizedPropertyTypeLabel,
   type PublicCopy,
   type PublicLocale,
@@ -110,9 +111,7 @@ export function PropertyFilters({ copy, locale, properties }: PropertyFiltersPro
         <div className="results-header">
           <div>
             <p className="eyebrow">{copy.filters.availableInventory}</p>
-            <h2>
-              {filteredProperties.length} {copy.filters.results}
-            </h2>
+            <h2>{getLocalizedResultsLabel(locale, filteredProperties.length)}</h2>
           </div>
         </div>
 

@@ -23,6 +23,7 @@
   "dependencies": {
     "@fontsource/cormorant-garamond": "^5.2.11",
     "@fontsource/lato": "^5.2.7",
+    "@fontsource/noto-sans": "^5.2.10",
     "@supabase/ssr": "^0.10.2",
     "@supabase/supabase-js": "^2.103.3",
     "embla-carousel-react": "^8.6.0",

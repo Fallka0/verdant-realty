@@ -25,7 +25,7 @@ export function Homepage({ copy, currentLocale, featuredProperties, latestProper
   }));
 
   return (
-    <main className="site-shell">
+    <main className="site-shell" data-locale={currentLocale} lang={currentLocale}>
       <section className="hero-shell">
         <PublicHeader
           brandSubtitle={copy.brandSubtitle}

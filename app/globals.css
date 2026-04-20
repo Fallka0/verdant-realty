@@ -12,7 +12,7 @@
   --danger: #8e4d2a;
   --shadow: 0 24px 70px rgba(18, 53, 36, 0.12);
   --font-primary-family: var(--font-primary), "Cormorant Garamond", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
-  --font-secondary-family: var(--font-secondary), "Lato", "Avenir Next", Avenir, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-secondary-family: var(--font-secondary), var(--font-secondary-cyrillic), "Lato", "Noto Sans", "Avenir Next", Avenir, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-body: var(--font-secondary-family);
   --font-heading: var(--font-primary-family);
   --font-ui: var(--font-secondary-family);
@@ -266,7 +266,8 @@ h3 {
   margin: 0;
   font-family: var(--font-heading);
   font-weight: 600;
-  line-height: 1;
+  line-height: 1.06;
+  text-wrap: balance;
 }
 
 h1 {
@@ -390,6 +391,10 @@ p {
 .section-heading {
   max-width: 44rem;
   margin-bottom: 1.75rem;
+}
+
+.section-heading.with-action {
+  align-items: end;
 }
 
 .section-heading.compact {
@@ -530,6 +535,7 @@ p {
 
 .property-card-topline {
   justify-content: space-between;
+  align-items: center;
   color: var(--muted);
 }
 
@@ -589,6 +595,15 @@ textarea:focus {
 
 .listing-results {
   min-height: 30rem;
+}
+
+.results-header {
+  margin-bottom: 1.4rem;
+  padding-bottom: 0.25rem;
+}
+
+.results-header > div > * + * {
+  margin-top: 0.45rem;
 }
 
 .empty-state {
@@ -928,6 +943,36 @@ textarea:focus {
   color: rgba(255, 250, 241, 0.78);
   font-family: var(--font-ui);
   font-size: 0.92rem;
+}
+
+[data-locale="ru"] .eyebrow,
+[data-locale="ru"] .region-pill,
+[data-locale="ru"] .pill,
+[data-locale="ru"] .language-button,
+[data-locale="ru"] .brand-link strong {
+  letter-spacing: 0.03em;
+}
+
+[data-locale="ru"] .eyebrow,
+[data-locale="ru"] .region-pill,
+[data-locale="ru"] .pill {
+  text-transform: none;
+}
+
+[data-locale="ru"] h1,
+[data-locale="ru"] h2,
+[data-locale="ru"] h3 {
+  line-height: 1.1;
+}
+
+[data-locale="ru"] .button-wide {
+  min-width: 12.5rem;
+}
+
+[data-locale="ru"] .stat-card span,
+[data-locale="ru"] .carousel-hint,
+[data-locale="ru"] .zoom-hint {
+  max-width: 22ch;
 }
 
 .zoom-side-button {

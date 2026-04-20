@@ -35,7 +35,7 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
   const gallery = [property.mainImageUrl, ...property.galleryUrls];
 
   return (
-    <main className="site-shell section-stack">
+    <main className="site-shell section-stack" data-locale={locale} lang={locale}>
       <PublicHeader
         brandSubtitle={copy.brandSubtitle}
         compact

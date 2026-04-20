@@ -391,14 +391,14 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     },
   },
   ru: {
-    areasLabel: "Популярные Районы",
+    areasLabel: "Популярные районы",
     areasTitle: "Прибрежные локации, которые чаще всего ищут покупатели.",
     areasSummary:
       "От центра Торревьехи до соседних прибрежных районов покупатели могут быстро перейти к тем местам, которые им действительно интересны.",
-    brandSubtitle: "Недвижимость На Коста-Бланке",
+    brandSubtitle: "Недвижимость на Коста-Бланке",
     buttons: {
       browseProperties: "Смотреть объекты",
-      openListings: "Открыть объекты",
+      openListings: "Все объекты",
       seeAllProperties: "Все объекты",
       sendInquiry: "Отправить запрос",
       sending: "Отправка...",
@@ -416,7 +416,7 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       zoomHint: "Используйте боковые стрелки или клавиатуру для просмотра галереи.",
     },
     coverage: {
-      eyebrow: "Прибрежная Подборка",
+      eyebrow: "Прибрежная коллекция",
       summary:
         "Понятный и ориентированный на объекты интерфейс для покупателей, которые ищут жилье в Торревьехе и рядом.",
       title: "Объекты показаны яснее и спокойнее.",
@@ -475,8 +475,8 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     },
     languageLabel: "Выберите язык",
     masonry: {
-      eyebrow: "Визуальный Просмотр",
-      title: "Изучайте коллекцию в более визуальной подаче.",
+      eyebrow: "Фотоподборка",
+      title: "Изучайте объекты через более визуальную подачу.",
     },
     nav: {
       home: "Главная",
@@ -485,7 +485,7 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     overview: {
       body:
         "Сайт построен вокруг реальных объектов, сильной презентации и более простого пути от просмотра к обращению.",
-      eyebrow: "Почему Покупатели Остаются",
+      eyebrow: "Почему здесь задерживаются",
       items: [
         {
           title: "Фокус на объектах",
@@ -508,13 +508,13 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       title: "Доступные объекты в Торревьехе и на побережье рядом.",
     },
     propertyMeta: {
-      bathroomsShort: "ванн.",
+      bathroomsShort: "ван.",
       bedroomsShort: "спал.",
       featuredSnapshot: "Выбранный объект",
-      homesOnline: "готовых объектов в каталоге",
-      homesSelected: "выделенных мест на главной",
+      homesOnline: "объектов в каталоге",
+      homesSelected: "объектов на главной",
       homesSelectedLabel: "ключевых районов рядом",
-      updatedListings: "обновленных объектов",
+      updatedListings: "актуальные объекты",
     },
   },
   de: {
@@ -694,4 +694,31 @@ export function getLocalizedPropertyStatusLabel(locale: PublicLocale, status: st
   } as const;
 
   return labels[locale][status as keyof (typeof labels)[typeof locale]] ?? status;
+}
+
+export function getLocalizedResultsLabel(locale: PublicLocale, count: number) {
+  if (locale === "ru") {
+    const mod10 = count % 10;
+    const mod100 = count % 100;
+
+    if (mod10 === 1 && mod100 !== 11) {
+      return `${count} объект найден`;
+    }
+
+    if (mod10 >= 2 && mod10 <= 4 && !(mod100 >= 12 && mod100 <= 14)) {
+      return `${count} объекта найдено`;
+    }
+
+    return `${count} объектов найдено`;
+  }
+
+  if (locale === "es") {
+    return count === 1 ? "1 propiedad coincide." : `${count} propiedades coinciden.`;
+  }
+
+  if (locale === "de") {
+    return count === 1 ? "1 Immobilie passt aktuell." : `${count} Immobilien passen aktuell.`;
+  }
+
+  return count === 1 ? "1 property currently matches." : `${count} properties currently match.`;
 }
