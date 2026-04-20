@@ -1,15 +1,12 @@
 import { cookies } from "next/headers";
-import Link from "next/link";
 
 import { notFound } from "next/navigation";
 
 import { ContactActions } from "@/components/contact-actions";
 import { ImageCarousel } from "@/components/image-carousel";
-import { InquiryForm } from "@/components/inquiry-form";
 import { PublicHeader } from "@/components/public-header";
 import { adminCopy, resolveAdminLocale } from "@/lib/admin-copy";
 import { getAdminAuthState } from "@/lib/auth";
-import { motherPhoneDisplay } from "@/lib/contact";
 import {
   getLocalizedPropertyStatusLabel,
   getLocalizedPropertyTypeLabel,
@@ -59,10 +56,6 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
 
         <div className="property-detail-hero">
           <div className="section-heading">
-            <Link className="detail-back-link" href="/properties">
-              <span aria-hidden="true">&larr;</span>
-              {copy.nav.properties}
-            </Link>
             <p className="eyebrow">{localizedProperty.location}</p>
             <h1>{localizedProperty.title}</h1>
             <p>{localizedProperty.description}</p>
@@ -85,9 +78,6 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
               whatsappLabel={copy.buttons.whatsapp}
               whatsappMessage={`${copy.contact.whatsappMessage} ${localizedProperty.title}`}
             />
-            <Link className="button button-primary" href="#inquiry">
-              {copy.buttons.sendInquiry}
-            </Link>
           </aside>
         </div>
       </section>
@@ -129,34 +119,15 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
           </article>
         </div>
 
-        <aside className="detail-sidebar" id="inquiry">
+        <aside className="detail-sidebar">
           <div className="sticky-card">
             <p className="eyebrow">{copy.detail.requestInfo}</p>
             <h2>{copy.detail.requestTitle}</h2>
-            <div className="contact-details compact-contact-details">
-              <div>
-                <span>{copy.contact.phoneLabel}</span>
-                <strong>{motherPhoneDisplay}</strong>
-              </div>
-              <div>
-                <span>{copy.contact.availabilityLabel}</span>
-                <strong>{copy.contact.availabilityValue}</strong>
-              </div>
-            </div>
             <ContactActions
               callLabel={copy.buttons.callNow}
               className="contact-actions sticky-contact-actions"
               whatsappLabel={copy.buttons.whatsapp}
               whatsappMessage={`${copy.contact.whatsappMessage} ${localizedProperty.title}`}
-            />
-            <InquiryForm
-              copy={copy}
-              locale={locale}
-              property={{
-                id: localizedProperty.id,
-                location: localizedProperty.location,
-                title: localizedProperty.title,
-              }}
             />
           </div>
         </aside>
