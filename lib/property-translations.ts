@@ -16,6 +16,13 @@ const deeplSourceLanguageMap: Partial<Record<string, (typeof targetLocales)[numb
   DE: "de",
 };
 
+const deeplSourceRequestLanguageMap: Record<(typeof targetLocales)[number], string> = {
+  en: "EN",
+  es: "ES",
+  ru: "RU",
+  de: "DE",
+};
+
 function getDeepLEnv() {
   return {
     apiKey: process.env.DEEPL_API_KEY,
@@ -32,6 +39,7 @@ async function translateWithDeepL(
   apiKey: string,
   content: PropertyContentFields,
   targetLocale: (typeof targetLocales)[number],
+  sourceLocale?: (typeof targetLocales)[number],
 ): Promise<{
   detectedSourceLocale: (typeof targetLocales)[number] | null;
   content: PropertyContentFields;
@@ -44,6 +52,7 @@ async function translateWithDeepL(
     },
     body: JSON.stringify({
       text: [content.title, content.shortDescription, content.description],
+      ...(sourceLocale ? { source_lang: deeplSourceRequestLanguageMap[sourceLocale] } : {}),
       target_lang: deeplTargetLanguageMap[targetLocale],
       context: `${content.title}\n\n${content.shortDescription}\n\n${content.description}`,
     }),
@@ -104,11 +113,11 @@ export async function generatePropertyTranslations(
           return [locale, content] as const;
         }
 
-        if (locale === "en" && englishResult) {
+        if (locale === "en" && englishResult && sourceLocale === "en") {
           return [locale, englishResult.content] as const;
         }
 
-        const translated = await translateWithDeepL(apiUrl, apiKey, content, locale);
+        const translated = await translateWithDeepL(apiUrl, apiKey, content, locale, sourceLocale ?? undefined);
 
         return [locale, translated?.content ?? content] as const;
       }),
