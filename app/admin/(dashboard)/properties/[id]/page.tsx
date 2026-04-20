@@ -39,7 +39,12 @@ export default async function EditPropertyPage({ params }: EditPropertyPageProps
         </Link>
       </div>
 
-      <PropertyForm action={updateAction} property={property} submitLabel="Save changes" />
+      <PropertyForm
+        action={updateAction}
+        property={property}
+        referenceSeed={property.referenceCode.replace(/^VR-/, "")}
+        submitLabel="Save changes"
+      />
 
       <form className="delete-form" action={deleteAction}>
         <button className="button button-danger" type="submit">

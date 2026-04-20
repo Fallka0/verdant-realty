@@ -1399,6 +1399,7 @@ textarea {
 
 .admin-login-card,
 .admin-card,
+.admin-dashboard-hero,
 .setup-card {
   border: 1px solid rgba(18, 53, 36, 0.08);
   border-radius: 26px;
@@ -1514,6 +1515,47 @@ textarea {
   gap: 1.25rem;
 }
 
+.admin-dashboard-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1.5rem;
+  align-items: end;
+  padding: 1.75rem;
+  background:
+    linear-gradient(135deg, rgba(255, 251, 244, 0.94), rgba(243, 235, 223, 0.72)),
+    repeating-linear-gradient(
+      135deg,
+      rgba(18, 53, 36, 0.014),
+      rgba(18, 53, 36, 0.014) 1px,
+      transparent 1px,
+      transparent 22px
+    );
+}
+
+.admin-dashboard-hero h2 {
+  max-width: 13ch;
+  margin: 0.45rem 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 5vw, 4.6rem);
+  font-weight: 600;
+  line-height: 0.98;
+  letter-spacing: -0.01em;
+}
+
+.admin-dashboard-hero p:last-child {
+  max-width: 46rem;
+  margin: 1rem 0 0;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.admin-quick-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 .admin-card {
   padding: 1.5rem;
 }
@@ -1586,9 +1628,13 @@ textarea {
   overflow-x: auto;
 }
 
+.admin-table-card {
+  overflow: hidden;
+}
+
 .admin-table {
   width: 100%;
-  min-width: 820px;
+  min-width: 760px;
   border-collapse: collapse;
 }
 
@@ -1621,6 +1667,28 @@ textarea {
 .admin-listing-title span {
   color: var(--muted);
   font-size: 0.78rem;
+}
+
+.admin-listing-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-width: 22rem;
+}
+
+.admin-listing-thumb {
+  position: relative;
+  width: 4.5rem;
+  height: 4rem;
+  flex: 0 0 auto;
+  overflow: hidden;
+  border: 1px solid rgba(18, 53, 36, 0.08);
+  border-radius: 14px;
+  background: rgba(18, 53, 36, 0.06);
+}
+
+.admin-listing-thumb img {
+  object-fit: cover;
 }
 
 .admin-status-pill {
@@ -1678,8 +1746,45 @@ textarea {
   gap: 1rem;
 }
 
+.field-note {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
 .full-span {
   grid-column: 1 / -1;
+}
+
+.admin-upload-field {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.admin-upload-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  padding: 0.85rem;
+  border: 1px dashed rgba(18, 53, 36, 0.18);
+  border-radius: 16px;
+  background: rgba(255, 251, 244, 0.52);
+}
+
+.admin-upload-row input[type="file"] {
+  width: min(100%, 20rem);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.admin-upload-row span {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 700;
 }
 
 .admin-checkbox {
@@ -1709,6 +1814,31 @@ textarea {
 .button-danger:hover,
 .button-danger:focus-visible {
   background: rgba(138, 74, 29, 0.12);
+}
+
+.admin-empty-state {
+  display: grid;
+  place-items: center;
+  gap: 0.8rem;
+  padding: 4rem 1.5rem;
+  text-align: center;
+  border: 1px dashed rgba(18, 53, 36, 0.14);
+  border-radius: 22px;
+  background: rgba(255, 251, 244, 0.36);
+}
+
+.admin-empty-state h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.admin-empty-state p {
+  max-width: 34rem;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
 }
 
 .setup-card {
@@ -2197,12 +2327,15 @@ textarea {
   }
 
   .admin-topbar,
+  .admin-dashboard-hero,
   .admin-overview-card {
     align-items: flex-start;
     flex-direction: column;
+    grid-template-columns: 1fr;
   }
 
-  .admin-topbar-actions {
+  .admin-topbar-actions,
+  .admin-quick-actions {
     justify-content: flex-start;
   }
 
@@ -2234,6 +2367,7 @@ textarea {
 
   .admin-login-card,
   .admin-card,
+  .admin-dashboard-hero,
   .setup-card {
     border-radius: 22px;
   }

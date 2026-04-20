@@ -1,8 +1,22 @@
 import { PropertyForm } from "@/components/admin/property-form";
+import { getAdminProperties } from "@/lib/properties";
 
 import { createPropertyAction } from "@/app/admin/(dashboard)/actions";
 
-export default function NewPropertyPage() {
+function getNextReferenceSeed(referenceCodes: string[]) {
+  const nextNumber =
+    Math.max(
+      100,
+      ...referenceCodes.map((code) => Number(code.match(/(\d+)$/)?.[1] ?? 0)).filter(Number.isFinite),
+    ) + 1;
+
+  return String(nextNumber);
+}
+
+export default async function NewPropertyPage() {
+  const properties = await getAdminProperties();
+  const referenceSeed = getNextReferenceSeed(properties.map((property) => property.referenceCode));
+
   return (
     <section className="admin-card">
       <div className="section-heading compact">
@@ -14,7 +28,7 @@ export default function NewPropertyPage() {
         </p>
       </div>
 
-      <PropertyForm action={createPropertyAction} submitLabel="Create property" />
+      <PropertyForm action={createPropertyAction} referenceSeed={referenceSeed} submitLabel="Create property" />
     </section>
   );
 }
