@@ -49,6 +49,8 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
       />
 
       <section className="detail-spotlight">
+        <ImageCarousel copy={copy} images={gallery} title={localizedProperty.title} />
+
         <div className="property-detail-hero">
           <div className="section-heading">
             <Link className="detail-back-link" href="/properties">
@@ -76,8 +78,6 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
             </Link>
           </aside>
         </div>
-
-        <ImageCarousel copy={copy} images={gallery} title={localizedProperty.title} />
       </section>
 
       <section className="detail-grid">

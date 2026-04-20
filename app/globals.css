@@ -840,6 +840,28 @@ textarea {
   font-size: 0.95rem;
 }
 
+.hero-side-image-link {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid rgba(18, 53, 36, 0.08);
+  background: rgba(18, 53, 36, 0.06);
+  box-shadow: 0 10px 30px rgba(18, 53, 36, 0.1);
+}
+
+.hero-side-image {
+  object-fit: cover;
+  transition: transform 400ms ease;
+}
+
+.hero-side-image-link:hover .hero-side-image,
+.hero-side-image-link:focus-visible .hero-side-image {
+  transform: scale(1.04);
+}
+
 .hero-side-facts {
   display: flex;
   flex-direction: column;
@@ -1382,7 +1404,7 @@ textarea {
   justify-content: space-between;
   gap: 2rem;
   flex-wrap: wrap;
-  padding: 0 0 2rem;
+  padding: 2rem 0 0;
 }
 
 .property-detail-hero .section-heading { margin-bottom: 0; max-width: 52rem; }

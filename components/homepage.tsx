@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import Image from "next/image";
 import Link from "next/link";
 
 import { PublicHeader } from "@/components/public-header";
@@ -51,6 +52,16 @@ export function Homepage({ copy, currentLocale, featuredProperties, latestProper
             <p className="eyebrow">{copy.propertyMeta.featuredSnapshot}</p>
             {featuredProperties[0] ? (
               <>
+                <Link className="hero-side-image-link" href={`/properties/${featuredProperties[0].slug}`}>
+                  <Image
+                    className="hero-side-image"
+                    src={featuredProperties[0].mainImageUrl}
+                    alt={featuredProperties[0].title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 360px"
+                    priority
+                  />
+                </Link>
                 <h2>{featuredProperties[0].title}</h2>
                 <p>{featuredProperties[0].shortDescription}</p>
                 <div className="hero-side-facts">
