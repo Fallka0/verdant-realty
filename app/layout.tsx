@@ -1,14 +1,31 @@
 import type { Metadata } from "next";
+import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 
-import { cyrillicUiFont, displayFont, uiFont } from "@/app/fonts";
 import "./globals.css";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+// DM Sans as the base body font — applied directly as className so it's
+// baked into the SSR HTML, no CSS variable race on first paint.
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+// Cormorant Garamond for headings — exposed as a CSS variable so heading
+// rules in globals.css can reference it via var(--font-display).
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-display",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Verdant Realty",
-  description: "Verdant Realty showcases homes for sale in Torrevieja and nearby coastal areas.",
-  metadataBase: new URL(siteUrl),
+  description:
+    "Verdant Realty is a boutique real estate brand with calm strategy, polished presentation, and concierge-level client care.",
 };
 
 export default function RootLayout({
@@ -17,14 +34,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      </head>
-      <body className={`${displayFont.variable} ${uiFont.variable} ${cyrillicUiFont.variable}`}>
-        {children}
-      </body>
+    // cormorant.variable puts --font-display on <html> for heading CSS rules
+    // dmSans.className applies DM Sans directly — no variable indirection needed
+    <html lang="en" className={cormorant.variable}>
+      <body className={dmSans.className}>{children}</body>
     </html>
   );
 }
