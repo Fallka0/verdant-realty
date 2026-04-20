@@ -21,12 +21,14 @@ export type PublicCopy = {
   brandSubtitle: string;
   buttons: {
     browseProperties: string;
+    callNow: string;
     openListings: string;
     seeAllProperties: string;
     sendInquiry: string;
     sending: string;
     viewDetails: string;
     viewListing: string;
+    whatsapp: string;
   };
   carousel: {
     closeZoom: string;
@@ -37,6 +39,15 @@ export type PublicCopy = {
     previousImage: string;
     showImage: string;
     zoomHint: string;
+  };
+  contact: {
+    availabilityLabel: string;
+    availabilityValue: string;
+    eyebrow: string;
+    phoneLabel: string;
+    summary: string;
+    title: string;
+    whatsappMessage: string;
   };
   coverage: {
     eyebrow: string;
@@ -182,12 +193,14 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     brandSubtitle: "Homes Along The Costa Blanca",
     buttons: {
       browseProperties: "Browse Properties",
+      callNow: "Call Now",
       openListings: "Open Full Listings",
       seeAllProperties: "See All Properties",
       sendInquiry: "Send Inquiry",
       sending: "Sending...",
       viewDetails: "View Details",
       viewListing: "View Listing",
+      whatsapp: "WhatsApp",
     },
     carousel: {
       closeZoom: "Close zoom view",
@@ -198,6 +211,15 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       previousImage: "Show previous image",
       showImage: "Show image",
       zoomHint: "Use the side arrows or your keyboard to move through the gallery.",
+    },
+    contact: {
+      availabilityLabel: "Best for",
+      availabilityValue: "Calls and WhatsApp",
+      eyebrow: "Direct Contact",
+      phoneLabel: "Phone",
+      summary: "For buyers who prefer a direct conversation, Verdant Realty is also available by phone or on WhatsApp.",
+      title: "Speak with your agent right away when a listing feels promising.",
+      whatsappMessage: "Hello, I am interested in a property from Verdant Realty and would like more information.",
     },
     coverage: {
       eyebrow: "Coastal Collection",
@@ -365,12 +387,14 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     brandSubtitle: "Viviendas En La Costa Blanca",
     buttons: {
       browseProperties: "Ver propiedades",
+      callNow: "Llamar ahora",
       openListings: "Abrir propiedades",
       seeAllProperties: "Ver todas",
       sendInquiry: "Enviar consulta",
       sending: "Enviando...",
       viewDetails: "Ver detalles",
       viewListing: "Ver propiedad",
+      whatsapp: "WhatsApp",
     },
     carousel: {
       closeZoom: "Cerrar vista ampliada",
@@ -381,6 +405,15 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       previousImage: "Mostrar la imagen anterior",
       showImage: "Mostrar imagen",
       zoomHint: "Usa las flechas laterales o el teclado para moverte por la galería.",
+    },
+    contact: {
+      availabilityLabel: "Ideal para",
+      availabilityValue: "Llamadas y WhatsApp",
+      eyebrow: "Contacto directo",
+      phoneLabel: "Teléfono",
+      summary: "Si prefieres hablar directamente, Verdant Realty también está disponible por teléfono o por WhatsApp.",
+      title: "Habla con tu agente enseguida cuando una propiedad te interese.",
+      whatsappMessage: "Hola, me interesa una propiedad de Verdant Realty y me gustaría recibir más información.",
     },
     coverage: {
       eyebrow: "Selección Costera",
@@ -548,12 +581,14 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     brandSubtitle: "Недвижимость на Коста-Бланке",
     buttons: {
       browseProperties: "Смотреть объекты",
+      callNow: "Позвонить",
       openListings: "Все объекты",
       seeAllProperties: "Все объекты",
       sendInquiry: "Отправить запрос",
       sending: "Отправка...",
       viewDetails: "Подробнее",
       viewListing: "Смотреть объект",
+      whatsapp: "WhatsApp",
     },
     carousel: {
       closeZoom: "Закрыть увеличенное изображение",
@@ -564,6 +599,15 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       previousImage: "Показать предыдущее изображение",
       showImage: "Показать изображение",
       zoomHint: "Используйте боковые стрелки или клавиатуру для просмотра галереи.",
+    },
+    contact: {
+      availabilityLabel: "Удобно для",
+      availabilityValue: "Звонков и WhatsApp",
+      eyebrow: "Быстрый контакт",
+      phoneLabel: "Телефон",
+      summary: "Если удобнее поговорить напрямую, с Verdant Realty можно быстро связаться по телефону или в WhatsApp.",
+      title: "Когда объект заинтересовал, связаться с агентом можно сразу.",
+      whatsappMessage: "Здравствуйте, меня заинтересовал объект на Verdant Realty. Хотелось бы получить больше информации.",
     },
     coverage: {
       eyebrow: "Прибрежная коллекция",
@@ -731,12 +775,14 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     brandSubtitle: "Häuser An Der Costa Blanca",
     buttons: {
       browseProperties: "Immobilien ansehen",
+      callNow: "Jetzt anrufen",
       openListings: "Alle Immobilien öffnen",
       seeAllProperties: "Alle ansehen",
       sendInquiry: "Anfrage senden",
       sending: "Wird gesendet...",
       viewDetails: "Details ansehen",
       viewListing: "Objekt ansehen",
+      whatsapp: "WhatsApp",
     },
     carousel: {
       closeZoom: "Zoomansicht schließen",
@@ -747,6 +793,15 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       previousImage: "Vorheriges Bild anzeigen",
       showImage: "Bild anzeigen",
       zoomHint: "Mit den seitlichen Pfeilen oder der Tastatur durch die Galerie gehen.",
+    },
+    contact: {
+      availabilityLabel: "Am besten für",
+      availabilityValue: "Anrufe und WhatsApp",
+      eyebrow: "Direkter Kontakt",
+      phoneLabel: "Telefon",
+      summary: "Wenn ein direktes Gespräch angenehmer ist, ist Verdant Realty auch telefonisch oder über WhatsApp erreichbar.",
+      title: "Sprechen Sie sofort mit Ihrer Ansprechpartnerin, wenn ein Objekt interessant wirkt.",
+      whatsappMessage: "Hallo, ich interessiere mich für eine Immobilie von Verdant Realty und hätte gern weitere Informationen.",
     },
     coverage: {
       eyebrow: "Küstenkollektion",

@@ -3,11 +3,13 @@ import Link from "next/link";
 
 import { notFound } from "next/navigation";
 
+import { ContactActions } from "@/components/contact-actions";
 import { ImageCarousel } from "@/components/image-carousel";
 import { InquiryForm } from "@/components/inquiry-form";
 import { PublicHeader } from "@/components/public-header";
 import { adminCopy, resolveAdminLocale } from "@/lib/admin-copy";
 import { getAdminAuthState } from "@/lib/auth";
+import { motherPhoneDisplay } from "@/lib/contact";
 import {
   getLocalizedPropertyStatusLabel,
   getLocalizedPropertyTypeLabel,
@@ -77,6 +79,12 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
           <aside className="detail-price-card">
             <span>{localizedProperty.referenceCode}</span>
             <strong>{formatPrice(localizedProperty.priceEuro)}</strong>
+            <ContactActions
+              callLabel={copy.buttons.callNow}
+              className="contact-actions detail-contact-actions"
+              whatsappLabel={copy.buttons.whatsapp}
+              whatsappMessage={`${copy.contact.whatsappMessage} ${localizedProperty.title}`}
+            />
             <Link className="button button-primary" href="#inquiry">
               {copy.buttons.sendInquiry}
             </Link>
@@ -125,6 +133,22 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
           <div className="sticky-card">
             <p className="eyebrow">{copy.detail.requestInfo}</p>
             <h2>{copy.detail.requestTitle}</h2>
+            <div className="contact-details compact-contact-details">
+              <div>
+                <span>{copy.contact.phoneLabel}</span>
+                <strong>{motherPhoneDisplay}</strong>
+              </div>
+              <div>
+                <span>{copy.contact.availabilityLabel}</span>
+                <strong>{copy.contact.availabilityValue}</strong>
+              </div>
+            </div>
+            <ContactActions
+              callLabel={copy.buttons.callNow}
+              className="contact-actions sticky-contact-actions"
+              whatsappLabel={copy.buttons.whatsapp}
+              whatsappMessage={`${copy.contact.whatsappMessage} ${localizedProperty.title}`}
+            />
             <InquiryForm
               copy={copy}
               locale={locale}

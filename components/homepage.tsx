@@ -2,9 +2,11 @@ import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { ContactActions } from "@/components/contact-actions";
 import { PublicHeader } from "@/components/public-header";
 import { PropertyCard } from "@/components/property-card";
 import { ReactBitsMasonry } from "@/components/react-bits-masonry";
+import { motherPhoneDisplay } from "@/lib/contact";
 import { formatPrice, type PropertyRecord } from "@/lib/property-shared";
 import { areaNames, neighborhoodImages, type PublicCopy, type PublicLocale } from "@/lib/public-copy";
 
@@ -47,6 +49,11 @@ export function Homepage({ adminLabel, copy, currentLocale, featuredProperties, 
               <Link className="button button-primary" href="/properties">
                 {copy.buttons.browseProperties}
               </Link>
+              <ContactActions
+                callLabel={copy.buttons.callNow}
+                whatsappLabel={copy.buttons.whatsapp}
+                whatsappMessage={copy.contact.whatsappMessage}
+              />
             </div>
           </div>
 
@@ -181,6 +188,37 @@ export function Homepage({ adminLabel, copy, currentLocale, featuredProperties, 
               <p>{item.copy}</p>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="section contact-section">
+        <div className="contact-copy">
+          <p className="eyebrow">{copy.contact.eyebrow}</p>
+          <h2>{copy.contact.title}</h2>
+          <p>{copy.contact.summary}</p>
+
+          <div className="contact-details">
+            <div>
+              <span>{copy.contact.phoneLabel}</span>
+              <strong>{motherPhoneDisplay}</strong>
+            </div>
+            <div>
+              <span>{copy.contact.availabilityLabel}</span>
+              <strong>{copy.contact.availabilityValue}</strong>
+            </div>
+          </div>
+        </div>
+
+        <div className="market-panel">
+          <p className="eyebrow">{copy.contact.eyebrow}</p>
+          <h3>{copy.contact.title}</h3>
+          <p>{copy.contact.summary}</p>
+          <ContactActions
+            callLabel={copy.buttons.callNow}
+            className="contact-actions"
+            whatsappLabel={copy.buttons.whatsapp}
+            whatsappMessage={copy.contact.whatsappMessage}
+          />
         </div>
       </section>
 
