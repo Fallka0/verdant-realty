@@ -9,6 +9,7 @@ import { formatPrice, type PropertyRecord } from "@/lib/property-shared";
 import { areaNames, neighborhoodImages, type PublicCopy, type PublicLocale } from "@/lib/public-copy";
 
 type HomepageProps = {
+  adminLabel?: string;
   copy: PublicCopy;
   currentLocale: PublicLocale;
   featuredProperties: PropertyRecord[];
@@ -17,7 +18,7 @@ type HomepageProps = {
 
 const masonryHeights = [300, 420, 340, 390, 460, 320];
 
-export function Homepage({ copy, currentLocale, featuredProperties, latestProperties }: HomepageProps) {
+export function Homepage({ adminLabel, copy, currentLocale, featuredProperties, latestProperties }: HomepageProps) {
   const masonryItems = latestProperties.map((property, index) => ({
     id: property.id,
     img: property.mainImageUrl,
@@ -30,6 +31,7 @@ export function Homepage({ copy, currentLocale, featuredProperties, latestProper
     <main className="site-shell" data-locale={currentLocale} lang={currentLocale}>
       <section className="hero-shell">
         <PublicHeader
+          adminLabel={adminLabel}
           brandSubtitle={copy.brandSubtitle}
           currentLocale={currentLocale}
           languageLabel={copy.languageLabel}

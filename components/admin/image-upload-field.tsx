@@ -16,7 +16,7 @@ type ImageUploadFieldProps = {
     uploadGallery: string;
     uploadImage: string;
     uploading: string;
-    uploadedCount: (count: number) => string;
+    uploadedCount: string;
   };
 };
 
@@ -88,7 +88,10 @@ export function ImageUploadField({
       }
 
       setUploadState({
-        message: mode === "single" ? uploadCopy.imageUploaded : uploadCopy.uploadedCount(urls.length),
+        message:
+          mode === "single"
+            ? uploadCopy.imageUploaded
+            : uploadCopy.uploadedCount.replace("{count}", String(urls.length)),
         type: "success",
       });
     } catch (error) {

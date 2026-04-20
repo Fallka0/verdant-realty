@@ -129,7 +129,7 @@ export type AdminCopy = {
     uploadGallery: string;
     uploadImage: string;
     uploading: string;
-    uploadedCount: (count: number) => string;
+    uploadedCount: string;
   };
 };
 
@@ -247,7 +247,7 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
       uploadGallery: "Upload gallery images",
       uploadImage: "Upload image",
       uploading: "Uploading...",
-      uploadedCount: (count) => `${count} image${count === 1 ? "" : "s"} uploaded.`,
+      uploadedCount: "{count} images uploaded.",
     },
   },
   es: {
@@ -355,7 +355,7 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
       uploadGallery: "Subir imágenes",
       uploadImage: "Subir imagen",
       uploading: "Subiendo...",
-      uploadedCount: (count) => `${count} imagen${count === 1 ? "" : "es"} subida${count === 1 ? "" : "s"}.`,
+      uploadedCount: "{count} imágenes subidas.",
     },
   },
   ru: {
@@ -463,7 +463,7 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
       uploadGallery: "Загрузить галерею",
       uploadImage: "Загрузить фото",
       uploading: "Загрузка...",
-      uploadedCount: (count) => `${count} фото загружено.`,
+      uploadedCount: "{count} фото загружено.",
     },
   },
   de: {} as AdminCopy,

@@ -35,18 +35,6 @@ export default async function AdminDashboardPage() {
         </div>
       </div>
 
-      <div className="admin-help-card">
-        <div>
-          <p className="eyebrow">{copy.accessibility.title}</p>
-          <p>{copy.accessibility.body}</p>
-        </div>
-        <ul>
-          {copy.accessibility.items.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </div>
-
       <div className="admin-stat-grid">
         <article className="admin-stat-card">
           <span>{copy.dashboard.stats.public}</span>
