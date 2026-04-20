@@ -9,6 +9,8 @@
   --gold: #d4b26a;
   --gold-soft: rgba(212, 178, 106, 0.24);
   --shadow: 0 24px 70px rgba(18, 53, 36, 0.14);
+  --font-sans: "Avenir Next", Avenir, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
 }
 
 * {
@@ -55,6 +57,12 @@ textarea {
   margin-bottom: 4rem;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
 .brand-lockup {
   display: flex;
   align-items: center;
@@ -98,6 +106,39 @@ textarea {
   gap: 1.5rem;
   color: var(--muted);
   font-size: 0.95rem;
+}
+
+.language-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.28rem;
+  border: 1px solid rgba(18, 53, 36, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 251, 244, 0.68);
+}
+
+.language-button {
+  min-height: 2.35rem;
+  padding: 0.5rem 0.8rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.language-button.active {
+  background: var(--text);
+  color: #fffaf1;
+  box-shadow: 0 10px 20px rgba(18, 53, 36, 0.18);
 }
 
 .site-nav a {
@@ -180,7 +221,7 @@ textarea {
 }
 
 .hero h1 {
-  max-width: 12ch;
+  max-width: 14ch;
   margin-top: 1rem;
   font-size: clamp(3.8rem, 8vw, 7rem);
 }
@@ -528,9 +569,19 @@ textarea {
     margin-bottom: 3rem;
   }
 
+  .header-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   .site-nav {
     flex-wrap: wrap;
     gap: 0.9rem 1.25rem;
+  }
+
+  .language-switcher {
+    flex-wrap: wrap;
   }
 
   .hero {
