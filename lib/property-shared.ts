@@ -10,10 +10,18 @@ export const propertyTypes = [
 
 export type PropertyStatus = (typeof propertyStatuses)[number];
 export type PropertyType = (typeof propertyTypes)[number];
+export type PropertyContentFields = {
+  description: string;
+  shortDescription: string;
+  title: string;
+};
+
+export type PropertyContentTranslations = Partial<Record<"en" | "es" | "ru" | "de", PropertyContentFields>>;
 
 export type PropertyRecord = {
   bathrooms: number;
   bedrooms: number;
+  contentTranslations: PropertyContentTranslations;
   createdAt: string;
   description: string;
   featured: boolean;
@@ -60,4 +68,3 @@ export function getPropertyStatusLabel(status: PropertyStatus) {
     sold: "Sold",
   }[status];
 }
-

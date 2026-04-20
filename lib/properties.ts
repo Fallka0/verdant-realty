@@ -1,10 +1,19 @@
 import { type PublicLocale } from "@/lib/public-copy";
-import { propertyStatuses, propertyTypes, type PropertyRecord, type PropertyStatus, type PropertyType } from "@/lib/property-shared";
+import {
+  propertyStatuses,
+  propertyTypes,
+  type PropertyContentFields,
+  type PropertyContentTranslations,
+  type PropertyRecord,
+  type PropertyStatus,
+  type PropertyType,
+} from "@/lib/property-shared";
 import { createAdminClient } from "@/lib/supabase/server";
 
 type PropertyRow = {
   bathrooms: number | string | null;
   bedrooms: number | string | null;
+  content_translations: PropertyContentTranslations | null;
   created_at: string | null;
   description: string | null;
   featured: boolean | null;
@@ -50,6 +59,15 @@ export const sampleProperties: PropertyRecord[] = [
       "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80",
     ],
+    contentTranslations: {
+      en: {
+        title: "Sea-view apartment near La Mata beach",
+        shortDescription:
+          "Bright three-bedroom apartment with open terrace, sea views, and easy walking distance to the beach.",
+        description:
+          "This bright apartment combines an airy living area, generous terrace, and a practical three-bedroom layout ideal for buyers looking for a turnkey coastal base in La Mata. It is close to the promenade, restaurants, and everyday services.",
+      },
+    },
     createdAt: "2026-04-20T08:00:00.000Z",
     updatedAt: "2026-04-20T08:00:00.000Z",
   },
@@ -78,6 +96,15 @@ export const sampleProperties: PropertyRecord[] = [
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=80",
     ],
+    contentTranslations: {
+      en: {
+        title: "Detached villa with pool in Los Balcones",
+        shortDescription:
+          "Detached family villa with private pool, spacious outdoor areas, and a layout that works year-round.",
+        description:
+          "Designed for buyers who want extra space and privacy, this detached villa in Los Balcones offers generous indoor living, a separate dining area, private pool, and room for entertaining outside.",
+      },
+    },
     createdAt: "2026-04-19T08:00:00.000Z",
     updatedAt: "2026-04-19T08:00:00.000Z",
   },
@@ -105,6 +132,15 @@ export const sampleProperties: PropertyRecord[] = [
       "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
     ],
+    contentTranslations: {
+      en: {
+        title: "Modern penthouse close to Punta Prima",
+        shortDescription:
+          "Modern top-floor home with strong rental appeal, generous sunlight, and quick access to the coast.",
+        description:
+          "A clean-lined penthouse positioned for both lifestyle buyers and second-home investors. The property offers a functional open plan, sunny terraces, and convenient access to Punta Prima and Torrevieja.",
+      },
+    },
     createdAt: "2026-04-18T08:00:00.000Z",
     updatedAt: "2026-04-18T08:00:00.000Z",
   },
@@ -195,6 +231,15 @@ const localizedSamplePropertyContent: Partial<
 };
 
 export function localizeProperty(property: PropertyRecord, locale: PublicLocale): PropertyRecord {
+  const translated = property.contentTranslations[locale];
+
+  if (translated) {
+    return {
+      ...property,
+      ...translated,
+    };
+  }
+
   const localized = localizedSamplePropertyContent[locale]?.[property.id];
 
   if (!localized) {
@@ -221,14 +266,37 @@ function coerceNumber(value: number | string | null) {
   return Number.isFinite(numeric) ? numeric : null;
 }
 
+function normalizeContentTranslations(
+  value: PropertyContentTranslations | null,
+  baseContent: PropertyContentFields,
+): PropertyContentTranslations {
+  const translations = value ?? {};
+
+  return {
+    en: {
+      title: translations.en?.title?.trim() || baseContent.title,
+      shortDescription: translations.en?.shortDescription?.trim() || baseContent.shortDescription,
+      description: translations.en?.description?.trim() || baseContent.description,
+    },
+    es: translations.es,
+    ru: translations.ru,
+    de: translations.de,
+  };
+}
+
 function normalizePropertyRow(row: PropertyRow): PropertyRecord {
   const type = row.property_type;
   const status = row.status;
+  const baseContent = {
+    title: row.title ?? "Untitled property",
+    shortDescription: row.short_description ?? "",
+    description: row.description ?? "",
+  };
 
   return {
     id: row.id,
     referenceCode: row.reference_code ?? "VR-000",
-    title: row.title ?? "Untitled property",
+    title: baseContent.title,
     slug: row.slug ?? "untitled-property",
     location: row.location ?? "Torrevieja",
     priceEuro: coerceNumber(row.price_eur) ?? 0,
@@ -241,10 +309,11 @@ function normalizePropertyRow(row: PropertyRow): PropertyRecord {
       ? (status as PropertyStatus)
       : "draft",
     featured: Boolean(row.featured),
-    shortDescription: row.short_description ?? "",
-    description: row.description ?? "",
+    shortDescription: baseContent.shortDescription,
+    description: baseContent.description,
     mainImageUrl: row.main_image_url ?? sampleProperties[0].mainImageUrl,
     galleryUrls: row.gallery_urls ?? [],
+    contentTranslations: normalizeContentTranslations(row.content_translations, baseContent),
     createdAt: row.created_at ?? new Date().toISOString(),
     updatedAt: row.updated_at ?? new Date().toISOString(),
   };
@@ -375,6 +444,14 @@ export function parsePropertyFormData(formData: FormData) {
     main_image_url: String(formData.get("mainImageUrl") ?? "").trim(),
     gallery_urls: parseGalleryUrls(formData.get("galleryUrls")),
     updated_at: new Date().toISOString(),
+  };
+}
+
+export function buildPropertyContentFromInput(input: ReturnType<typeof parsePropertyFormData>): PropertyContentFields {
+  return {
+    title: input.title,
+    shortDescription: input.short_description,
+    description: input.description,
   };
 }
 
