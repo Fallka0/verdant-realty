@@ -59,57 +59,61 @@ export async function generatePropertyTranslations(
     return buildFallbackTranslations(content);
   }
 
-  const response = await client.responses.create({
-    model: process.env.OPENAI_TRANSLATION_MODEL || fallbackModel,
-    input: [
-      {
-        role: "system",
-        content: [
-          {
-            type: "input_text",
-            text:
-              "You translate real-estate listings for the Costa Blanca. Detect the source language and return polished listing copy in English, Spanish, Russian, and German. Preserve factual details, place names, measurements, and pricing references. Do not add facts, amenities, or claims that are not present in the source. Return valid JSON only.",
-          },
-        ],
-      },
-      {
-        role: "user",
-        content: [
-          {
-            type: "input_text",
-            text: JSON.stringify({
-              targetLocales: publicLocales,
-              fields: content,
-              schema: {
-                en: {
-                  title: "string",
-                  shortDescription: "string",
-                  description: "string",
+  try {
+    const response = await client.responses.create({
+      model: process.env.OPENAI_TRANSLATION_MODEL || fallbackModel,
+      input: [
+        {
+          role: "system",
+          content: [
+            {
+              type: "input_text",
+              text:
+                "You translate real-estate listings for the Costa Blanca. Detect the source language and return polished listing copy in English, Spanish, Russian, and German. Preserve factual details, place names, measurements, and pricing references. Do not add facts, amenities, or claims that are not present in the source. Return valid JSON only.",
+            },
+          ],
+        },
+        {
+          role: "user",
+          content: [
+            {
+              type: "input_text",
+              text: JSON.stringify({
+                targetLocales: publicLocales,
+                fields: content,
+                schema: {
+                  en: {
+                    title: "string",
+                    shortDescription: "string",
+                    description: "string",
+                  },
+                  es: {
+                    title: "string",
+                    shortDescription: "string",
+                    description: "string",
+                  },
+                  ru: {
+                    title: "string",
+                    shortDescription: "string",
+                    description: "string",
+                  },
+                  de: {
+                    title: "string",
+                    shortDescription: "string",
+                    description: "string",
+                  },
                 },
-                es: {
-                  title: "string",
-                  shortDescription: "string",
-                  description: "string",
-                },
-                ru: {
-                  title: "string",
-                  shortDescription: "string",
-                  description: "string",
-                },
-                de: {
-                  title: "string",
-                  shortDescription: "string",
-                  description: "string",
-                },
-              },
-            }),
-          },
-        ],
-      },
-    ],
-  });
+              }),
+            },
+          ],
+        },
+      ],
+    });
 
-  const parsed = parseTranslationResponse(response.output_text);
+    const parsed = parseTranslationResponse(response.output_text);
 
-  return parsed ?? buildFallbackTranslations(content);
+    return parsed ?? buildFallbackTranslations(content);
+  } catch {
+    return buildFallbackTranslations(content);
+  }
 }
