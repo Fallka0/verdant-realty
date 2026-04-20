@@ -1,118 +1,98 @@
-import OpenAI from "openai";
-
 import { type PropertyContentFields, type PropertyContentTranslations } from "@/lib/property-shared";
-import { publicLocales } from "@/lib/public-copy";
 
-const fallbackModel = "gpt-5-mini";
+const targetLocales = ["en", "es", "ru", "de"] as const;
 
-function getTranslationClient() {
-  if (!process.env.OPENAI_API_KEY) {
-    return null;
-  }
+const deeplTargetLanguageMap: Record<(typeof targetLocales)[number], string> = {
+  en: "EN",
+  es: "ES",
+  ru: "RU",
+  de: "DE",
+};
 
-  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+function getDeepLEnv() {
+  return {
+    apiKey: process.env.DEEPL_API_KEY,
+    apiUrl: process.env.DEEPL_API_URL || "https://api-free.deepl.com",
+  };
 }
 
 function buildFallbackTranslations(content: PropertyContentFields): PropertyContentTranslations {
-  return Object.fromEntries(publicLocales.map((locale) => [locale, content])) as PropertyContentTranslations;
+  return Object.fromEntries(targetLocales.map((locale) => [locale, content])) as PropertyContentTranslations;
 }
 
-function parseTranslationResponse(output: string): PropertyContentTranslations | null {
-  try {
-    const parsed = JSON.parse(output) as Record<string, PropertyContentFields>;
-    const translations = Object.fromEntries(
-      publicLocales.map((locale) => {
-        const entry = parsed[locale];
+async function translateWithDeepL(
+  apiUrl: string,
+  apiKey: string,
+  content: PropertyContentFields,
+  targetLocale: (typeof targetLocales)[number],
+): Promise<PropertyContentFields | null> {
+  const response = await fetch(`${apiUrl}/v2/translate`, {
+    method: "POST",
+    headers: {
+      Authorization: `DeepL-Auth-Key ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      text: [content.title, content.shortDescription, content.description],
+      target_lang: deeplTargetLanguageMap[targetLocale],
+      context: `${content.title}\n\n${content.shortDescription}\n\n${content.description}`,
+    }),
+  });
 
-        if (
-          !entry ||
-          typeof entry.title !== "string" ||
-          typeof entry.shortDescription !== "string" ||
-          typeof entry.description !== "string"
-        ) {
-          return [locale, null];
-        }
-
-        return [
-          locale,
-          {
-            title: entry.title.trim(),
-            shortDescription: entry.shortDescription.trim(),
-            description: entry.description.trim(),
-          },
-        ];
-      }),
-    ) as PropertyContentTranslations;
-
-    return publicLocales.every((locale) => translations[locale]) ? translations : null;
-  } catch {
+  if (!response.ok) {
     return null;
   }
+
+  const data = (await response.json().catch(() => null)) as
+    | {
+        translations?: Array<{
+          text?: string;
+        }>;
+      }
+    | null;
+
+  const translations = data?.translations;
+
+  if (!translations || translations.length < 3) {
+    return null;
+  }
+
+  const [title, shortDescription, description] = translations.map((entry) => entry.text?.trim() ?? "");
+
+  if (!title || !shortDescription || !description) {
+    return null;
+  }
+
+  return {
+    title,
+    shortDescription,
+    description,
+  };
 }
 
 export async function generatePropertyTranslations(
   content: PropertyContentFields,
 ): Promise<PropertyContentTranslations> {
-  const client = getTranslationClient();
+  const { apiKey, apiUrl } = getDeepLEnv();
 
-  if (!client) {
+  if (!apiKey) {
     return buildFallbackTranslations(content);
   }
 
   try {
-    const response = await client.responses.create({
-      model: process.env.OPENAI_TRANSLATION_MODEL || fallbackModel,
-      input: [
-        {
-          role: "system",
-          content: [
-            {
-              type: "input_text",
-              text:
-                "You translate real-estate listings for the Costa Blanca. Detect the source language and return polished listing copy in English, Spanish, Russian, and German. Preserve factual details, place names, measurements, and pricing references. Do not add facts, amenities, or claims that are not present in the source. Return valid JSON only.",
-            },
-          ],
-        },
-        {
-          role: "user",
-          content: [
-            {
-              type: "input_text",
-              text: JSON.stringify({
-                targetLocales: publicLocales,
-                fields: content,
-                schema: {
-                  en: {
-                    title: "string",
-                    shortDescription: "string",
-                    description: "string",
-                  },
-                  es: {
-                    title: "string",
-                    shortDescription: "string",
-                    description: "string",
-                  },
-                  ru: {
-                    title: "string",
-                    shortDescription: "string",
-                    description: "string",
-                  },
-                  de: {
-                    title: "string",
-                    shortDescription: "string",
-                    description: "string",
-                  },
-                },
-              }),
-            },
-          ],
-        },
-      ],
-    });
+    const translations = await Promise.all(
+      targetLocales.map(async (locale) => {
+        if (locale === "en") {
+          return [locale, content] as const;
+        }
 
-    const parsed = parseTranslationResponse(response.output_text);
+        const translated = await translateWithDeepL(apiUrl, apiKey, content, locale);
 
-    return parsed ?? buildFallbackTranslations(content);
+        return [locale, translated ?? content] as const;
+      }),
+    );
+
+    return Object.fromEntries(translations) as PropertyContentTranslations;
   } catch {
     return buildFallbackTranslations(content);
   }
