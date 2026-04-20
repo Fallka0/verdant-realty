@@ -76,8 +76,8 @@ export function PropertyForm({
       <div className="admin-fields">
         <label>
           {copy.fields.reference}
+          <input name="referenceCode" type="hidden" value={referenceCode} />
           <input
-            name="referenceCode"
             type="text"
             value={referenceCode}
             onChange={(event) => {
@@ -92,8 +92,8 @@ export function PropertyForm({
 
         <label>
           {copy.fields.title}
+          <input name="title" type="hidden" value={title} />
           <input
-            name="title"
             type="text"
             value={title}
             onChange={(event) => handleTitleChange(event.target.value)}
@@ -104,8 +104,8 @@ export function PropertyForm({
 
         <label>
           {copy.fields.slug}
+          <input name="slug" type="hidden" value={slug} />
           <input
-            name="slug"
             type="text"
             value={slug}
             onChange={(event) => {

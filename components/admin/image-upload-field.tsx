@@ -112,9 +112,9 @@ export function ImageUploadField({
     <div className="admin-upload-field">
       <label>
         {label}
+        <input name={name} type="hidden" value={value} />
         {mode === "single" ? (
           <input
-            name={name}
             type="url"
             value={value}
             onChange={(event) => setValue(event.target.value)}
@@ -123,7 +123,6 @@ export function ImageUploadField({
           />
         ) : (
           <textarea
-            name={name}
             rows={6}
             value={value}
             onChange={(event) => setValue(event.target.value)}
