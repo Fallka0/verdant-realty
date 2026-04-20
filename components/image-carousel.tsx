@@ -4,12 +4,15 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 
+import { type PublicCopy } from "@/lib/public-copy";
+
 type ImageCarouselProps = {
+  copy: PublicCopy;
   images: string[];
   title: string;
 };
 
-export function ImageCarousel({ images, title }: ImageCarouselProps) {
+export function ImageCarousel({ copy, images, title }: ImageCarouselProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
@@ -86,7 +89,7 @@ export function ImageCarousel({ images, title }: ImageCarouselProps) {
                       className="carousel-image-button"
                       type="button"
                       onClick={() => setIsZoomed(true)}
-                      aria-label={`Zoom image ${index + 1} of ${images.length}`}
+                      aria-label={`${copy.carousel.enlargeImage} ${index + 1}`}
                     >
                       <Image
                         className="carousel-image"
@@ -108,7 +111,7 @@ export function ImageCarousel({ images, title }: ImageCarouselProps) {
                   className="carousel-side-button carousel-side-button-left"
                   type="button"
                   onClick={() => emblaApi?.scrollPrev()}
-                  aria-label="Previous image"
+                  aria-label={copy.carousel.previousImage}
                   disabled={!canScrollPrev}
                 >
                   <span>‹</span>
@@ -117,7 +120,7 @@ export function ImageCarousel({ images, title }: ImageCarouselProps) {
                   className="carousel-side-button carousel-side-button-right"
                   type="button"
                   onClick={() => emblaApi?.scrollNext()}
-                  aria-label="Next image"
+                  aria-label={copy.carousel.nextImage}
                   disabled={!canScrollNext}
                 >
                   <span>›</span>
@@ -131,20 +134,20 @@ export function ImageCarousel({ images, title }: ImageCarouselProps) {
               <div className="carousel-counter" aria-live="polite">
                 {selectedIndex + 1} / {images.length}
               </div>
-              <p className="carousel-hint">Click any image to zoom in</p>
+              <p className="carousel-hint">{copy.carousel.galleryHint}</p>
             </div>
           ) : null}
         </div>
 
         {hasMultipleImages ? (
-          <div className="carousel-thumbnails" aria-label="Property gallery thumbnails">
+          <div className="carousel-thumbnails" aria-label={copy.carousel.thumbnailsLabel}>
             {images.map((image, index) => (
               <button
                 key={`${image}-thumb-${index}`}
                 className={`carousel-thumb ${index === selectedIndex ? "active" : ""}`}
                 type="button"
                 onClick={() => scrollTo(index)}
-                aria-label={`Show image ${index + 1}`}
+                aria-label={`${copy.carousel.showImage} ${index + 1}`}
                 aria-pressed={index === selectedIndex}
               >
                 <Image className="carousel-thumb-image" src={image} alt="" fill sizes="120px" />
@@ -167,7 +170,7 @@ export function ImageCarousel({ images, title }: ImageCarouselProps) {
               className="zoom-close"
               type="button"
               onClick={() => setIsZoomed(false)}
-              aria-label="Close zoom view"
+              aria-label={copy.carousel.closeZoom}
             >
               ×
             </button>
@@ -187,7 +190,7 @@ export function ImageCarousel({ images, title }: ImageCarouselProps) {
                     className="carousel-side-button zoom-side-button zoom-side-button-left"
                     type="button"
                     onClick={() => emblaApi?.scrollPrev()}
-                    aria-label="Previous image"
+                    aria-label={copy.carousel.previousImage}
                     disabled={!canScrollPrev}
                   >
                     <span>‹</span>
@@ -196,7 +199,7 @@ export function ImageCarousel({ images, title }: ImageCarouselProps) {
                     className="carousel-side-button zoom-side-button zoom-side-button-right"
                     type="button"
                     onClick={() => emblaApi?.scrollNext()}
-                    aria-label="Next image"
+                    aria-label={copy.carousel.nextImage}
                     disabled={!canScrollNext}
                   >
                     <span>›</span>
@@ -210,7 +213,7 @@ export function ImageCarousel({ images, title }: ImageCarouselProps) {
                 <span>
                   {selectedIndex + 1} / {images.length}
                 </span>
-                <p className="zoom-hint">Use the side arrows or keyboard arrows</p>
+                <p className="zoom-hint">{copy.carousel.zoomHint}</p>
               </div>
             ) : null}
           </div>

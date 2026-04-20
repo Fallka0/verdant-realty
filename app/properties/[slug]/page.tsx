@@ -1,9 +1,16 @@
-import Link from "next/link";
+import { cookies } from "next/headers";
+
 import { notFound } from "next/navigation";
 
 import { ImageCarousel } from "@/components/image-carousel";
 import { InquiryForm } from "@/components/inquiry-form";
-import { formatPrice, getPropertyTypeLabel } from "@/lib/property-shared";
+import { PublicHeader } from "@/components/public-header";
+import {
+  getLocalizedPropertyTypeLabel,
+  publicCopy,
+  resolvePublicLocale,
+} from "@/lib/public-copy";
+import { formatPrice } from "@/lib/property-shared";
 import { getPropertyBySlug } from "@/lib/properties";
 
 export const dynamic = "force-dynamic";
@@ -15,6 +22,9 @@ type PropertyDetailPageProps = {
 };
 
 export default async function PropertyDetailPage({ params }: PropertyDetailPageProps) {
+  const cookieStore = await cookies();
+  const locale = resolvePublicLocale(cookieStore.get("verdant-locale")?.value);
+  const copy = publicCopy[locale];
   const { slug } = await params;
   const property = await getPropertyBySlug(slug);
 
@@ -26,21 +36,13 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
 
   return (
     <main className="site-shell section-stack">
-      <header className="public-header compact-header">
-        <Link className="brand-link" href="/">
-          <span className="brand-mark" />
-          <span>
-            <strong>Verdant Realty</strong>
-            <small>Torrevieja Property Collection</small>
-          </span>
-        </Link>
-
-        <nav className="primary-nav" aria-label="Primary">
-          <Link href="/">Home</Link>
-          <Link href="/properties">Properties</Link>
-          <Link href="/admin">Admin</Link>
-        </nav>
-      </header>
+      <PublicHeader
+        brandSubtitle={copy.brandSubtitle}
+        compact
+        currentLocale={locale}
+        languageLabel={copy.languageLabel}
+        nav={copy.nav}
+      />
 
       <section className="property-detail-hero">
         <div className="section-heading">
@@ -54,40 +56,40 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
         </div>
       </section>
 
-      <ImageCarousel images={gallery} title={property.title} />
+      <ImageCarousel copy={copy} images={gallery} title={property.title} />
 
       <section className="detail-grid">
         <div className="detail-main">
           <div className="fact-grid">
             <article className="fact-card">
-              <span>Type</span>
-              <strong>{getPropertyTypeLabel(property.type)}</strong>
+              <span>{copy.detail.type}</span>
+              <strong>{getLocalizedPropertyTypeLabel(locale, property.type)}</strong>
             </article>
             <article className="fact-card">
-              <span>Bedrooms</span>
+              <span>{copy.detail.bedrooms}</span>
               <strong>{property.bedrooms}</strong>
             </article>
             <article className="fact-card">
-              <span>Bathrooms</span>
+              <span>{copy.detail.bathrooms}</span>
               <strong>{property.bathrooms}</strong>
             </article>
             {property.interiorSqm ? (
               <article className="fact-card">
-                <span>Interior</span>
+                <span>{copy.detail.interior}</span>
                 <strong>{property.interiorSqm} m²</strong>
               </article>
             ) : null}
             {property.plotSqm ? (
               <article className="fact-card">
-                <span>Plot</span>
+                <span>{copy.detail.plot}</span>
                 <strong>{property.plotSqm} m²</strong>
               </article>
             ) : null}
           </div>
 
           <article className="detail-copy-card">
-            <p className="eyebrow">Listing Overview</p>
-            <h2>Why buyers will pause on this one.</h2>
+            <p className="eyebrow">{copy.detail.listingOverview}</p>
+            <h2>{copy.detail.whyPause}</h2>
             <p>{property.shortDescription}</p>
             <p>{property.description}</p>
           </article>
@@ -95,9 +97,11 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
 
         <aside className="detail-sidebar">
           <div className="sticky-card">
-            <p className="eyebrow">Request More Information</p>
-            <h2>Schedule a viewing or ask for more detail.</h2>
+            <p className="eyebrow">{copy.detail.requestInfo}</p>
+            <h2>{copy.detail.requestTitle}</h2>
             <InquiryForm
+              copy={copy}
+              locale={locale}
               property={{
                 id: property.id,
                 location: property.location,

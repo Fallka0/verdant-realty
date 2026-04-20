@@ -2,7 +2,11 @@
 
 import { FormEvent, useState } from "react";
 
+import { type PublicCopy, type PublicLocale } from "@/lib/public-copy";
+
 type InquiryFormProps = {
+  copy: PublicCopy;
+  locale: PublicLocale;
   property?: {
     id: string;
     location: string;
@@ -20,7 +24,7 @@ const initialState: SubmissionState = {
   type: "idle",
 };
 
-export function InquiryForm({ property }: InquiryFormProps) {
+export function InquiryForm({ copy, locale, property }: InquiryFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submission, setSubmission] = useState(initialState);
 
@@ -41,6 +45,7 @@ export function InquiryForm({ property }: InquiryFormProps) {
         body: JSON.stringify({
           name: formData.get("name"),
           email: formData.get("email"),
+          locale,
           phone: formData.get("phone"),
           message: formData.get("message"),
           propertyId: property?.id,
@@ -53,7 +58,7 @@ export function InquiryForm({ property }: InquiryFormProps) {
       if (!response.ok) {
         setSubmission({
           type: "error",
-          message: data.error ?? "Something went wrong. Please try again.",
+          message: data.error ?? copy.inquiry.error,
         });
         setIsSubmitting(false);
         return;
@@ -62,12 +67,12 @@ export function InquiryForm({ property }: InquiryFormProps) {
       form.reset();
       setSubmission({
         type: "success",
-        message: data.message ?? "Inquiry sent successfully.",
+        message: data.message ?? copy.inquiry.success,
       });
     } catch {
       setSubmission({
         type: "error",
-        message: "Something went wrong. Please try again.",
+        message: copy.inquiry.error,
       });
     } finally {
       setIsSubmitting(false);
@@ -78,32 +83,32 @@ export function InquiryForm({ property }: InquiryFormProps) {
     <form className="inquiry-form" onSubmit={handleSubmit}>
       {property ? (
         <div className="inquiry-context">
-          <p className="eyebrow">Property Inquiry</p>
+          <p className="eyebrow">{copy.inquiry.propertyInquiry}</p>
           <h3>{property.title}</h3>
           <p>{property.location}</p>
         </div>
       ) : null}
       <div className="form-grid">
         <label>
-          Full Name
-          <input name="name" type="text" placeholder="Your name" required />
+          {copy.inquiry.fullName}
+          <input name="name" type="text" placeholder={copy.inquiry.yourName} required />
         </label>
         <label>
-          Email Address
-          <input name="email" type="email" placeholder="you@example.com" required />
+          {copy.inquiry.email}
+          <input name="email" type="email" placeholder={copy.inquiry.emailPlaceholder} required />
         </label>
         <label>
-          Phone Number
-          <input name="phone" type="tel" placeholder="Optional" />
+          {copy.inquiry.phone}
+          <input name="phone" type="tel" placeholder={copy.inquiry.optional} />
         </label>
         <label className="full-width">
-          Message
+          {copy.inquiry.message}
           <textarea
             name="message"
             placeholder={
               property
-                ? `I’m interested in ${property.title}. Please share more details or arrange a viewing.`
-                : "Tell us what kind of property you are looking for."
+                ? `${copy.inquiry.messagePlaceholder} ${property.title}.`
+                : copy.inquiry.messagePlaceholder
             }
             rows={5}
             required
@@ -111,7 +116,7 @@ export function InquiryForm({ property }: InquiryFormProps) {
         </label>
       </div>
       <button className="button button-primary submit-button" type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Sending..." : "Send Inquiry"}
+        {isSubmitting ? copy.buttons.sending : copy.buttons.sendInquiry}
       </button>
       <p className={`form-status ${submission.type}`} aria-live="polite">
         {submission.message}

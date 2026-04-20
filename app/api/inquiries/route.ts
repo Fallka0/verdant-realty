@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 
+import { publicCopy, resolvePublicLocale } from "@/lib/public-copy";
 import { createAdminClient } from "@/lib/supabase/server";
 
 type InquiryPayload = {
   email?: string;
+  locale?: string;
   message?: string;
   name?: string;
   phone?: string;
@@ -17,6 +19,7 @@ function normalizeInput(payload: InquiryPayload) {
   return {
     name: payload.name?.trim() ?? "",
     email: payload.email?.trim().toLowerCase() ?? "",
+    locale: resolvePublicLocale(payload.locale),
     phone: payload.phone?.trim() ?? "",
     message: payload.message?.trim() ?? "",
     propertyId: payload.propertyId?.trim() ?? "",
@@ -34,16 +37,17 @@ export async function POST(request: Request) {
   }
 
   const inquiry = normalizeInput(payload);
+  const copy = publicCopy[inquiry.locale];
 
   if (!inquiry.name || !inquiry.email || !inquiry.message) {
     return NextResponse.json(
-      { error: "Name, email, and message are required." },
+      { error: copy.inquiry.error },
       { status: 400 },
     );
   }
 
   if (!emailPattern.test(inquiry.email)) {
-    return NextResponse.json({ error: "Please enter a valid email address." }, { status: 400 });
+    return NextResponse.json({ error: copy.inquiry.error }, { status: 400 });
   }
 
   const supabase = createAdminClient();
@@ -51,8 +55,7 @@ export async function POST(request: Request) {
   if (!supabase) {
     return NextResponse.json(
       {
-        error:
-          "Supabase is not configured yet. Add the project URL and service role key to enable inquiries.",
+        error: copy.inquiry.error,
       },
       { status: 503 },
     );
@@ -69,12 +72,12 @@ export async function POST(request: Request) {
 
   if (error) {
     return NextResponse.json(
-      { error: "The inquiry could not be saved right now. Please try again." },
+      { error: copy.inquiry.error },
       { status: 500 },
     );
   }
 
   return NextResponse.json({
-    message: "Thanks for reaching out. Verdant Realty will be in touch soon.",
+    message: copy.inquiry.success,
   });
 }

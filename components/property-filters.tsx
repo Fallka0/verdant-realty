@@ -1,16 +1,22 @@
 "use client";
 
-import Link from "next/link";
 import { useDeferredValue, useState } from "react";
 
 import { PropertyCard } from "@/components/property-card";
 import { propertyTypes, type PropertyRecord, type PropertyType } from "@/lib/property-shared";
+import {
+  getLocalizedPropertyTypeLabel,
+  type PublicCopy,
+  type PublicLocale,
+} from "@/lib/public-copy";
 
 type PropertyFiltersProps = {
+  copy: PublicCopy;
+  locale: PublicLocale;
   properties: PropertyRecord[];
 };
 
-export function PropertyFilters({ properties }: PropertyFiltersProps) {
+export function PropertyFilters({ copy, locale, properties }: PropertyFiltersProps) {
   const [search, setSearch] = useState("");
   const [selectedType, setSelectedType] = useState<"all" | PropertyType>("all");
   const [minimumBedrooms, setMinimumBedrooms] = useState("0");
@@ -48,40 +54,40 @@ export function PropertyFilters({ properties }: PropertyFiltersProps) {
     <div className="listing-layout">
       <aside className="filters-panel">
         <div className="section-heading compact">
-          <p className="eyebrow">Property Search</p>
-          <h2>Find the right listing faster.</h2>
+          <p className="eyebrow">{copy.filters.heading}</p>
+          <h2>{copy.filters.title}</h2>
         </div>
 
         <div className="filters-grid">
           <label>
-            Search
+            {copy.filters.search}
             <input
               type="text"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder="Area, reference, or title"
+              placeholder={copy.filters.searchPlaceholder}
             />
           </label>
 
           <label>
-            Property Type
+            {copy.filters.propertyType}
             <select
               value={selectedType}
               onChange={(event) => setSelectedType(event.target.value as "all" | PropertyType)}
             >
-              <option value="all">All types</option>
+              <option value="all">{copy.filters.types.all}</option>
               {propertyTypes.map((type) => (
                 <option key={type} value={type}>
-                  {type[0].toUpperCase() + type.slice(1)}
+                  {getLocalizedPropertyTypeLabel(locale, type)}
                 </option>
               ))}
             </select>
           </label>
 
           <label>
-            Minimum Bedrooms
+            {copy.filters.minimumBedrooms}
             <select value={minimumBedrooms} onChange={(event) => setMinimumBedrooms(event.target.value)}>
-              <option value="0">Any</option>
+              <option value="0">{copy.filters.types.any}</option>
               <option value="1">1+</option>
               <option value="2">2+</option>
               <option value="3">3+</option>
@@ -90,38 +96,43 @@ export function PropertyFilters({ properties }: PropertyFiltersProps) {
           </label>
 
           <label>
-            Sort
+            {copy.filters.sort}
             <select value={sort} onChange={(event) => setSort(event.target.value as typeof sort)}>
-              <option value="latest">Latest</option>
-              <option value="price-asc">Price: low to high</option>
-              <option value="price-desc">Price: high to low</option>
+              <option value="latest">{copy.filters.sortOptions.latest}</option>
+              <option value="price-asc">{copy.filters.sortOptions.priceAsc}</option>
+              <option value="price-desc">{copy.filters.sortOptions.priceDesc}</option>
             </select>
           </label>
         </div>
-
-        <Link className="button button-secondary full-width-button" href="/admin">
-          Open Admin Panel
-        </Link>
       </aside>
 
       <section className="listing-results">
         <div className="results-header">
           <div>
-            <p className="eyebrow">Available Inventory</p>
-            <h2>{filteredProperties.length} properties currently match.</h2>
+            <p className="eyebrow">{copy.filters.availableInventory}</p>
+            <h2>
+              {filteredProperties.length} {copy.filters.results}
+            </h2>
           </div>
         </div>
 
         {filteredProperties.length > 0 ? (
           <div className="property-grid">
             {filteredProperties.map((property) => (
-              <PropertyCard key={property.id} property={property} />
+              <PropertyCard
+                bathroomsLabel={copy.propertyMeta.bathroomsShort}
+                bedroomsLabel={copy.propertyMeta.bedroomsShort}
+                buttonLabel={copy.buttons.viewDetails}
+                key={property.id}
+                locale={locale}
+                property={property}
+              />
             ))}
           </div>
         ) : (
           <div className="empty-state">
-            <h3>No properties match those filters yet.</h3>
-            <p>Try broadening the search or lowering the bedroom minimum.</p>
+            <h3>{copy.filters.emptyTitle}</h3>
+            <p>{copy.filters.emptyBody}</p>
           </div>
         )}
       </section>

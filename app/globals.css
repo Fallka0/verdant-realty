@@ -96,6 +96,12 @@ img {
   gap: 1.5rem;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .public-header {
   margin-bottom: 2.5rem;
 }
@@ -146,6 +152,34 @@ img {
 .primary-nav {
   color: var(--muted);
   flex-wrap: wrap;
+}
+
+.language-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.28rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(255, 251, 244, 0.8);
+}
+
+.language-button {
+  min-height: 2.25rem;
+  padding: 0.45rem 0.75rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.language-button.active {
+  background: var(--text);
+  color: #fffaf1;
 }
 
 .primary-nav a {
@@ -347,6 +381,18 @@ p {
   margin-bottom: 1rem;
 }
 
+.coverage-pills-heading {
+  margin-top: 2rem;
+}
+
+.stat-card {
+  display: grid;
+  gap: 0.45rem;
+  align-content: start;
+  min-height: 10.5rem;
+  padding: 1.45rem;
+}
+
 .stats-grid,
 .property-grid,
 .advantage-grid,
@@ -378,6 +424,15 @@ p {
   font-size: 2.1rem;
   font-family: var(--font-display);
   color: var(--text);
+  line-height: 0.95;
+}
+
+.stat-card span {
+  max-width: 16ch;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.35;
 }
 
 .region-pill,
@@ -385,20 +440,21 @@ p {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 2.25rem;
-  padding: 0.45rem 0.95rem;
+  min-height: 2.5rem;
+  padding: 0.55rem 1rem;
   border-radius: 999px;
   border: 1px solid rgba(18, 53, 36, 0.1);
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
-  line-height: 1;
+  letter-spacing: 0.06em;
+  line-height: 1.1;
   text-transform: uppercase;
 }
 
 .region-pill {
   background: rgba(255, 251, 244, 0.85);
   color: var(--text);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .pill {
@@ -445,6 +501,7 @@ p {
   left: 0.9rem;
   right: 0.9rem;
   gap: 0.5rem;
+  align-items: flex-start;
 }
 
 .property-card-body {
@@ -899,7 +956,8 @@ textarea:focus {
   .property-card-footer,
   .admin-topbar-actions,
   .zoom-actions,
-  .carousel-toolbar {
+  .carousel-toolbar,
+  .header-actions {
     flex-direction: column;
     align-items: flex-start;
   }

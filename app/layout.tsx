@@ -8,8 +8,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Verdant Realty",
-  description:
-    "Verdant Realty showcases homes for sale in Torrevieja and nearby areas, with a private Supabase-backed admin panel for managing listings.",
+  description: "Verdant Realty showcases homes for sale in Torrevieja and nearby coastal areas.",
 };
 
 export default function RootLayout({
