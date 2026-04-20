@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import type { CSSProperties } from "react";
 
+import { siteFontVariables } from "@/app/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Verdant Realty",
-  description:
-    "Verdant Realty is a boutique real estate brand with calm strategy, polished presentation, and concierge-level client care.",
+  description: "Verdant Realty showcases homes for sale in Torrevieja and nearby coastal areas.",
 };
 
 export default function RootLayout({
@@ -15,7 +16,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body style={siteFontVariables as CSSProperties}>
+        {children}
+      </body>
     </html>
   );
 }
