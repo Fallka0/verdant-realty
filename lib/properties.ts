@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+
 import { type PublicLocale } from "@/lib/public-copy";
 import {
   propertyStatuses,
@@ -13,6 +15,7 @@ import { createAdminClient } from "@/lib/supabase/server";
 type PropertyRow = {
   bathrooms: number | string | null;
   bedrooms: number | string | null;
+  content_translation_source_hash: string | null;
   content_translations: PropertyContentTranslations | null;
   created_at: string | null;
   description: string | null;
@@ -458,6 +461,12 @@ export function buildPropertyContentFromInput(input: ReturnType<typeof parseProp
     shortDescription: input.short_description,
     description: input.description,
   };
+}
+
+export function createPropertyContentHash(content: PropertyContentFields) {
+  return createHash("sha256")
+    .update(JSON.stringify(content))
+    .digest("hex");
 }
 
 export function validatePropertyInput(input: ReturnType<typeof parsePropertyFormData>) {

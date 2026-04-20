@@ -8,6 +8,7 @@ import { generatePropertyTranslations } from "@/lib/property-translations";
 import { createAdminClient } from "@/lib/supabase/server";
 import {
   buildPropertyContentFromInput,
+  createPropertyContentHash,
   parsePropertyFormData,
   validatePropertyInput,
 } from "@/lib/properties";
@@ -36,11 +37,17 @@ export async function createPropertyAction(formData: FormData) {
 
   validatePropertyInput(payload);
 
-  const contentTranslations = await generatePropertyTranslations(buildPropertyContentFromInput(payload));
+  const sourceContent = buildPropertyContentFromInput(payload);
+  const contentTranslations = await generatePropertyTranslations(sourceContent);
+  const contentTranslationSourceHash = createPropertyContentHash(sourceContent);
 
   const { data, error } = await supabase
     .from("properties")
-    .insert({ ...payload, content_translations: contentTranslations })
+    .insert({
+      ...payload,
+      content_translations: contentTranslations,
+      content_translation_source_hash: contentTranslationSourceHash,
+    })
     .select("id, slug")
     .single();
 
@@ -58,11 +65,33 @@ export async function updatePropertyAction(propertyId: string, currentSlug: stri
   const payload = parsePropertyFormData(formData);
 
   validatePropertyInput(payload);
-  const contentTranslations = await generatePropertyTranslations(buildPropertyContentFromInput(payload));
+  const sourceContent = buildPropertyContentFromInput(payload);
+  const contentTranslationSourceHash = createPropertyContentHash(sourceContent);
+  const { data: existingProperty, error: existingPropertyError } = await supabase
+    .from("properties")
+    .select("content_translation_source_hash, content_translations")
+    .eq("id", propertyId)
+    .single();
+
+  if (existingPropertyError || !existingProperty) {
+    throw new Error(existingPropertyError?.message ?? "Property could not be loaded for translation reuse.");
+  }
+
+  const shouldRegenerateTranslations =
+    existingProperty.content_translation_source_hash !== contentTranslationSourceHash ||
+    !existingProperty.content_translations;
+
+  const contentTranslations = shouldRegenerateTranslations
+    ? await generatePropertyTranslations(sourceContent)
+    : existingProperty.content_translations;
 
   const { data, error } = await supabase
     .from("properties")
-    .update({ ...payload, content_translations: contentTranslations })
+    .update({
+      ...payload,
+      content_translations: contentTranslations,
+      content_translation_source_hash: contentTranslationSourceHash,
+    })
     .eq("id", propertyId)
     .select("slug")
     .single();
