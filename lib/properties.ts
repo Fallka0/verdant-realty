@@ -1,3 +1,4 @@
+import { type PublicLocale } from "@/lib/public-copy";
 import { propertyStatuses, propertyTypes, type PropertyRecord, type PropertyStatus, type PropertyType } from "@/lib/property-shared";
 import { createAdminClient } from "@/lib/supabase/server";
 
@@ -108,6 +109,107 @@ export const sampleProperties: PropertyRecord[] = [
     updatedAt: "2026-04-18T08:00:00.000Z",
   },
 ];
+
+const localizedSamplePropertyContent: Partial<
+  Record<
+    PublicLocale,
+    Record<
+      string,
+      {
+        description: string;
+        shortDescription: string;
+        title: string;
+      }
+    >
+  >
+> = {
+  es: {
+    "sample-la-mata-apartment": {
+      title: "Apartamento con vistas al mar cerca de la playa de La Mata",
+      shortDescription:
+        "Luminoso apartamento de tres dormitorios con terraza abierta, vistas al mar y cómoda distancia a pie de la playa.",
+      description:
+        "Este apartamento luminoso combina una zona de estar amplia, una terraza generosa y una distribución práctica de tres dormitorios, ideal para compradores que buscan una base costera lista para entrar a vivir en La Mata. Está cerca del paseo marítimo, restaurantes y servicios diarios.",
+    },
+    "sample-villa-los-balcones": {
+      title: "Villa independiente con piscina en Los Balcones",
+      shortDescription:
+        "Villa familiar independiente con piscina privada, amplios espacios exteriores y una distribución cómoda todo el año.",
+      description:
+        "Pensada para compradores que buscan más espacio y privacidad, esta villa independiente en Los Balcones ofrece amplias zonas interiores, comedor separado, piscina privada y espacio exterior para recibir invitados.",
+    },
+    "sample-penthouse-punta-prima": {
+      title: "Ático moderno cerca de Punta Prima",
+      shortDescription:
+        "Vivienda moderna en la última planta con buena proyección de alquiler, mucha luz y acceso rápido a la costa.",
+      description:
+        "Un ático de líneas limpias pensado tanto para compradores de estilo de vida como para quienes buscan una segunda residencia. La propiedad ofrece una distribución abierta funcional, terrazas soleadas y acceso cómodo a Punta Prima y Torrevieja.",
+    },
+  },
+  ru: {
+    "sample-la-mata-apartment": {
+      title: "Апартаменты с видом на море рядом с пляжем Ла Мата",
+      shortDescription:
+        "Светлая квартира с тремя спальнями, открытой террасой, видом на море и удобной пешей дорогой до пляжа.",
+      description:
+        "Эти светлые апартаменты объединяют просторную гостиную, большую террасу и удобную планировку с тремя спальнями. Это хороший вариант для покупателей, которым нужна готовая к проживанию база у моря в Ла Мата. Рядом находятся набережная, рестораны и все повседневные сервисы.",
+    },
+    "sample-villa-los-balcones": {
+      title: "Отдельная вилла с бассейном в Лос Балконес",
+      shortDescription:
+        "Семейная вилла с частным бассейном, просторными внешними зонами и планировкой для круглогодичного проживания.",
+      description:
+        "Эта отдельная вилла в Лос Балконес подойдет покупателям, которым нужны пространство и приватность. Внутри много жилой площади, есть отдельная столовая зона, частный бассейн и удобные открытые пространства для отдыха и встреч.",
+    },
+    "sample-penthouse-punta-prima": {
+      title: "Современный пентхаус рядом с Пунта Прима",
+      shortDescription:
+        "Современное жилье на верхнем этаже с хорошим арендным потенциалом, большим количеством света и быстрым доступом к побережью.",
+      description:
+        "Современный пентхаус для тех, кто ищет комфортное жилье у моря или вторую резиденцию. В объекте предусмотрены удобная открытая планировка, солнечные террасы и быстрый доступ к Пунта Прима и Торревьехе.",
+    },
+  },
+  de: {
+    "sample-la-mata-apartment": {
+      title: "Apartment mit Meerblick nahe dem Strand von La Mata",
+      shortDescription:
+        "Helles Apartment mit drei Schlafzimmern, offener Terrasse, Meerblick und kurzem Fußweg zum Strand.",
+      description:
+        "Dieses helle Apartment verbindet einen luftigen Wohnbereich, eine großzügige Terrasse und einen praktischen Grundriss mit drei Schlafzimmern. Es eignet sich ideal für Käufer, die in La Mata ein sofort nutzbares Zuhause an der Küste suchen. Promenade, Restaurants und tägliche Besorgungen sind schnell erreichbar.",
+    },
+    "sample-villa-los-balcones": {
+      title: "Freistehende Villa mit Pool in Los Balcones",
+      shortDescription:
+        "Freistehende Familienvilla mit privatem Pool, großzügigen Außenflächen und einem Grundriss für das ganze Jahr.",
+      description:
+        "Für Käufer, die mehr Platz und Privatsphäre suchen, bietet diese freistehende Villa in Los Balcones großzügige Wohnflächen, einen separaten Essbereich, einen privaten Pool und viel Raum im Außenbereich.",
+    },
+    "sample-penthouse-punta-prima": {
+      title: "Modernes Penthouse nahe Punta Prima",
+      shortDescription:
+        "Modernes Zuhause im obersten Geschoss mit guter Vermietbarkeit, viel Licht und schnellem Zugang zur Küste.",
+      description:
+        "Ein klar gestaltetes Penthouse für Lifestyle-Käufer und Zweitwohnsitz-Interessenten. Die Immobilie bietet einen funktionalen offenen Grundriss, sonnige Terrassen und eine bequeme Anbindung an Punta Prima und Torrevieja.",
+    },
+  },
+};
+
+export function localizeProperty(property: PropertyRecord, locale: PublicLocale): PropertyRecord {
+  const localized = localizedSamplePropertyContent[locale]?.[property.id];
+
+  if (!localized) {
+    return property;
+  }
+
+  return {
+    ...property,
+    ...localized,
+  };
+}
+
+export function localizeProperties(properties: PropertyRecord[], locale: PublicLocale) {
+  return properties.map((property) => localizeProperty(property, locale));
+}
 
 function coerceNumber(value: number | string | null) {
   if (value === null || value === "") {

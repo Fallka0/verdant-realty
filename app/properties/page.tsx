@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { PropertyFilters } from "@/components/property-filters";
 import { PublicHeader } from "@/components/public-header";
 import { publicCopy, resolvePublicLocale } from "@/lib/public-copy";
-import { getPublicProperties } from "@/lib/properties";
+import { getPublicProperties, localizeProperties } from "@/lib/properties";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +11,7 @@ export default async function PropertiesPage() {
   const cookieStore = await cookies();
   const locale = resolvePublicLocale(cookieStore.get("verdant-locale")?.value);
   const copy = publicCopy[locale];
-  const properties = await getPublicProperties();
+  const properties = localizeProperties(await getPublicProperties(), locale);
 
   return (
     <main className="site-shell section-stack" data-locale={locale} lang={locale}>

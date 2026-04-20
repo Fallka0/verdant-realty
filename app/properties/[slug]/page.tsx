@@ -11,7 +11,7 @@ import {
   resolvePublicLocale,
 } from "@/lib/public-copy";
 import { formatPrice } from "@/lib/property-shared";
-import { getPropertyBySlug } from "@/lib/properties";
+import { getPropertyBySlug, localizeProperty } from "@/lib/properties";
 
 export const dynamic = "force-dynamic";
 
@@ -32,7 +32,9 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
     notFound();
   }
 
-  const gallery = [property.mainImageUrl, ...property.galleryUrls];
+  const localizedProperty = localizeProperty(property, locale);
+
+  const gallery = [localizedProperty.mainImageUrl, ...localizedProperty.galleryUrls];
 
   return (
     <main className="site-shell section-stack" data-locale={locale} lang={locale}>
@@ -47,42 +49,42 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
       <section className="property-detail-hero">
         <div className="section-heading">
           <p className="eyebrow">{property.location}</p>
-          <h1>{property.title}</h1>
-          <p>{property.description}</p>
+          <h1>{localizedProperty.title}</h1>
+          <p>{localizedProperty.description}</p>
         </div>
         <div className="detail-price-card">
-          <strong>{formatPrice(property.priceEuro)}</strong>
-          <span>{property.referenceCode}</span>
+          <strong>{formatPrice(localizedProperty.priceEuro)}</strong>
+          <span>{localizedProperty.referenceCode}</span>
         </div>
       </section>
 
-      <ImageCarousel copy={copy} images={gallery} title={property.title} />
+      <ImageCarousel copy={copy} images={gallery} title={localizedProperty.title} />
 
       <section className="detail-grid">
         <div className="detail-main">
           <div className="fact-grid">
             <article className="fact-card">
               <span>{copy.detail.type}</span>
-              <strong>{getLocalizedPropertyTypeLabel(locale, property.type)}</strong>
+              <strong>{getLocalizedPropertyTypeLabel(locale, localizedProperty.type)}</strong>
             </article>
             <article className="fact-card">
               <span>{copy.detail.bedrooms}</span>
-              <strong>{property.bedrooms}</strong>
+              <strong>{localizedProperty.bedrooms}</strong>
             </article>
             <article className="fact-card">
               <span>{copy.detail.bathrooms}</span>
-              <strong>{property.bathrooms}</strong>
+              <strong>{localizedProperty.bathrooms}</strong>
             </article>
-            {property.interiorSqm ? (
+            {localizedProperty.interiorSqm ? (
               <article className="fact-card">
                 <span>{copy.detail.interior}</span>
-                <strong>{property.interiorSqm} m²</strong>
+                <strong>{localizedProperty.interiorSqm} m²</strong>
               </article>
             ) : null}
-            {property.plotSqm ? (
+            {localizedProperty.plotSqm ? (
               <article className="fact-card">
                 <span>{copy.detail.plot}</span>
-                <strong>{property.plotSqm} m²</strong>
+                <strong>{localizedProperty.plotSqm} m²</strong>
               </article>
             ) : null}
           </div>
@@ -90,8 +92,8 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
           <article className="detail-copy-card">
             <p className="eyebrow">{copy.detail.listingOverview}</p>
             <h2>{copy.detail.whyPause}</h2>
-            <p>{property.shortDescription}</p>
-            <p>{property.description}</p>
+            <p>{localizedProperty.shortDescription}</p>
+            <p>{localizedProperty.description}</p>
           </article>
         </div>
 
@@ -103,9 +105,9 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
               copy={copy}
               locale={locale}
               property={{
-                id: property.id,
-                location: property.location,
-                title: property.title,
+                id: localizedProperty.id,
+                location: localizedProperty.location,
+                title: localizedProperty.title,
               }}
             />
           </div>

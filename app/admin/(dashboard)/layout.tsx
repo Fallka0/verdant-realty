@@ -27,8 +27,10 @@ export default async function AdminDashboardLayout({
         <div className="setup-card">
           <h1>Admin setup incomplete</h1>
           <p>
-            Add the Supabase keys and `ADMIN_EMAILS` to `.env.local`, run the property migrations,
-            and create your mother’s admin user in Supabase Auth.
+            Add `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` or
+            `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, and `ADMIN_EMAILS` to
+            `.env.local`, run the property migrations, and create your mother’s admin user in
+            Supabase Auth.
           </p>
         </div>
       </main>

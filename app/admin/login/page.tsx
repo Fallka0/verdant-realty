@@ -43,9 +43,9 @@ export default async function AdminLoginPage({ searchParams }: AdminLoginPagePro
           <div className="setup-card">
             <h2>Admin setup still needed</h2>
             <p>
-              Add `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
-              `SUPABASE_SERVICE_ROLE_KEY`, and `ADMIN_EMAILS` to `.env.local`, then create the admin
-              user in Supabase Auth.
+              Add `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` or
+              `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, and `ADMIN_EMAILS` to
+              `.env.local`, then create the admin user in Supabase Auth.
             </p>
           </div>
         ) : (
