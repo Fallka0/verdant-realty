@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import Link from "next/link";
 
 import { notFound } from "next/navigation";
 
@@ -6,6 +7,7 @@ import { ImageCarousel } from "@/components/image-carousel";
 import { InquiryForm } from "@/components/inquiry-form";
 import { PublicHeader } from "@/components/public-header";
 import {
+  getLocalizedPropertyStatusLabel,
   getLocalizedPropertyTypeLabel,
   publicCopy,
   resolvePublicLocale,
@@ -46,19 +48,37 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
         nav={copy.nav}
       />
 
-      <section className="property-detail-hero">
-        <div className="section-heading">
-          <p className="eyebrow">{property.location}</p>
-          <h1>{localizedProperty.title}</h1>
-          <p>{localizedProperty.description}</p>
+      <section className="detail-spotlight">
+        <div className="property-detail-hero">
+          <div className="section-heading">
+            <Link className="detail-back-link" href="/properties">
+              <span aria-hidden="true">&larr;</span>
+              {copy.nav.properties}
+            </Link>
+            <p className="eyebrow">{localizedProperty.location}</p>
+            <h1>{localizedProperty.title}</h1>
+            <p>{localizedProperty.description}</p>
+            <div className="detail-hero-meta">
+              <span className={`pill status-${localizedProperty.status}`}>
+                {getLocalizedPropertyStatusLabel(locale, localizedProperty.status)}
+              </span>
+              <span className="pill pill-secondary">
+                {getLocalizedPropertyTypeLabel(locale, localizedProperty.type)}
+              </span>
+              <span>{localizedProperty.referenceCode}</span>
+            </div>
+          </div>
+          <aside className="detail-price-card">
+            <span>{localizedProperty.referenceCode}</span>
+            <strong>{formatPrice(localizedProperty.priceEuro)}</strong>
+            <Link className="button button-primary" href="#inquiry">
+              {copy.buttons.sendInquiry}
+            </Link>
+          </aside>
         </div>
-        <div className="detail-price-card">
-          <strong>{formatPrice(localizedProperty.priceEuro)}</strong>
-          <span>{localizedProperty.referenceCode}</span>
-        </div>
-      </section>
 
-      <ImageCarousel copy={copy} images={gallery} title={localizedProperty.title} />
+        <ImageCarousel copy={copy} images={gallery} title={localizedProperty.title} />
+      </section>
 
       <section className="detail-grid">
         <div className="detail-main">
@@ -97,7 +117,7 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
           </article>
         </div>
 
-        <aside className="detail-sidebar">
+        <aside className="detail-sidebar" id="inquiry">
           <div className="sticky-card">
             <p className="eyebrow">{copy.detail.requestInfo}</p>
             <h2>{copy.detail.requestTitle}</h2>
