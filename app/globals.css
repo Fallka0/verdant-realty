@@ -1435,7 +1435,7 @@ textarea {
 .price-line {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 1.4rem;
   align-items: baseline;
 }
 
@@ -1449,10 +1449,11 @@ textarea {
 }
 
 .rent-price-inline {
-  color: var(--text);
-  font-size: 1.15rem;
-  font-weight: 700;
-  line-height: 1.1;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: 0;
 }
 
 .rent-price-tag-placeholder {
