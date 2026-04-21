@@ -144,7 +144,7 @@ export type PublicCopy = {
     home: string;
     properties: string;
   };
-  overview: {
+  overview?: {
     body: string;
     eyebrow: string;
     items: Array<{
@@ -169,8 +169,11 @@ export type PublicCopy = {
     bedroomsShort: string;
     featuredSnapshot: string;
     homesOnline: string;
+    homesOnlineValue: string;
     homesSelected: string;
+    homesSelectedValue: string;
     homesSelectedLabel: string;
+    targetAreasValue: string;
     updatedListings: string;
   };
   testimonials: {
@@ -389,8 +392,11 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       bedroomsShort: "bed",
       featuredSnapshot: "Featured Snapshot",
       homesOnline: "listings currently online",
+      homesOnlineValue: "2",
       homesSelected: "featured homes right now",
+      homesSelectedValue: "1",
       homesSelectedLabel: "coastal areas covered",
+      targetAreasValue: "4",
       updatedListings: "current highlighted listings",
     },
     testimonials: {
@@ -601,8 +607,11 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       bedroomsShort: "hab",
       featuredSnapshot: "Propiedad destacada",
       homesOnline: "propiedades activas ahora",
+      homesOnlineValue: "2",
       homesSelected: "viviendas destacadas ahora",
+      homesSelectedValue: "1",
       homesSelectedLabel: "zonas costeras cubiertas",
+      targetAreasValue: "4",
       updatedListings: "selección actual destacada",
     },
     testimonials: {
@@ -813,8 +822,11 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       bedroomsShort: "спал.",
       featuredSnapshot: "Выбранный объект",
       homesOnline: "активных объектов сейчас",
+      homesOnlineValue: "2",
       homesSelected: "выделенных объектов сейчас",
+      homesSelectedValue: "1",
       homesSelectedLabel: "охваченных прибрежных районов",
+      targetAreasValue: "4",
       updatedListings: "актуальная подборка объектов",
     },
     testimonials: {
@@ -1025,8 +1037,11 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       bedroomsShort: "SZ",
       featuredSnapshot: "Ausgewähltes Objekt",
       homesOnline: "aktive Immobilien online",
+      homesOnlineValue: "2",
       homesSelected: "aktuell hervorgehobene Objekte",
+      homesSelectedValue: "1",
       homesSelectedLabel: "abgedeckte Küstenlagen",
+      targetAreasValue: "4",
       updatedListings: "aktuell hervorgehobene Angebote",
     },
     testimonials: {

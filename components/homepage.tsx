@@ -9,7 +9,6 @@ import { ReactBitsMasonry } from "@/components/react-bits-masonry";
 import { SiteFooter } from "@/components/site-footer";
 import { formatOptionalPrice, formatPrice, type PropertyRecord } from "@/lib/property-shared";
 import {
-  areaNames,
   getLocalizedListingModeLabel,
   getLocalizedRentPricePeriodLabel,
   neighborhoodImages,
@@ -125,15 +124,15 @@ export function Homepage({ adminLabel, copy, currentLocale, featuredProperties, 
 
         <div className="stats-grid">
           <article className="stat-card">
-            <strong>{latestProperties.length}</strong>
+            <strong>{copy.propertyMeta.homesOnlineValue}</strong>
             <span>{copy.propertyMeta.homesOnline}</span>
           </article>
           <article className="stat-card">
-            <strong>{featuredProperties.length}</strong>
+            <strong>{copy.propertyMeta.homesSelectedValue}</strong>
             <span>{copy.propertyMeta.homesSelected}</span>
           </article>
           <article className="stat-card">
-            <strong>{areaNames.length}</strong>
+            <strong>{copy.propertyMeta.targetAreasValue}</strong>
             <span>{copy.propertyMeta.homesSelectedLabel}</span>
           </article>
         </div>
@@ -178,23 +177,6 @@ export function Homepage({ adminLabel, copy, currentLocale, featuredProperties, 
               locale={currentLocale}
               property={property}
             />
-          ))}
-        </div>
-      </section>
-
-      <section className="section split-section">
-        <div className="market-panel">
-          <p className="eyebrow">{copy.overview.eyebrow}</p>
-          <h2>{copy.overview.title}</h2>
-          <p>{copy.overview.body}</p>
-        </div>
-
-        <div className="advantage-grid">
-          {copy.overview.items.map((item) => (
-            <article className="info-card" key={item.title}>
-              <h3>{item.title}</h3>
-              <p>{item.copy}</p>
-            </article>
           ))}
         </div>
       </section>
