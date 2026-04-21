@@ -36,21 +36,22 @@ export function Homepage({ adminLabel, copy, currentLocale, featuredProperties, 
   }));
 
   return (
-    <main className="site-shell" data-locale={currentLocale} lang={currentLocale}>
-      <section className="hero-shell">
-        <PublicHeader
-          adminLabel={adminLabel}
-          brandSubtitle={copy.brandSubtitle}
-          currentLocale={currentLocale}
-          languageLabel={copy.languageLabel}
-          nav={copy.nav}
-        />
+    <main className="site-shell section-stack" data-locale={currentLocale} lang={currentLocale}>
+      <PublicHeader
+        adminLabel={adminLabel}
+        brandSubtitle={copy.brandSubtitle}
+        compact
+        currentLocale={currentLocale}
+        languageLabel={copy.languageLabel}
+        nav={copy.nav}
+      />
 
-        <div className="hero-panel">
-          <div className="hero-copy">
+      <section className="homepage-intro">
+        <div className="hero-panel homepage-hero-panel">
+          <div className="section-heading homepage-hero-copy">
             <p className="eyebrow">{copy.hero.eyebrow}</p>
             <h1>{copy.hero.title}</h1>
-            <p className="hero-text">{copy.hero.text}</p>
+            <p>{copy.hero.text}</p>
             <div className="hero-actions">
               <Link className="button button-primary hero-primary-button" href="/properties">
                 {copy.buttons.browseProperties}

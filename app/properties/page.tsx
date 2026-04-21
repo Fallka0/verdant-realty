@@ -29,7 +29,7 @@ export default async function PropertiesPage() {
         nav={copy.nav}
       />
 
-      <section className="section-heading">
+      <section className="section-heading properties-intro">
         <p className="eyebrow">{copy.propertiesPage.eyebrow}</p>
         <h1>{copy.propertiesPage.title}</h1>
         <p>{copy.propertiesPage.text}</p>
