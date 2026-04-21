@@ -1453,6 +1453,8 @@ textarea {
 
 .price-line-dual {
   justify-content: space-between;
+  align-items: baseline;
+  gap: 0.8rem;
 }
 
 .price-tag {
@@ -1479,6 +1481,11 @@ textarea {
 .price-line-dual .price-tag:first-child {
   flex: 0 1 auto;
   min-width: 0;
+  font-size: 1.08rem;
+}
+
+.price-line-dual .rent-price-inline {
+  font-size: 0.8rem;
 }
 
 .rent-price-tag-placeholder {
