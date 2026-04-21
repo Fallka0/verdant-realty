@@ -64,19 +64,21 @@ export function PropertyCard({
 
         <div className="property-card-footer">
           <div className="price-stack">
-            {hasSalePrice ? (
-              <strong className="price-tag">{formatPrice(property.priceEuro)}</strong>
-            ) : null}
-            {hasRentPrice ? (
-              <span className="rent-price-tag">
-                {formatOptionalPrice(property.rentPriceEuro)}{" "}
-                {property.rentPricePeriod ? getLocalizedRentPricePeriodLabel(locale, property.rentPricePeriod) : ""}
-              </span>
-            ) : (
-              <span aria-hidden="true" className="rent-price-tag rent-price-tag-placeholder">
-                &nbsp;
-              </span>
-            )}
+            <div className="price-line">
+              {hasSalePrice ? (
+                <strong className="price-tag">{formatPrice(property.priceEuro)}</strong>
+              ) : null}
+              {hasRentPrice ? (
+                <span className="price-tag rent-price-inline">
+                  {formatOptionalPrice(property.rentPriceEuro)}{" "}
+                  {property.rentPricePeriod ? getLocalizedRentPricePeriodLabel(locale, property.rentPricePeriod) : ""}
+                </span>
+              ) : (
+                <span aria-hidden="true" className="price-tag rent-price-inline rent-price-tag-placeholder">
+                  &nbsp;
+                </span>
+              )}
+            </div>
           </div>
           <Link className="button button-ghost" href={`/properties/${property.slug}`}>
             {buttonLabel}

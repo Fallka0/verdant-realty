@@ -1426,11 +1426,17 @@ textarea {
 .price-stack {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
   min-width: 0;
   align-items: flex-start;
   justify-content: flex-start;
   min-height: 2.85rem;
+}
+
+.price-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: baseline;
 }
 
 .price-tag {
@@ -1442,16 +1448,16 @@ textarea {
   line-height: 1.1;
 }
 
-.rent-price-tag {
-  color: var(--muted);
-  font-size: 0.82rem;
-  line-height: 1.25;
-  max-width: 16ch;
+.rent-price-inline {
+  color: var(--text);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.1;
 }
 
 .rent-price-tag-placeholder {
   visibility: hidden;
-  display: block;
+  display: inline-block;
 }
 
 .property-card-footer .button {
