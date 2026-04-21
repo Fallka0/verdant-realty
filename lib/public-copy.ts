@@ -112,6 +112,11 @@ export type PublicCopy = {
     eyebrow: string;
     title: string;
   };
+  footer: {
+    blurb: string;
+    browseLabel: string;
+    copyright: string;
+  };
   neighborhoods: {
     cards: Array<{
       area: string;
@@ -220,10 +225,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       whatsappMessage: "Hello, I am interested in a property from Verdant Realty and would like more information.",
     },
     coverage: {
-      eyebrow: "Coastal Collection",
+      eyebrow: "A More Personal Search",
       summary:
-        "A clear property-first experience for buyers searching Torrevieja and nearby coastal neighborhoods.",
-      title: "Homes presented with more clarity and less noise.",
+        "Buying near the coast often means balancing lifestyle, location, and long-term confidence. Verdant Realty helps buyers move through that decision with more calm and more clarity.",
+      title: "A thoughtful property search should feel personal from the very beginning.",
     },
     detail: {
       bathrooms: "Bathrooms",
@@ -262,8 +267,8 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     hero: {
       eyebrow: "Homes for sale in Torrevieja and nearby coastal areas",
       text:
-        "Verdant Realty showcases available homes with a calm, refined presentation so buyers can move from discovery to inquiry with ease.",
-      title: "Beautiful properties, clearly presented.",
+        "Verdant Realty takes a more personal approach to buying on the Costa Blanca: clear guidance, carefully chosen listings, and direct support when a property feels right.",
+      title: "Finding the right home should feel guided, calm, and genuinely personal.",
     },
     inquiry: {
       email: "Email Address",
@@ -282,8 +287,13 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     },
     languageLabel: "Choose language",
     masonry: {
-      eyebrow: "Visual Browse",
-      title: "Explore the collection through a more visual layout.",
+      eyebrow: "Explore Available Homes",
+      title: "Browse the current collection and open the listings that feel most relevant to you.",
+    },
+    footer: {
+      blurb: "Verdant Realty offers a more personal way to explore homes in Torrevieja and the surrounding coast.",
+      browseLabel: "Browse Listings",
+      copyright: "© Verdant Realty",
     },
     neighborhoods: {
       cards: [
@@ -317,23 +327,23 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     },
     overview: {
       body:
-        "The site is shaped around real listings, strong presentation, and an easier path from browsing to inquiry.",
-      eyebrow: "Why Buyers Stay Longer",
+        "Buyers are supported with honest guidance, a calmer pace, and listings presented in a way that makes comparison feel easier.",
+      eyebrow: "What Clients Value",
       items: [
         {
-          title: "Clean listing-first experience",
-          copy: "Visitors land directly in the properties, the areas, and the homes that matter.",
+          title: "A more personal approach",
+          copy: "Conversations stay focused on what actually matters to the buyer, not just on pushing the next viewing.",
         },
         {
-          title: "Clear, elegant presentation",
-          copy: "Photography, pricing, and key details stay readable and well-organized across the site.",
+          title: "Clear guidance without pressure",
+          copy: "Homes, locations, and differences between areas are explained with more calm and less noise.",
         },
         {
-          title: "Built for active inventory",
-          copy: "The experience is designed to keep available homes current and easy to browse.",
+          title: "Care through every step",
+          copy: "From the first shortlist to the first call, the experience is designed to feel attentive and reassuring.",
         },
       ],
-      title: "A property website built around the homes themselves.",
+      title: "The right property search feels clearer when there is trust behind it.",
     },
     propertiesPage: {
       eyebrow: "Property Listings",
@@ -413,10 +423,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       whatsappMessage: "Hola, me interesa una propiedad de Verdant Realty y me gustaría recibir más información.",
     },
     coverage: {
-      eyebrow: "Selección Costera",
+      eyebrow: "Una búsqueda más personal",
       summary:
-        "Una experiencia clara y centrada en propiedades para compradores que buscan en Torrevieja y sus alrededores.",
-      title: "Viviendas presentadas con más claridad y menos ruido.",
+        "Comprar en la costa implica comparar estilo de vida, zona y tranquilidad para el futuro. Verdant Realty acompaña ese proceso con más calma y más claridad.",
+      title: "La búsqueda de una vivienda debería sentirse personal desde el primer momento.",
     },
     detail: {
       bathrooms: "Baños",
@@ -455,8 +465,8 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     hero: {
       eyebrow: "Viviendas en venta en Torrevieja y la costa cercana",
       text:
-        "Verdant Realty presenta viviendas disponibles con una imagen serena y cuidada para que el comprador pase de descubrir a consultar con facilidad.",
-      title: "Propiedades bonitas, presentadas con claridad.",
+        "Verdant Realty apuesta por una forma más personal de comprar en la Costa Blanca: orientación clara, selección cuidada y acompañamiento directo cuando una propiedad encaja.",
+      title: "Encontrar la vivienda adecuada debería sentirse guiado, sereno y realmente cercano.",
     },
     inquiry: {
       email: "Correo electrónico",
@@ -475,8 +485,13 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     },
     languageLabel: "Elegir idioma",
     masonry: {
-      eyebrow: "Exploración Visual",
-      title: "Descubre la colección con una presentación más visual.",
+      eyebrow: "Explora viviendas disponibles",
+      title: "Recorre la selección actual y abre las propiedades que más sentido tengan para ti.",
+    },
+    footer: {
+      blurb: "Verdant Realty ofrece una manera más personal de explorar viviendas en Torrevieja y la costa cercana.",
+      browseLabel: "Ver propiedades",
+      copyright: "© Verdant Realty",
     },
     neighborhoods: {
       cards: [
@@ -510,23 +525,23 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     },
     overview: {
       body:
-        "La web está organizada alrededor de propiedades reales, una presentación sólida y un camino más fácil desde la búsqueda hasta la consulta.",
-      eyebrow: "Por Qué El Comprador Se Queda",
+        "El comprador recibe orientación honesta, un ritmo más calmado y una selección presentada de forma que comparar opciones resulte mucho más fácil.",
+      eyebrow: "Lo que valoran los clientes",
       items: [
         {
-          title: "Experiencia centrada en propiedades",
-          copy: "Los visitantes llegan directamente a las viviendas, zonas y oportunidades que importan.",
+          title: "Un trato más personal",
+          copy: "Las conversaciones se centran en lo que de verdad importa al comprador, no en empujar la siguiente visita.",
         },
         {
-          title: "Presentación clara y elegante",
-          copy: "Fotografía, precio y detalles clave se leen con orden y sin saturación.",
+          title: "Orientación clara y sin presión",
+          copy: "Las viviendas, las zonas y sus diferencias se explican con más calma y menos ruido.",
         },
         {
-          title: "Pensada para stock activo",
-          copy: "La experiencia está preparada para mantener la oferta visible y fácil de explorar.",
+          title: "Acompañamiento en cada paso",
+          copy: "Desde la primera selección hasta la primera llamada, todo está pensado para transmitir confianza.",
         },
       ],
-      title: "Una web inmobiliaria construida alrededor de las viviendas.",
+      title: "La búsqueda se vuelve más clara cuando detrás hay confianza y criterio.",
     },
     propertiesPage: {
       eyebrow: "Listado de propiedades",
@@ -606,10 +621,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       whatsappMessage: "Здравствуйте, меня заинтересовал объект на Verdant Realty. Хотелось бы получить больше информации.",
     },
     coverage: {
-      eyebrow: "Прибрежная коллекция",
+      eyebrow: "Более личный поиск",
       summary:
-        "Понятный и ориентированный на объекты интерфейс для покупателей, которые ищут жилье в Торревьехе и рядом.",
-      title: "Объекты показаны яснее и спокойнее.",
+        "Покупка жилья у моря почти всегда связана не только с объектом, но и с образом жизни, районом и ощущением уверенности в решении. Verdant Realty помогает пройти этот путь спокойнее и яснее.",
+      title: "Поиск недвижимости должен ощущаться личным и внимательным с самого начала.",
     },
     detail: {
       bathrooms: "Ванные",
@@ -648,8 +663,8 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     hero: {
       eyebrow: "Объекты на продажу в Торревьехе и рядом с побережьем",
       text:
-        "Verdant Realty показывает доступные дома и квартиры в спокойной и аккуратной подаче, чтобы путь от просмотра до запроса был проще.",
-      title: "Красивые объекты, показанные с ясностью.",
+        "Verdant Realty предлагает более личный подход к покупке на Коста-Бланке: понятное сопровождение, тщательно подобранные объекты и прямую связь, когда вариант действительно подходит.",
+      title: "Поиск дома должен ощущаться спокойным, понятным и по-настоящему личным.",
     },
     inquiry: {
       email: "Электронная почта",
@@ -668,8 +683,13 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     },
     languageLabel: "Выберите язык",
     masonry: {
-      eyebrow: "Фотоподборка",
-      title: "Изучайте объекты через более визуальную подачу.",
+      eyebrow: "Смотреть доступные объекты",
+      title: "Изучайте актуальные предложения и открывайте те объекты, которые действительно подходят именно вам.",
+    },
+    footer: {
+      blurb: "Verdant Realty помогает искать жилье в Торревьехе и на побережье рядом более спокойно, лично и внимательно.",
+      browseLabel: "Смотреть объекты",
+      copyright: "© Verdant Realty",
     },
     neighborhoods: {
       cards: [
@@ -703,23 +723,23 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     },
     overview: {
       body:
-        "Сайт построен вокруг реальных объектов, сильной презентации и более простого пути от просмотра к обращению.",
-      eyebrow: "Почему здесь задерживаются",
+        "Покупатели получают честную поддержку, более спокойный ритм поиска и подачу, при которой сравнивать варианты становится проще.",
+      eyebrow: "Что ценят клиенты",
       items: [
         {
-          title: "Фокус на объектах",
-          copy: "Посетители сразу попадают к объектам, районам и предложениям, которые действительно важны.",
+          title: "Более личный подход",
+          copy: "Разговор строится вокруг того, что действительно важно покупателю, а не вокруг давления и спешки.",
         },
         {
-          title: "Четкая и элегантная подача",
-          copy: "Фотографии, цены и ключевые параметры остаются читаемыми и аккуратно организованными.",
+          title: "Понятно и без лишнего шума",
+          copy: "Разница между объектами и районами объясняется спокойно, ясно и без перегрузки лишними деталями.",
         },
         {
-          title: "Подходит для активной витрины",
-          copy: "Опыт рассчитан на то, чтобы актуальные объекты было легко держать на виду.",
+          title: "Внимание на каждом этапе",
+          copy: "От первого просмотра до первого звонка поиск выстроен так, чтобы людям было легче доверять своему выбору.",
         },
       ],
-      title: "Сайт о недвижимости, построенный вокруг самих объектов.",
+      title: "Когда за поиском стоит доверие, принимать решение становится легче.",
     },
     propertiesPage: {
       eyebrow: "Каталог недвижимости",
@@ -799,10 +819,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       whatsappMessage: "Hallo, ich interessiere mich für eine Immobilie von Verdant Realty und hätte gern weitere Informationen.",
     },
     coverage: {
-      eyebrow: "Küstenkollektion",
+      eyebrow: "Eine persönlichere Suche",
       summary:
-        "Ein klarer, objektorientierter Auftritt für Käuferinnen und Käufer, die in Torrevieja und der nahen Küste suchen.",
-      title: "Immobilien mit mehr Klarheit und weniger Unruhe präsentiert.",
+        "Der Kauf an der Küste ist oft mehr als nur eine Objektentscheidung. Verdant Realty begleitet diesen Weg mit mehr Ruhe, mehr Klarheit und einem persönlicheren Blick auf das, was wirklich passt.",
+      title: "Die Suche nach einem Zuhause sollte sich von Anfang an persönlich und gut begleitet anfühlen.",
     },
     detail: {
       bathrooms: "Bäder",
@@ -841,8 +861,8 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     hero: {
       eyebrow: "Immobilien zum Verkauf in Torrevieja und an der nahen Küste",
       text:
-        "Verdant Realty zeigt verfügbare Immobilien in einer ruhigen, hochwertigen Präsentation, damit aus dem ersten Blick leichter eine echte Anfrage wird.",
-      title: "Schöne Immobilien, klar präsentiert.",
+        "Verdant Realty steht für einen persönlicheren Weg zum Immobilienkauf an der Costa Blanca: klare Begleitung, sorgfältig ausgewählte Angebote und direkte Unterstützung, wenn sich ein Objekt richtig anfühlt.",
+      title: "Die Suche nach dem richtigen Zuhause sollte ruhig, klar und wirklich persönlich wirken.",
     },
     inquiry: {
       email: "E-Mail-Adresse",
@@ -861,8 +881,13 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     },
     languageLabel: "Sprache wählen",
     masonry: {
-      eyebrow: "Visuelles Entdecken",
-      title: "Die Auswahl in einer visuellen Darstellung erkunden.",
+      eyebrow: "Verfügbare Immobilien entdecken",
+      title: "Durchstöbern Sie die aktuelle Auswahl und öffnen Sie die Objekte, die für Sie wirklich relevant sind.",
+    },
+    footer: {
+      blurb: "Verdant Realty begleitet die Immobiliensuche in Torrevieja und an der nahen Küste auf eine persönlichere und ruhigere Weise.",
+      browseLabel: "Immobilien ansehen",
+      copyright: "© Verdant Realty",
     },
     neighborhoods: {
       cards: [
@@ -896,23 +921,23 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     },
     overview: {
       body:
-        "Die Seite ist auf echte Immobilien, starke Präsentation und einen einfacheren Weg von der Suche zur Anfrage ausgerichtet.",
-      eyebrow: "Warum Käufer Hier Bleiben",
+        "Käuferinnen und Käufer erhalten ehrliche Begleitung, ein ruhigeres Tempo und eine Darstellung, die Vergleiche zwischen Objekten und Lagen leichter macht.",
+      eyebrow: "Was Kunden schätzen",
       items: [
         {
-          title: "Immobilien im Mittelpunkt",
-          copy: "Besucher gelangen direkt zu den Objekten, Lagen und Chancen, die wirklich zählen.",
+          title: "Ein persönlicherer Umgang",
+          copy: "Gespräche orientieren sich daran, was für den Käufer wirklich wichtig ist, nicht nur am nächsten Besichtigungstermin.",
         },
         {
-          title: "Klare und elegante Darstellung",
-          copy: "Fotos, Preise und Kerndaten bleiben lesbar und gut strukturiert.",
+          title: "Klarheit ohne Druck",
+          copy: "Objekte, Lagen und Unterschiede werden ruhig erklärt, damit Entscheidungen mit mehr Sicherheit getroffen werden können.",
         },
         {
-          title: "Für aktive Angebote gemacht",
-          copy: "Das Erlebnis ist darauf ausgelegt, verfügbare Immobilien aktuell und leicht durchsuchbar zu halten.",
+          title: "Begleitung in jedem Schritt",
+          copy: "Von der ersten Auswahl bis zum ersten Gespräch ist der Ablauf darauf ausgelegt, Vertrauen aufzubauen.",
         },
       ],
-      title: "Eine Immobilienseite, die um die Objekte selbst gebaut ist.",
+      title: "Mit Vertrauen im Prozess wird auch die Entscheidung selbst klarer.",
     },
     propertiesPage: {
       eyebrow: "Immobilienübersicht",
