@@ -1475,6 +1475,57 @@ textarea {
   letter-spacing: 0.02em;
 }
 
+.filters-feature-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.filters-group-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+
+.filters-pill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.filters-pill-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 0.95rem;
+  border: 1px solid rgba(18, 53, 36, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--text);
+  font-size: 0.86rem;
+  font-weight: 500;
+  line-height: 1.2;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.filters-pill-button:hover,
+.filters-pill-button:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(212, 178, 106, 0.52);
+  box-shadow: 0 10px 20px rgba(18, 53, 36, 0.08);
+}
+
+.filters-pill-button.active {
+  border-color: rgba(212, 178, 106, 0.72);
+  background: rgba(212, 178, 106, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(212, 178, 106, 0.16);
+}
+
 .filters-grid input,
 .filters-grid select {
   padding: 0.7rem 0.9rem;
@@ -2808,6 +2859,15 @@ textarea {
 
   .filters-grid {
     gap: 0.85rem;
+  }
+
+  .filters-pill-group {
+    gap: 0.5rem;
+  }
+
+  .filters-pill-button {
+    padding: 0.58rem 0.85rem;
+    font-size: 0.84rem;
   }
 
   .filters-grid input,

@@ -76,8 +76,10 @@ export type PublicCopy = {
     availabilityTo: string;
     emptyBody: string;
     emptyTitle: string;
+    features: string;
     heading: string;
     listingMode: string;
+    mustHaveFeatures: string;
     minimumBedrooms: string;
     propertyType: string;
     region: string;
@@ -270,8 +272,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       availabilityTo: "Available to",
       emptyBody: "Try broadening the search or lowering the bedroom minimum.",
       emptyTitle: "No properties match those filters yet.",
+      features: "Amenities",
       heading: "Property Search",
       listingMode: "Looking for",
+      mustHaveFeatures: "Must-have features",
       minimumBedrooms: "Minimum Bedrooms",
       propertyType: "Property Type",
       region: "Region",
@@ -485,8 +489,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       availabilityTo: "Disponible hasta",
       emptyBody: "Prueba ampliar la búsqueda o bajar el mínimo de dormitorios.",
       emptyTitle: "No hay propiedades con esos filtros.",
+      features: "Comodidades",
       heading: "Búsqueda de propiedades",
       listingMode: "Busco",
+      mustHaveFeatures: "Características imprescindibles",
       minimumBedrooms: "Dormitorios mínimos",
       propertyType: "Tipo de propiedad",
       region: "Zona",
@@ -700,8 +706,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       availabilityTo: "Доступно до",
       emptyBody: "Попробуйте расширить поиск или уменьшить минимум по спальням.",
       emptyTitle: "По этим фильтрам пока ничего не найдено.",
+      features: "Удобства",
       heading: "Поиск недвижимости",
       listingMode: "Интересует",
+      mustHaveFeatures: "Обязательные особенности",
       minimumBedrooms: "Минимум спален",
       propertyType: "Тип недвижимости",
       region: "Район",
@@ -915,8 +923,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       availabilityTo: "Verfügbar bis",
       emptyBody: "Versuchen Sie eine breitere Suche oder weniger Schlafzimmer als Minimum.",
       emptyTitle: "Zu diesen Filtern wurden noch keine Immobilien gefunden.",
+      features: "Ausstattung",
       heading: "Immobiliensuche",
       listingMode: "Gesucht",
+      mustHaveFeatures: "Wichtige Merkmale",
       minimumBedrooms: "Mindestens Schlafzimmer",
       propertyType: "Objektart",
       region: "Region",

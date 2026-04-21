@@ -3,9 +3,18 @@
 import { useDeferredValue, useState } from "react";
 
 import { PropertyCard } from "@/components/property-card";
-import { listingModes, propertyTypes, type ListingMode, type PropertyRecord, type PropertyType } from "@/lib/property-shared";
+import {
+  listingModes,
+  propertyFeatureOptions,
+  propertyTypes,
+  type ListingMode,
+  type PropertyFeature,
+  type PropertyRecord,
+  type PropertyType,
+} from "@/lib/property-shared";
 import {
   areaNames,
+  getLocalizedPropertyFeatureLabel,
   getLocalizedResultsLabel,
   getLocalizedPropertyTypeLabel,
   type PublicCopy,
@@ -23,6 +32,7 @@ export function PropertyFilters({ copy, locale, properties }: PropertyFiltersPro
   const [selectedListingMode, setSelectedListingMode] = useState<"all" | ListingMode>("all");
   const [selectedRegion, setSelectedRegion] = useState<"all" | (typeof areaNames)[number]>("all");
   const [selectedType, setSelectedType] = useState<"all" | PropertyType>("all");
+  const [selectedFeatures, setSelectedFeatures] = useState<PropertyFeature[]>([]);
   const [availabilityFrom, setAvailabilityFrom] = useState("");
   const [availabilityTo, setAvailabilityTo] = useState("");
   const [minimumBedrooms, setMinimumBedrooms] = useState("0");
@@ -33,8 +43,15 @@ export function PropertyFilters({ copy, locale, properties }: PropertyFiltersPro
   const availableRegions = areaNames.filter((region) =>
     properties.some((property) => property.location.toLowerCase().includes(region.toLowerCase())),
   );
+  const availableFeatures = propertyFeatureOptions.filter((feature) =>
+    properties.some((property) => property.features.includes(feature)),
+  );
   const getSortablePrice = (property: PropertyRecord) =>
     selectedListingMode === "rent" ? property.rentPriceEuro ?? property.priceEuro : property.priceEuro;
+  const toggleFeature = (feature: PropertyFeature) =>
+    setSelectedFeatures((current) =>
+      current.includes(feature) ? current.filter((entry) => entry !== feature) : [...current, feature],
+    );
 
   const filteredProperties = properties
     .filter((property) => {
@@ -51,6 +68,8 @@ export function PropertyFilters({ copy, locale, properties }: PropertyFiltersPro
         property.listingMode === "both";
       const matchesType = selectedType === "all" || property.type === selectedType;
       const matchesBedrooms = property.bedrooms >= Number(minimumBedrooms);
+      const matchesFeatures =
+        selectedFeatures.length === 0 || selectedFeatures.every((feature) => property.features.includes(feature));
       const matchesAvailability =
         selectedListingMode !== "rent" ||
         ((!availabilityFrom && !availabilityTo) ||
@@ -59,7 +78,15 @@ export function PropertyFilters({ copy, locale, properties }: PropertyFiltersPro
             (!availabilityFrom || property.availabilityStart <= availabilityFrom) &&
             (!availabilityTo || property.availabilityEnd >= availabilityTo)));
 
-      return matchesSearch && matchesRegion && matchesListingMode && matchesType && matchesBedrooms && matchesAvailability;
+      return (
+        matchesSearch &&
+        matchesRegion &&
+        matchesListingMode &&
+        matchesType &&
+        matchesBedrooms &&
+        matchesFeatures &&
+        matchesAvailability
+      );
     })
     .sort((left, right) => {
       if (sort === "price-asc") {
@@ -144,6 +171,28 @@ export function PropertyFilters({ copy, locale, properties }: PropertyFiltersPro
               <option value="4">4+</option>
             </select>
           </label>
+
+          {availableFeatures.length > 0 ? (
+            <div className="filters-feature-group">
+              <span className="filters-group-label">{copy.filters.mustHaveFeatures}</span>
+              <div className="filters-pill-group">
+                {availableFeatures.map((feature) => {
+                  const isActive = selectedFeatures.includes(feature);
+
+                  return (
+                    <button
+                      className={`filters-pill-button${isActive ? " active" : ""}`}
+                      key={feature}
+                      onClick={() => toggleFeature(feature)}
+                      type="button"
+                    >
+                      {getLocalizedPropertyFeatureLabel(locale, feature)}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : null}
 
           {selectedListingMode === "rent" ? (
             <>
