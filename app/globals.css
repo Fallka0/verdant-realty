@@ -961,12 +961,35 @@ textarea {
   box-shadow: var(--shadow);
 }
 
+.homepage-intro {
+  padding-top: 0.15rem;
+}
+
 .hero-panel {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
   gap: 2rem;
   align-items: center;
   padding: 0.6rem 0 0.5rem;
+}
+
+.homepage-hero-panel {
+  align-items: start;
+  padding-top: 0;
+}
+
+.homepage-hero-copy {
+  gap: 0.85rem;
+  margin-bottom: 0;
+  padding-top: 0.2rem;
+}
+
+.homepage-hero-copy h1 {
+  max-width: 12ch;
+}
+
+.homepage-hero-copy p:last-child {
+  max-width: 40rem;
 }
 
 .hero-copy h1 {
@@ -2994,6 +3017,14 @@ textarea {
   .hero-panel {
     gap: 1.25rem;
     padding-top: 0.25rem;
+  }
+
+  .homepage-intro {
+    padding-top: 0;
+  }
+
+  .homepage-hero-panel {
+    padding-top: 0;
   }
 
   .hero-copy h1 {
