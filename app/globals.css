@@ -154,55 +154,6 @@ textarea {
   box-shadow: 0 10px 20px rgba(18, 53, 36, 0.18);
 }
 
-.language-switcher-compact {
-  position: relative;
-  z-index: 50;
-  padding: 0;
-  border: 0;
-  background: transparent;
-}
-
-.language-compact-trigger {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  min-height: 2.5rem;
-  padding: 0.45rem 0.8rem 0.45rem 0.95rem;
-  border: 1px solid rgba(18, 53, 36, 0.12);
-  border-radius: 999px;
-  background: rgba(255, 251, 244, 0.88);
-  color: var(--text);
-  cursor: pointer;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  box-shadow: 0 10px 24px rgba(18, 53, 36, 0.08);
-}
-
-.language-compact-chevron {
-  font-size: 0.8rem;
-  transition: transform 180ms ease;
-}
-
-.language-switcher-compact.is-open .language-compact-chevron {
-  transform: rotate(180deg);
-}
-
-.language-compact-menu {
-  position: absolute;
-  top: calc(100% + 0.45rem);
-  right: 0;
-  z-index: 60;
-  display: grid;
-  gap: 0.28rem;
-  min-width: max-content;
-  padding: 0.35rem;
-  border: 1px solid rgba(18, 53, 36, 0.1);
-  border-radius: 18px;
-  background: rgba(255, 251, 244, 0.98);
-  box-shadow: 0 18px 34px rgba(18, 53, 36, 0.14);
-}
-
 .site-nav a {
   position: relative;
 }
@@ -797,17 +748,7 @@ textarea {
   justify-content: space-between;
   gap: 1.5rem;
   flex-wrap: wrap;
-  position: relative;
-  z-index: 10;
   padding: 1.5rem 0 1.85rem;
-}
-
-.mobile-language-slot {
-  display: none;
-}
-
-.desktop-language-slot {
-  display: flex;
 }
 
 .public-header.compact-header {
@@ -1482,7 +1423,8 @@ textarea {
 }
 
 .property-card-single-price .property-card-footer {
-  grid-template-columns: minmax(0, 1fr) minmax(9.75rem, 11rem);
+  grid-template-columns: 1fr;
+  align-items: stretch;
 }
 
 .property-card-dual-price .property-card-footer {
@@ -1499,7 +1441,7 @@ textarea {
 }
 
 .property-card-single-price .price-stack {
-  min-height: 3.4rem;
+  min-height: 0;
 }
 
 .price-tag {
@@ -2959,28 +2901,13 @@ textarea {
 
   .public-header {
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem;
     padding: 1rem 0 0.9rem;
-    flex-wrap: nowrap;
-  }
-
-  .mobile-language-slot {
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-  }
-
-  .mobile-language-slot .language-switcher-compact {
-    width: auto;
-  }
-
-  .desktop-language-slot {
-    display: none;
   }
 
   .mobile-menu-toggle {
     display: inline-flex;
-    margin-left: 0;
+    margin-left: auto;
   }
 
   .header-actions {
@@ -3017,6 +2944,18 @@ textarea {
 
   .primary-nav a::after {
     display: none;
+  }
+
+  .language-switcher {
+    width: 100%;
+    justify-content: space-between;
+    padding: 0.32rem;
+    overflow-x: auto;
+  }
+
+  .language-button {
+    flex: 1 0 3.4rem;
+    min-width: 3.4rem;
   }
 
   .hero-shell {

@@ -40,10 +40,6 @@ export function PublicHeader({
         </span>
       </Link>
 
-      <div className="mobile-language-slot">
-        <LanguageSwitcher compact currentLocale={currentLocale} label={languageLabel} />
-      </div>
-
       <button
         className={`mobile-menu-toggle ${isMenuOpen ? "is-open" : ""}`}
         type="button"
@@ -71,9 +67,7 @@ export function PublicHeader({
             </Link>
           ) : null}
         </nav>
-        <div className="desktop-language-slot">
-          <LanguageSwitcher currentLocale={currentLocale} label={languageLabel} />
-        </div>
+        <LanguageSwitcher currentLocale={currentLocale} label={languageLabel} />
       </div>
     </header>
   );
