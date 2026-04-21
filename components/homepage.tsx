@@ -116,19 +116,6 @@ export function Homepage({ adminLabel, copy, currentLocale, featuredProperties, 
           </article>
         </div>
 
-        <div className="section-heading compact coverage-pills-heading">
-          <p className="eyebrow">{copy.areasLabel}</p>
-          <h3>{copy.areasTitle}</h3>
-          <p>{copy.areasSummary}</p>
-        </div>
-        <div className="region-row">
-          {areaNames.map((region) => (
-            <span className="region-pill" key={region}>
-              {region}
-            </span>
-          ))}
-        </div>
-
         <div className="section-heading compact neighborhood-heading">
           <p className="eyebrow">{copy.neighborhoods.eyebrow}</p>
           <h3>{copy.neighborhoods.title}</h3>
@@ -181,9 +168,8 @@ export function Homepage({ adminLabel, copy, currentLocale, featuredProperties, 
         </div>
 
         <div className="market-panel">
-          <p className="eyebrow">{copy.contact.eyebrow}</p>
-          <h3>{copy.contact.title}</h3>
-          <p>{copy.contact.summary}</p>
+          <h3>{copy.contact.panelTitle}</h3>
+          <p>{copy.contact.panelSummary}</p>
           <ContactActions
             callLabel={copy.buttons.callNow}
             className="contact-actions"

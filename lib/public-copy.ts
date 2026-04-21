@@ -15,9 +15,6 @@ export function resolvePublicLocale(value?: string | null): PublicLocale {
 }
 
 export type PublicCopy = {
-  areasLabel: string;
-  areasTitle: string;
-  areasSummary: string;
   brandSubtitle: string;
   buttons: {
     browseProperties: string;
@@ -44,6 +41,8 @@ export type PublicCopy = {
     availabilityLabel: string;
     availabilityValue: string;
     eyebrow: string;
+    panelSummary: string;
+    panelTitle: string;
     phoneLabel: string;
     summary: string;
     title: string;
@@ -72,6 +71,7 @@ export type PublicCopy = {
     heading: string;
     minimumBedrooms: string;
     propertyType: string;
+    region: string;
     results: string;
     search: string;
     searchPlaceholder: string;
@@ -189,10 +189,6 @@ export const neighborhoodImages: Record<(typeof areaNames)[number], string> = {
 
 export const publicCopy: Record<PublicLocale, PublicCopy> = {
   en: {
-    areasLabel: "Popular Search Areas",
-    areasTitle: "Coastal locations buyers ask for most often.",
-    areasSummary:
-      "From central Torrevieja to the nearby coastline, buyers can quickly move into the areas they already know and love.",
     brandSubtitle: "Homes Along The Costa Blanca",
     buttons: {
       browseProperties: "Browse Properties",
@@ -219,9 +215,11 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       availabilityLabel: "Best for",
       availabilityValue: "Calls and WhatsApp",
       eyebrow: "Direct Contact",
+      panelSummary: "If a home already feels right, a quick call or WhatsApp message is often the fastest next step.",
+      panelTitle: "Prefer to speak directly instead of filling out forms?",
       phoneLabel: "Phone",
-      summary: "For buyers who prefer a direct conversation, Verdant Realty is also available by phone or on WhatsApp.",
-      title: "Speak with your agent right away when a listing feels promising.",
+      summary: "When a property stands out, a direct conversation can answer the practical questions much faster.",
+      title: "Reach your agent quickly when a listing feels worth pursuing.",
       whatsappMessage: "Hello, I am interested in a property from Verdant Realty and would like more information.",
     },
     coverage: {
@@ -248,9 +246,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       heading: "Property Search",
       minimumBedrooms: "Minimum Bedrooms",
       propertyType: "Property Type",
+      region: "Region",
       results: "properties currently match.",
       search: "Search",
-      searchPlaceholder: "Area or title",
+      searchPlaceholder: "Title or keyword",
       sort: "Sort",
       title: "Find the right listing faster.",
       types: {
@@ -347,29 +346,25 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       items: [
         {
           name: "Private buyer",
-          quote: "The search felt calm and clear from the start. We always knew which homes were genuinely worth opening.",
+          quote: "From the beginning, the search felt focused and reassuring. We could quickly tell which homes deserved real attention.",
           role: "Relocating from Northern Europe",
         },
         {
           name: "Second-home couple",
-          quote: "The presentation made it easier to compare areas, not just properties, which helped us decide much faster.",
+          quote: "The listings made the differences between locations much easier to understand, so our decision came together faster.",
           role: "Buying near the coast",
         },
         {
           name: "Family purchaser",
-          quote: "Everything felt more personal than a generic portal. The listings gave us confidence before we even reached out.",
+          quote: "It felt more thoughtful than a generic portal. By the time we reached out, we already felt confident in the shortlist.",
           role: "Looking for a year-round home",
         },
       ],
-      summary: "A relationship-first approach shows up in how the listings are explained, paced, and presented.",
-      title: "Buyers remember when the search feels calm, human, and well-guided.",
+      summary: "The difference shows up in the tone, the pacing, and how clearly each listing is presented before the first conversation.",
+      title: "A well-guided property search leaves buyers feeling informed rather than overwhelmed.",
     },
   },
   es: {
-    areasLabel: "Zonas Más Buscadas",
-    areasTitle: "Lugares costeros que más interesan a los compradores.",
-    areasSummary:
-      "Desde el centro de Torrevieja hasta la costa cercana, los compradores pueden entrar rápido en las zonas que ya conocen y desean.",
     brandSubtitle: "Viviendas En La Costa Blanca",
     buttons: {
       browseProperties: "Ver propiedades",
@@ -396,9 +391,11 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       availabilityLabel: "Ideal para",
       availabilityValue: "Llamadas y WhatsApp",
       eyebrow: "Contacto directo",
+      panelSummary: "Si ya te interesa una vivienda, una llamada o un mensaje suele ser la forma más rápida de avanzar.",
+      panelTitle: "¿Prefieres hablar directamente en vez de completar formularios?",
       phoneLabel: "Teléfono",
-      summary: "Si prefieres hablar directamente, Verdant Realty también está disponible por teléfono o por WhatsApp.",
-      title: "Habla con tu agente enseguida cuando una propiedad te interese.",
+      summary: "Cuando una propiedad encaja de verdad, una conversación directa ayuda a resolver dudas con más rapidez.",
+      title: "Habla con tu agente enseguida cuando una propiedad merezca seguir adelante.",
       whatsappMessage: "Hola, me interesa una propiedad de Verdant Realty y me gustaría recibir más información.",
     },
     coverage: {
@@ -425,9 +422,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       heading: "Búsqueda de propiedades",
       minimumBedrooms: "Dormitorios mínimos",
       propertyType: "Tipo de propiedad",
+      region: "Zona",
       results: "propiedades coinciden.",
       search: "Buscar",
-      searchPlaceholder: "Zona o título",
+      searchPlaceholder: "Título o palabra clave",
       sort: "Ordenar",
       title: "Encuentra la propiedad adecuada más rápido.",
       types: {
@@ -544,29 +542,25 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       items: [
         {
           name: "Compradora internacional",
-          quote: "La búsqueda se sintió clara y tranquila desde el principio. Era fácil entender qué viviendas merecían una visita.",
+          quote: "La búsqueda se sintió ordenada y tranquila desde el principio. Era fácil ver qué viviendas merecían de verdad una visita.",
           role: "Mudanza a la costa",
         },
         {
           name: "Pareja compradora",
-          quote: "Nos ayudó mucho comparar zonas y no solo viviendas. La presentación tenía orden y criterio.",
+          quote: "Nos ayudó mucho poder entender mejor cada zona y no solo mirar viviendas sueltas. Todo estaba presentado con criterio.",
           role: "Segunda residencia",
         },
         {
           name: "Familia compradora",
-          quote: "La web transmite cercanía. Antes de escribir ya sentíamos que entendíamos mejor el mercado.",
+          quote: "Transmitía más cercanía que un portal genérico. Antes de escribir ya sentíamos que entendíamos mejor el mercado.",
           role: "Compra para todo el año",
         },
       ],
-      summary: "Una experiencia más humana se nota en cómo se presenta cada propiedad y en el ritmo de la búsqueda.",
-      title: "Cuando la búsqueda se siente más personal, los compradores avanzan con más confianza.",
+      summary: "La diferencia se nota en el tono, en la claridad de cada anuncio y en la forma en que el proceso acompaña al comprador.",
+      title: "Cuando la búsqueda está bien guiada, el comprador avanza con más calma y confianza.",
     },
   },
   ru: {
-    areasLabel: "Популярные районы",
-    areasTitle: "Прибрежные локации, которые чаще всего ищут покупатели.",
-    areasSummary:
-      "От центра Торревьехи до соседних прибрежных районов покупатели могут быстро перейти к тем местам, которые им действительно интересны.",
     brandSubtitle: "Недвижимость на Коста-Бланке",
     buttons: {
       browseProperties: "Смотреть объекты",
@@ -592,10 +586,12 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     contact: {
       availabilityLabel: "Удобно для",
       availabilityValue: "Звонков и WhatsApp",
-      eyebrow: "Быстрый контакт",
+      eyebrow: "Прямой контакт",
+      panelSummary: "Если объект уже заинтересовал, звонок или сообщение в WhatsApp обычно помогают быстрее перейти к следующему шагу.",
+      panelTitle: "Удобнее обсудить детали напрямую?",
       phoneLabel: "Телефон",
-      summary: "Если удобнее поговорить напрямую, с Verdant Realty можно быстро связаться по телефону или в WhatsApp.",
-      title: "Когда объект заинтересовал, связаться с агентом можно сразу.",
+      summary: "Когда объект действительно подходит, короткий разговор часто снимает практические вопросы быстрее, чем переписка.",
+      title: "Свяжитесь с агентом сразу, когда объект кажется действительно подходящим.",
       whatsappMessage: "Здравствуйте, меня заинтересовал объект на Verdant Realty. Хотелось бы получить больше информации.",
     },
     coverage: {
@@ -622,9 +618,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       heading: "Поиск недвижимости",
       minimumBedrooms: "Минимум спален",
       propertyType: "Тип недвижимости",
+      region: "Район",
       results: "объектов найдено.",
       search: "Поиск",
-      searchPlaceholder: "Район или название",
+      searchPlaceholder: "Название или ключевое слово",
       sort: "Сортировка",
       title: "Найдите нужный объект быстрее.",
       types: {
@@ -741,12 +738,12 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       items: [
         {
           name: "Частный покупатель",
-          quote: "Поиск ощущался спокойным и понятным. Было легко понять, какие объекты действительно стоит открыть.",
+          quote: "С самого начала поиск ощущался спокойным и понятным. Сразу было видно, какие объекты действительно заслуживают внимания.",
           role: "Переезд к морю",
         },
         {
           name: "Пара покупателей",
-          quote: "Нам помогло то, что сайт показывает не только дома, но и характер районов. Решение стало принимать проще.",
+          quote: "Нам очень помогло, что сайт показывал не только сами дома, но и разницу между районами. Решение принимать стало легче.",
           role: "Покупка второй резиденции",
         },
         {
@@ -760,10 +757,6 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     },
   },
   de: {
-    areasLabel: "Beliebte Suchlagen",
-    areasTitle: "Küstenlagen, nach denen Käufer besonders oft fragen.",
-    areasSummary:
-      "Von Torrevieja selbst bis zu den nahen Küstenorten gelangen Interessenten schnell in die Lagen, die sie wirklich suchen.",
     brandSubtitle: "Häuser An Der Costa Blanca",
     buttons: {
       browseProperties: "Immobilien ansehen",
@@ -790,9 +783,11 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       availabilityLabel: "Am besten für",
       availabilityValue: "Anrufe und WhatsApp",
       eyebrow: "Direkter Kontakt",
+      panelSummary: "Wenn ein Objekt bereits passt, bringt ein kurzer Anruf oder eine WhatsApp-Nachricht oft am schnellsten Klarheit.",
+      panelTitle: "Sie möchten lieber direkt sprechen als Formulare ausfüllen?",
       phoneLabel: "Telefon",
-      summary: "Wenn ein direktes Gespräch angenehmer ist, ist Verdant Realty auch telefonisch oder über WhatsApp erreichbar.",
-      title: "Sprechen Sie sofort mit Ihrer Ansprechpartnerin, wenn ein Objekt interessant wirkt.",
+      summary: "Wenn eine Immobilie wirklich interessant wirkt, lassen sich praktische Fragen in einem direkten Gespräch meist schneller klären.",
+      title: "Sprechen Sie direkt mit Ihrer Ansprechpartnerin, sobald ein Objekt ernsthaft infrage kommt.",
       whatsappMessage: "Hallo, ich interessiere mich für eine Immobilie von Verdant Realty und hätte gern weitere Informationen.",
     },
     coverage: {
@@ -819,9 +814,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       heading: "Immobiliensuche",
       minimumBedrooms: "Mindestens Schlafzimmer",
       propertyType: "Objektart",
+      region: "Region",
       results: "Immobilien passen aktuell.",
       search: "Suche",
-      searchPlaceholder: "Lage oder Titel",
+      searchPlaceholder: "Titel oder Stichwort",
       sort: "Sortieren",
       title: "Schneller zur passenden Immobilie.",
       types: {
@@ -938,22 +934,22 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       items: [
         {
           name: "Privater Käufer",
-          quote: "Die Suche fühlte sich von Anfang an ruhig und klar an. Man wusste sofort, welche Objekte wirklich interessant sind.",
+          quote: "Die Suche wirkte von Anfang an ruhig und gut strukturiert. Man merkte schnell, welche Objekte wirklich näher angeschaut werden sollten.",
           role: "Umzug an die Küste",
         },
         {
           name: "Kaufinteressiertes Paar",
-          quote: "Uns half besonders, dass nicht nur die Immobilien, sondern auch die Lagen verständlich dargestellt wurden.",
+          quote: "Uns half besonders, dass nicht nur die Immobilien, sondern auch die Unterschiede zwischen den Lagen klar erklärt wurden.",
           role: "Zweitwohnsitz an der Costa Blanca",
         },
         {
           name: "Familienkauf",
-          quote: "Alles wirkte persönlicher als auf klassischen Portalen. Das gab uns schon vor der Anfrage mehr Vertrauen.",
+          quote: "Es wirkte persönlicher als auf klassischen Portalen. Schon vor der Anfrage hatten wir deutlich mehr Vertrauen in die Auswahl.",
           role: "Suche nach einem dauerhaften Zuhause",
         },
       ],
-      summary: "Ein beziehungsorientierter Auftritt zeigt sich darin, wie Immobilien erklärt, sortiert und erlebbar gemacht werden.",
-      title: "Wenn sich die Suche klar und menschlich anfühlt, entsteht schneller echtes Vertrauen.",
+      summary: "Der Unterschied zeigt sich im Ton, in der Klarheit der Exposés und darin, wie ruhig der Weg zur Anfrage geführt wird.",
+      title: "Eine gut geführte Immobiliensuche gibt Käufern Sicherheit statt Überforderung.",
     },
   },
 };
