@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 
 import { PropertyFilters } from "@/components/property-filters";
 import { PublicHeader } from "@/components/public-header";
+import { SiteFooter } from "@/components/site-footer";
 import { adminCopy, resolveAdminLocale } from "@/lib/admin-copy";
 import { getAdminAuthState } from "@/lib/auth";
 import { publicCopy, resolvePublicLocale } from "@/lib/public-copy";
@@ -35,6 +36,7 @@ export default async function PropertiesPage() {
       </section>
 
       <PropertyFilters copy={copy} locale={locale} properties={properties} />
+      <SiteFooter copy={copy} />
     </main>
   );
 }

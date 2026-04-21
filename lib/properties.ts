@@ -2,17 +2,27 @@ import { createHash } from "node:crypto";
 
 import { type PublicLocale } from "@/lib/public-copy";
 import {
+  listingModes,
+  propertyFeatureOptions,
   propertyStatuses,
   propertyTypes,
+  rentalPeriodOptions,
+  rentPricePeriods,
   type PropertyContentFields,
   type PropertyContentTranslations,
+  type ListingMode,
+  type PropertyFeature,
   type PropertyRecord,
   type PropertyStatus,
   type PropertyType,
+  type RentalPeriodOption,
+  type RentPricePeriod,
 } from "@/lib/property-shared";
 import { createAdminClient } from "@/lib/supabase/server";
 
 type PropertyRow = {
+  availability_end: string | null;
+  availability_start: string | null;
   bathrooms: number | string | null;
   bedrooms: number | string | null;
   content_translation_source_hash: string | null;
@@ -20,14 +30,20 @@ type PropertyRow = {
   created_at: string | null;
   description: string | null;
   featured: boolean | null;
+  features: string[] | null;
   gallery_urls: string[] | null;
   id: string;
   interior_sqm: number | string | null;
+  internal_notes: string | null;
+  listing_mode: string | null;
   location: string | null;
   main_image_url: string | null;
   plot_sqm: number | string | null;
   price_eur: number | string | null;
   reference_code: string | null;
+  rent_price_eur: number | string | null;
+  rent_price_period: string | null;
+  rental_periods: string[] | null;
   short_description: string | null;
   slug: string | null;
   status: string | null;
@@ -44,13 +60,21 @@ export const sampleProperties: PropertyRecord[] = [
     slug: "sea-view-apartment-la-mata",
     location: "La Mata, Torrevieja",
     priceEuro: 289000,
+    rentPriceEuro: 1850,
+    rentPricePeriod: "week",
     bedrooms: 3,
     bathrooms: 2,
     interiorSqm: 96,
     plotSqm: null,
     type: "apartment",
+    listingMode: "both",
     status: "available",
     featured: true,
+    features: ["sea_view", "terrace", "air_conditioning", "furnished"],
+    internalNotes: "Strong fit for summer rentals. Owner prefers 48h notice before viewings.",
+    rentalPeriods: ["weekly", "seasonal"],
+    availabilityStart: "2026-05-01",
+    availabilityEnd: "2026-09-30",
     shortDescription:
       "Bright three-bedroom apartment with open terrace, sea views, and easy walking distance to the beach.",
     description:
@@ -81,13 +105,21 @@ export const sampleProperties: PropertyRecord[] = [
     slug: "detached-villa-los-balcones",
     location: "Los Balcones, Torrevieja",
     priceEuro: 525000,
+    rentPriceEuro: null,
+    rentPricePeriod: null,
     bedrooms: 4,
     bathrooms: 3,
     interiorSqm: 184,
     plotSqm: 420,
     type: "villa",
+    listingMode: "sale",
     status: "available",
     featured: true,
+    features: ["pool", "garden", "garage", "air_conditioning"],
+    internalNotes: "Owners flexible on closing timeline. Highlight family layout in viewings.",
+    rentalPeriods: [],
+    availabilityStart: null,
+    availabilityEnd: null,
     shortDescription:
       "Detached family villa with private pool, spacious outdoor areas, and a layout that works year-round.",
     description:
@@ -118,13 +150,21 @@ export const sampleProperties: PropertyRecord[] = [
     slug: "modern-penthouse-punta-prima",
     location: "Punta Prima, Orihuela Costa",
     priceEuro: 349000,
+    rentPriceEuro: 1650,
+    rentPricePeriod: "month",
     bedrooms: 2,
     bathrooms: 2,
     interiorSqm: 88,
     plotSqm: null,
     type: "penthouse",
+    listingMode: "both",
     status: "reserved",
     featured: false,
+    features: ["terrace", "sea_view", "lift", "tourist_license"],
+    internalNotes: "Investor profile. Keep rental yield figures ready for follow-ups.",
+    rentalPeriods: ["monthly", "long_term"],
+    availabilityStart: "2026-10-01",
+    availabilityEnd: "2027-03-31",
     shortDescription:
       "Modern top-floor home with strong rental appeal, generous sunlight, and quick access to the coast.",
     description:
@@ -290,6 +330,8 @@ function normalizeContentTranslations(
 function normalizePropertyRow(row: PropertyRow): PropertyRecord {
   const type = row.property_type;
   const status = row.status;
+  const listingMode = row.listing_mode;
+  const rentPricePeriod = row.rent_price_period;
   const baseContent = {
     title: row.title ?? "Untitled property",
     shortDescription: row.short_description ?? "",
@@ -298,6 +340,8 @@ function normalizePropertyRow(row: PropertyRow): PropertyRecord {
 
   return {
     id: row.id,
+    availabilityEnd: row.availability_end,
+    availabilityStart: row.availability_start,
     referenceCode: row.reference_code ?? "VR-000",
     title: baseContent.title,
     slug: row.slug ?? "untitled-property",
@@ -306,16 +350,28 @@ function normalizePropertyRow(row: PropertyRow): PropertyRecord {
     bedrooms: coerceNumber(row.bedrooms) ?? 0,
     bathrooms: coerceNumber(row.bathrooms) ?? 0,
     interiorSqm: coerceNumber(row.interior_sqm),
+    internalNotes: row.internal_notes ?? "",
+    listingMode: listingModes.includes(listingMode as ListingMode) ? (listingMode as ListingMode) : "sale",
     plotSqm: coerceNumber(row.plot_sqm),
     type: propertyTypes.includes(type as PropertyType) ? (type as PropertyType) : "apartment",
     status: propertyStatuses.includes(status as PropertyStatus)
       ? (status as PropertyStatus)
       : "draft",
     featured: Boolean(row.featured),
+    features: (row.features ?? []).filter((feature): feature is PropertyFeature =>
+      propertyFeatureOptions.includes(feature as PropertyFeature),
+    ),
     shortDescription: baseContent.shortDescription,
     description: baseContent.description,
     mainImageUrl: row.main_image_url ?? sampleProperties[0].mainImageUrl,
     galleryUrls: row.gallery_urls ?? [],
+    rentPriceEuro: coerceNumber(row.rent_price_eur),
+    rentPricePeriod: rentPricePeriods.includes(rentPricePeriod as RentPricePeriod)
+      ? (rentPricePeriod as RentPricePeriod)
+      : null,
+    rentalPeriods: (row.rental_periods ?? []).filter((period): period is RentalPeriodOption =>
+      rentalPeriodOptions.includes(period as RentalPeriodOption),
+    ),
     contentTranslations: normalizeContentTranslations(row.content_translations, baseContent),
     createdAt: row.created_at ?? new Date().toISOString(),
     updatedAt: row.updated_at ?? new Date().toISOString(),
@@ -422,6 +478,17 @@ function parseGalleryUrls(value: FormDataEntryValue | null) {
     .filter(Boolean);
 }
 
+function parseStringArray(value: FormDataEntryValue | null) {
+  if (typeof value !== "string" || value.trim() === "") {
+    return [];
+  }
+
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
 export function parsePropertyFormData(formData: FormData) {
   const title = String(formData.get("title") ?? "").trim();
   const referenceCode = String(formData.get("referenceCode") ?? "").trim().toUpperCase();
@@ -430,9 +497,19 @@ export function parsePropertyFormData(formData: FormData) {
   const mainImageUrl = String(formData.get("mainImageUrl") ?? "").trim() || galleryUrls[0] || "";
   const slug = slugify(rawSlug || title) || slugify(referenceCode) || `property-${Date.now()}`;
   const typeValue = String(formData.get("type") ?? "apartment");
+  const listingModeValue = String(formData.get("listingMode") ?? "sale");
+  const rentPricePeriodValue = String(formData.get("rentPricePeriod") ?? "");
   const statusValue = String(formData.get("status") ?? "draft");
+  const features = parseStringArray(formData.get("features")).filter((feature): feature is PropertyFeature =>
+    propertyFeatureOptions.includes(feature as PropertyFeature),
+  );
+  const rentalPeriods = parseStringArray(formData.get("rentalPeriods")).filter((period): period is RentalPeriodOption =>
+    rentalPeriodOptions.includes(period as RentalPeriodOption),
+  );
 
   return {
+    availability_end: String(formData.get("availabilityEnd") ?? "").trim() || null,
+    availability_start: String(formData.get("availabilityStart") ?? "").trim() || null,
     reference_code: referenceCode,
     title,
     slug,
@@ -441,12 +518,20 @@ export function parsePropertyFormData(formData: FormData) {
     bedrooms: parseIntegerField(formData.get("bedrooms")) ?? 0,
     bathrooms: parseIntegerField(formData.get("bathrooms")) ?? 0,
     interior_sqm: parseIntegerField(formData.get("interiorSqm")),
+    internal_notes: String(formData.get("internalNotes") ?? "").trim(),
+    listing_mode: listingModes.includes(listingModeValue as ListingMode) ? listingModeValue : "sale",
     plot_sqm: parseIntegerField(formData.get("plotSqm")),
     property_type: propertyTypes.includes(typeValue as PropertyType)
       ? typeValue
       : "apartment",
     status: propertyStatuses.includes(statusValue as PropertyStatus) ? statusValue : "draft",
     featured: formData.get("featured") === "on",
+    features,
+    rent_price_eur: parseIntegerField(formData.get("rentPriceEuro")),
+    rent_price_period: rentPricePeriods.includes(rentPricePeriodValue as RentPricePeriod)
+      ? rentPricePeriodValue
+      : null,
+    rental_periods: rentalPeriods,
     short_description: String(formData.get("shortDescription") ?? "").trim(),
     description: String(formData.get("description") ?? "").trim(),
     main_image_url: mainImageUrl,
@@ -480,5 +565,17 @@ export function validatePropertyInput(input: ReturnType<typeof parsePropertyForm
 
   if (missingFields.length > 0) {
     throw new Error(`Missing required fields: ${missingFields.join(", ")}.`);
+  }
+
+  if ((input.listing_mode === "rent" || input.listing_mode === "both") && !input.rent_price_eur) {
+    throw new Error("Missing required fields: rent price.");
+  }
+
+  if ((input.listing_mode === "rent" || input.listing_mode === "both") && !input.availability_start) {
+    throw new Error("Missing required fields: rent availability start.");
+  }
+
+  if ((input.listing_mode === "rent" || input.listing_mode === "both") && !input.availability_end) {
+    throw new Error("Missing required fields: rent availability end.");
   }
 }

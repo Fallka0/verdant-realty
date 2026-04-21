@@ -1251,12 +1251,24 @@ textarea {
   padding-top: 0.25rem;
 }
 
+.price-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
 .price-tag {
   font-size: 1.15rem;
   font-weight: 700;
   font-family: var(--font-ui);
   color: var(--text);
   letter-spacing: -0.01em;
+}
+
+.rent-price-tag {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.4;
 }
 
 .property-card-footer .button {
@@ -1376,6 +1388,50 @@ textarea {
   font-size: 0.78rem;
   color: var(--muted);
   letter-spacing: 0.04em;
+}
+
+.site-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) auto;
+  gap: 1.5rem;
+  margin-top: 5rem;
+  padding: 1.5rem 0 0;
+  border-top: 1px solid rgba(18, 53, 36, 0.1);
+}
+
+.site-footer-copy strong {
+  display: block;
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.site-footer-copy p {
+  max-width: 38rem;
+  margin: 0.85rem 0 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.site-footer-actions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.footer-contact-actions {
+  justify-content: flex-end;
+}
+
+.site-footer-meta {
+  grid-column: 1 / -1;
+  padding-top: 0.2rem;
+  color: var(--muted);
+  font-size: 0.82rem;
 }
 
 /* Masonry */
@@ -1893,6 +1949,47 @@ textarea {
   margin-top: 0.5rem;
 }
 
+.admin-field-label {
+  display: block;
+  margin-bottom: 0.55rem;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.admin-pill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.admin-pill-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.55rem;
+  padding: 0.6rem 0.95rem;
+  border: 1px solid rgba(18, 53, 36, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 251, 244, 0.76);
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.88rem;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.admin-pill-button.active {
+  background: var(--text);
+  border-color: var(--text);
+  color: #fffaf1;
+  box-shadow: 0 12px 24px rgba(18, 53, 36, 0.14);
+}
+
 .admin-checkbox input {
   width: 1rem;
   height: 1rem;
@@ -2280,6 +2377,13 @@ textarea {
   color: var(--muted);
   line-height: 1.8;
   margin: 0 0 0.75rem;
+}
+
+.detail-feature-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.75rem;
 }
 
 .sticky-card {
@@ -2813,5 +2917,20 @@ textarea {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.85rem;
+  }
+
+  .site-footer {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 3.5rem;
+  }
+
+  .site-footer-actions {
+    justify-content: flex-start;
+  }
+
+  .footer-contact-actions {
+    width: 100%;
+    justify-content: flex-start;
   }
 }

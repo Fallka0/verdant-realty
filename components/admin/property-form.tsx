@@ -4,7 +4,18 @@ import { useState } from "react";
 
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 import { type AdminCopy } from "@/lib/admin-copy";
-import { propertyStatuses, propertyTypes, type PropertyRecord } from "@/lib/property-shared";
+import {
+  listingModes,
+  propertyFeatureOptions,
+  propertyStatuses,
+  propertyTypes,
+  rentalPeriodOptions,
+  rentPricePeriods,
+  type ListingMode,
+  type PropertyRecord,
+  type PropertyFeature,
+  type RentalPeriodOption,
+} from "@/lib/property-shared";
 
 type PropertyFormProps = {
   action: (formData: FormData) => void | Promise<void>;
@@ -56,6 +67,9 @@ export function PropertyForm({
   const [title, setTitle] = useState(property?.title ?? "");
   const [slug, setSlug] = useState(property?.slug ?? "");
   const [referenceCode, setReferenceCode] = useState(property?.referenceCode ?? "");
+  const [listingMode, setListingMode] = useState<ListingMode>(property?.listingMode ?? "sale");
+  const [selectedFeatures, setSelectedFeatures] = useState<PropertyFeature[]>(property?.features ?? []);
+  const [selectedRentalPeriods, setSelectedRentalPeriods] = useState<RentalPeriodOption[]>(property?.rentalPeriods ?? []);
   const [slugEdited, setSlugEdited] = useState(Boolean(property?.slug));
   const [referenceEdited, setReferenceEdited] = useState(Boolean(property?.referenceCode));
 
@@ -69,6 +83,18 @@ export function PropertyForm({
     if (!referenceEdited) {
       setReferenceCode(createReferenceCode(value, referenceSeed));
     }
+  }
+
+  function toggleFeature(feature: PropertyFeature) {
+    setSelectedFeatures((current) =>
+      current.includes(feature) ? current.filter((item) => item !== feature) : [...current, feature],
+    );
+  }
+
+  function toggleRentalPeriod(period: RentalPeriodOption) {
+    setSelectedRentalPeriods((current) =>
+      current.includes(period) ? current.filter((item) => item !== period) : [...current, period],
+    );
   }
 
   return (
@@ -134,6 +160,39 @@ export function PropertyForm({
         </label>
 
         <label>
+          {copy.fields.listingMode}
+          <select name="listingMode" value={listingMode} onChange={(event) => setListingMode(event.target.value as ListingMode)}>
+            {listingModes.map((mode) => (
+              <option key={mode} value={mode}>
+                {copy.listingModeLabels[mode] ?? mode}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label>
+          {copy.fields.rentPrice}
+          <input
+            name="rentPriceEuro"
+            type="number"
+            min="0"
+            defaultValue={property?.rentPriceEuro ?? undefined}
+          />
+        </label>
+
+        <label>
+          {copy.fields.rentPricePeriod}
+          <select name="rentPricePeriod" defaultValue={property?.rentPricePeriod ?? ""}>
+            <option value="">{copy.fields.rentPricePeriod}</option>
+            {rentPricePeriods.map((period) => (
+              <option key={period} value={period}>
+                {copy.rentPricePeriodLabels[period] ?? period}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label>
           {copy.fields.type}
           <select name="type" defaultValue={property?.type ?? "apartment"}>
             {propertyTypes.map((type) => (
@@ -175,6 +234,18 @@ export function PropertyForm({
           <input name="plotSqm" type="number" min="0" defaultValue={property?.plotSqm ?? undefined} />
         </label>
 
+        <label>
+          {copy.fields.availabilityStart}
+          <input name="availabilityStart" type="date" defaultValue={property?.availabilityStart ?? ""} />
+          <span className="field-note">{copy.fieldNotes.availability}</span>
+        </label>
+
+        <label>
+          {copy.fields.availabilityEnd}
+          <input name="availabilityEnd" type="date" defaultValue={property?.availabilityEnd ?? ""} />
+          <span className="field-note">{copy.fieldNotes.availability}</span>
+        </label>
+
         <div className="full-span">
           <ImageUploadField
             defaultValue={property?.mainImageUrl ?? ""}
@@ -210,6 +281,53 @@ export function PropertyForm({
             required
           />
         </label>
+
+        <label className="full-span">
+          {copy.fields.internalNotes}
+          <textarea
+            name="internalNotes"
+            rows={4}
+            defaultValue={property?.internalNotes ?? ""}
+            placeholder={copy.placeholders.internalNotes}
+          />
+          <span className="field-note">{copy.fieldNotes.internalNotes}</span>
+        </label>
+
+        <div className="full-span">
+          <span className="admin-field-label">{copy.fields.features}</span>
+          <input name="features" type="hidden" value={selectedFeatures.join(",")} />
+          <div className="admin-pill-group">
+            {propertyFeatureOptions.map((feature) => (
+              <button
+                key={feature}
+                className={`admin-pill-button ${selectedFeatures.includes(feature) ? "active" : ""}`}
+                type="button"
+                onClick={() => toggleFeature(feature)}
+              >
+                {copy.featureLabels[feature] ?? feature}
+              </button>
+            ))}
+          </div>
+          <span className="field-note">{copy.fieldNotes.features}</span>
+        </div>
+
+        <div className="full-span">
+          <span className="admin-field-label">{copy.fields.rentalPeriods}</span>
+          <input name="rentalPeriods" type="hidden" value={selectedRentalPeriods.join(",")} />
+          <div className="admin-pill-group">
+            {rentalPeriodOptions.map((period) => (
+              <button
+                key={period}
+                className={`admin-pill-button ${selectedRentalPeriods.includes(period) ? "active" : ""}`}
+                type="button"
+                onClick={() => toggleRentalPeriod(period)}
+              >
+                {copy.rentalPeriodLabels[period] ?? period}
+              </button>
+            ))}
+          </div>
+          <span className="field-note">{copy.fieldNotes.rentalPeriods}</span>
+        </div>
 
         <div className="full-span">
           <ImageUploadField

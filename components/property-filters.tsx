@@ -3,7 +3,7 @@
 import { useDeferredValue, useState } from "react";
 
 import { PropertyCard } from "@/components/property-card";
-import { propertyTypes, type PropertyRecord, type PropertyType } from "@/lib/property-shared";
+import { listingModes, propertyTypes, type ListingMode, type PropertyRecord, type PropertyType } from "@/lib/property-shared";
 import {
   areaNames,
   getLocalizedResultsLabel,
@@ -20,8 +20,11 @@ type PropertyFiltersProps = {
 
 export function PropertyFilters({ copy, locale, properties }: PropertyFiltersProps) {
   const [search, setSearch] = useState("");
+  const [selectedListingMode, setSelectedListingMode] = useState<"all" | ListingMode>("all");
   const [selectedRegion, setSelectedRegion] = useState<"all" | (typeof areaNames)[number]>("all");
   const [selectedType, setSelectedType] = useState<"all" | PropertyType>("all");
+  const [availabilityFrom, setAvailabilityFrom] = useState("");
+  const [availabilityTo, setAvailabilityTo] = useState("");
   const [minimumBedrooms, setMinimumBedrooms] = useState("0");
   const [sort, setSort] = useState<"latest" | "price-asc" | "price-desc">("latest");
 
@@ -30,6 +33,8 @@ export function PropertyFilters({ copy, locale, properties }: PropertyFiltersPro
   const availableRegions = areaNames.filter((region) =>
     properties.some((property) => property.location.toLowerCase().includes(region.toLowerCase())),
   );
+  const getSortablePrice = (property: PropertyRecord) =>
+    selectedListingMode === "rent" ? property.rentPriceEuro ?? property.priceEuro : property.priceEuro;
 
   const filteredProperties = properties
     .filter((property) => {
@@ -40,18 +45,29 @@ export function PropertyFilters({ copy, locale, properties }: PropertyFiltersPro
 
       const matchesRegion =
         selectedRegion === "all" || property.location.toLowerCase().includes(selectedRegion.toLowerCase());
+      const matchesListingMode =
+        selectedListingMode === "all" ||
+        property.listingMode === selectedListingMode ||
+        property.listingMode === "both";
       const matchesType = selectedType === "all" || property.type === selectedType;
       const matchesBedrooms = property.bedrooms >= Number(minimumBedrooms);
+      const matchesAvailability =
+        selectedListingMode !== "rent" ||
+        ((!availabilityFrom && !availabilityTo) ||
+          (property.availabilityStart &&
+            property.availabilityEnd &&
+            (!availabilityFrom || property.availabilityStart <= availabilityFrom) &&
+            (!availabilityTo || property.availabilityEnd >= availabilityTo)));
 
-      return matchesSearch && matchesRegion && matchesType && matchesBedrooms;
+      return matchesSearch && matchesRegion && matchesListingMode && matchesType && matchesBedrooms && matchesAvailability;
     })
     .sort((left, right) => {
       if (sort === "price-asc") {
-        return left.priceEuro - right.priceEuro;
+        return getSortablePrice(left) - getSortablePrice(right);
       }
 
       if (sort === "price-desc") {
-        return right.priceEuro - left.priceEuro;
+        return getSortablePrice(right) - getSortablePrice(left);
       }
 
       return right.updatedAt.localeCompare(left.updatedAt);
@@ -89,6 +105,21 @@ export function PropertyFilters({ copy, locale, properties }: PropertyFiltersPro
           </label>
 
           <label>
+            {copy.filters.listingMode}
+            <select
+              value={selectedListingMode}
+              onChange={(event) => setSelectedListingMode(event.target.value as "all" | ListingMode)}
+            >
+              <option value="all">{copy.filters.types.all}</option>
+              {listingModes.map((mode) => (
+                <option key={mode} value={mode}>
+                  {copy.filters.listingModeOptions[mode]}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label>
             {copy.filters.propertyType}
             <select
               value={selectedType}
@@ -113,6 +144,20 @@ export function PropertyFilters({ copy, locale, properties }: PropertyFiltersPro
               <option value="4">4+</option>
             </select>
           </label>
+
+          {selectedListingMode === "rent" ? (
+            <>
+              <label>
+                {copy.filters.availabilityFrom}
+                <input type="date" value={availabilityFrom} onChange={(event) => setAvailabilityFrom(event.target.value)} />
+              </label>
+
+              <label>
+                {copy.filters.availabilityTo}
+                <input type="date" value={availabilityTo} onChange={(event) => setAvailabilityTo(event.target.value)} />
+              </label>
+            </>
+          ) : null}
 
           <label>
             {copy.filters.sort}

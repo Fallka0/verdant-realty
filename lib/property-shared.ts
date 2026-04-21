@@ -1,4 +1,7 @@
 export const propertyStatuses = ["draft", "available", "reserved", "sold"] as const;
+export const listingModes = ["sale", "rent", "both"] as const;
+export const rentPricePeriods = ["night", "week", "month"] as const;
+export const rentalPeriodOptions = ["nightly", "weekly", "monthly", "seasonal", "long_term"] as const;
 export const propertyTypes = [
   "apartment",
   "villa",
@@ -7,9 +10,30 @@ export const propertyTypes = [
   "bungalow",
   "finca",
 ] as const;
+export const propertyFeatureOptions = [
+  "sauna",
+  "pool",
+  "sea_view",
+  "garage",
+  "parking",
+  "terrace",
+  "garden",
+  "lift",
+  "furnished",
+  "air_conditioning",
+  "heating",
+  "gated_community",
+  "pet_friendly",
+  "new_build",
+  "tourist_license",
+] as const;
 
 export type PropertyStatus = (typeof propertyStatuses)[number];
+export type ListingMode = (typeof listingModes)[number];
+export type RentPricePeriod = (typeof rentPricePeriods)[number];
+export type RentalPeriodOption = (typeof rentalPeriodOptions)[number];
 export type PropertyType = (typeof propertyTypes)[number];
+export type PropertyFeature = (typeof propertyFeatureOptions)[number];
 export type PropertyContentFields = {
   description: string;
   shortDescription: string;
@@ -19,20 +43,28 @@ export type PropertyContentFields = {
 export type PropertyContentTranslations = Partial<Record<"en" | "es" | "ru" | "de", PropertyContentFields>>;
 
 export type PropertyRecord = {
+  availabilityEnd: string | null;
+  availabilityStart: string | null;
   bathrooms: number;
   bedrooms: number;
   contentTranslations: PropertyContentTranslations;
   createdAt: string;
   description: string;
   featured: boolean;
+  features: PropertyFeature[];
   galleryUrls: string[];
   id: string;
   interiorSqm: number | null;
+  internalNotes: string;
+  listingMode: ListingMode;
   location: string;
   mainImageUrl: string;
   plotSqm: number | null;
   priceEuro: number;
   referenceCode: string;
+  rentPriceEuro: number | null;
+  rentPricePeriod: RentPricePeriod | null;
+  rentalPeriods: RentalPeriodOption[];
   shortDescription: string;
   slug: string;
   status: PropertyStatus;
@@ -47,6 +79,10 @@ export function formatPrice(value: number) {
     currency: "EUR",
     maximumFractionDigits: 0,
   }).format(value);
+}
+
+export function formatOptionalPrice(value: number | null) {
+  return value === null ? null : formatPrice(value);
 }
 
 export function getPropertyTypeLabel(type: PropertyType) {

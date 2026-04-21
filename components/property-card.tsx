@@ -2,12 +2,15 @@ import Image from "next/image";
 import Link from "next/link";
 
 import {
+  getLocalizedListingModeLabel,
   type PublicLocale,
+  getLocalizedRentPricePeriodLabel,
   getLocalizedPropertyStatusLabel,
   getLocalizedPropertyTypeLabel,
 } from "@/lib/public-copy";
 import {
   formatPrice,
+  formatOptionalPrice,
   type PropertyRecord,
 } from "@/lib/property-shared";
 
@@ -38,6 +41,7 @@ export function PropertyCard({
         />
         <div className="property-badges">
           <span className={`pill status-${property.status}`}>{getLocalizedPropertyStatusLabel(locale, property.status)}</span>
+          <span className="pill pill-secondary">{getLocalizedListingModeLabel(locale, property.listingMode)}</span>
           <span className="pill pill-secondary">{getLocalizedPropertyTypeLabel(locale, property.type)}</span>
         </div>
       </div>
@@ -55,7 +59,16 @@ export function PropertyCard({
         </div>
 
         <div className="property-card-footer">
-          <strong className="price-tag">{formatPrice(property.priceEuro)}</strong>
+          <div className="price-stack">
+            {(property.listingMode === "sale" || property.listingMode === "both") ? (
+              <strong className="price-tag">{formatPrice(property.priceEuro)}</strong>
+            ) : null}
+            {(property.listingMode === "rent" || property.listingMode === "both") && property.rentPriceEuro ? (
+              <span className="rent-price-tag">
+                {formatOptionalPrice(property.rentPriceEuro)} {property.rentPricePeriod ? getLocalizedRentPricePeriodLabel(locale, property.rentPricePeriod) : ""}
+              </span>
+            ) : null}
+          </div>
           <Link className="button button-ghost" href={`/properties/${property.slug}`}>
             {buttonLabel}
           </Link>
