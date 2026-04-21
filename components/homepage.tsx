@@ -6,8 +6,16 @@ import { ContactActions } from "@/components/contact-actions";
 import { PublicHeader } from "@/components/public-header";
 import { PropertyCard } from "@/components/property-card";
 import { ReactBitsMasonry } from "@/components/react-bits-masonry";
-import { formatPrice, type PropertyRecord } from "@/lib/property-shared";
-import { areaNames, neighborhoodImages, type PublicCopy, type PublicLocale } from "@/lib/public-copy";
+import { SiteFooter } from "@/components/site-footer";
+import { formatOptionalPrice, formatPrice, type PropertyRecord } from "@/lib/property-shared";
+import {
+  areaNames,
+  getLocalizedListingModeLabel,
+  getLocalizedRentPricePeriodLabel,
+  neighborhoodImages,
+  type PublicCopy,
+  type PublicLocale,
+} from "@/lib/public-copy";
 
 type HomepageProps = {
   adminLabel?: string;
@@ -74,11 +82,25 @@ export function Homepage({ adminLabel, copy, currentLocale, featuredProperties, 
                 <p>{featuredProperties[0].shortDescription}</p>
                 <div className="hero-side-facts">
                   <span>{featuredProperties[0].location}</span>
-                  <span>{formatPrice(featuredProperties[0].priceEuro)}</span>
+                  <span>{getLocalizedListingModeLabel(currentLocale, featuredProperties[0].listingMode)}</span>
                   <span>
                     {featuredProperties[0].bedrooms} {copy.propertyMeta.bedroomsShort} •{" "}
                     {featuredProperties[0].bathrooms} {copy.propertyMeta.bathroomsShort}
                   </span>
+                </div>
+                <div className="price-stack hero-price-stack">
+                  {(featuredProperties[0].listingMode === "sale" || featuredProperties[0].listingMode === "both") ? (
+                    <strong className="price-tag">{formatPrice(featuredProperties[0].priceEuro)}</strong>
+                  ) : null}
+                  {(featuredProperties[0].listingMode === "rent" || featuredProperties[0].listingMode === "both") &&
+                  featuredProperties[0].rentPriceEuro ? (
+                    <span className="rent-price-tag">
+                      {formatOptionalPrice(featuredProperties[0].rentPriceEuro)}{" "}
+                      {featuredProperties[0].rentPricePeriod
+                        ? getLocalizedRentPricePeriodLabel(currentLocale, featuredProperties[0].rentPricePeriod)
+                        : ""}
+                    </span>
+                  ) : null}
                 </div>
                 <Link className="button button-ghost" href={`/properties/${featuredProperties[0].slug}`}>
                   {copy.buttons.viewListing}
@@ -247,28 +269,7 @@ export function Homepage({ adminLabel, copy, currentLocale, featuredProperties, 
         </div>
       </section>
 
-      <footer className="site-footer">
-        <div className="site-footer-copy">
-          <strong>Verdant Realty</strong>
-          <p>{copy.footer.blurb}</p>
-        </div>
-
-        <div className="site-footer-actions">
-          <Link className="button button-secondary" href="/properties">
-            {copy.footer.browseLabel}
-          </Link>
-          <ContactActions
-            callLabel={copy.buttons.callNow}
-            className="contact-actions footer-contact-actions"
-            whatsappLabel={copy.buttons.whatsapp}
-            whatsappMessage={copy.contact.whatsappMessage}
-          />
-        </div>
-
-        <div className="site-footer-meta">
-          <span>{copy.footer.copyright}</span>
-        </div>
-      </footer>
+      <SiteFooter copy={copy} />
     </main>
   );
 }

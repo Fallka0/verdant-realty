@@ -47,17 +47,26 @@ export type AdminCopy = {
     checkboxFeatured: string;
     editBody: string;
     editEyebrow: string;
+    featureLabels: Record<string, string>;
     fields: {
+      availabilityEnd: string;
+      availabilityStart: string;
       bathrooms: string;
       bedrooms: string;
       description: string;
+      features: string;
       galleryImages: string;
       interior: string;
+      internalNotes: string;
+      listingMode: string;
       location: string;
       mainImage: string;
       plot: string;
       price: string;
       reference: string;
+      rentPrice: string;
+      rentPricePeriod: string;
+      rentalPeriods: string;
       shortDescription: string;
       slug: string;
       status: string;
@@ -65,21 +74,29 @@ export type AdminCopy = {
       type: string;
     };
     fieldNotes: {
+      availability: string;
+      features: string;
       galleryImages: string;
+      internalNotes: string;
       mainImage: string;
       reference: string;
+      rentalPeriods: string;
       slug: string;
     };
+    listingModeLabels: Record<string, string>;
     newBody: string;
     newEyebrow: string;
     newTitle: string;
     placeholders: {
       description: string;
       imageUrl: string;
+      internalNotes: string;
       location: string;
       shortDescription: string;
       title: string;
     };
+    rentPricePeriodLabels: Record<string, string>;
+    rentalPeriodLabels: Record<string, string>;
   };
   languageLabel: string;
   layout: {
@@ -175,17 +192,42 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
       checkboxFeatured: "Feature this listing on the homepage",
       editBody: "Update the public presentation, pricing, status, or gallery. Changes flow through to the public site after save.",
       editEyebrow: "Edit Listing",
+      featureLabels: {
+        air_conditioning: "Air conditioning",
+        furnished: "Furnished",
+        garage: "Garage",
+        garden: "Garden",
+        gated_community: "Gated community",
+        heating: "Heating",
+        lift: "Lift",
+        new_build: "New build",
+        parking: "Parking",
+        pet_friendly: "Pet friendly",
+        pool: "Pool",
+        sauna: "Sauna",
+        sea_view: "Sea view",
+        terrace: "Terrace",
+        tourist_license: "Tourist license",
+      },
       fields: {
+        availabilityEnd: "Available Until",
+        availabilityStart: "Available From",
         bathrooms: "Bathrooms",
         bedrooms: "Bedrooms",
         description: "Full Description",
+        features: "Feature Pills",
         galleryImages: "Gallery Images",
         interior: "Interior m²",
+        internalNotes: "Private Notes",
+        listingMode: "Sale / Rent Mode",
         location: "Location",
         mainImage: "Main Image",
         plot: "Plot m²",
-        price: "Price (EUR)",
+        price: "Sale Price (EUR)",
         reference: "Reference Code",
+        rentPrice: "Rent Price From (EUR)",
+        rentPricePeriod: "Rent Price Period",
+        rentalPeriods: "Rent Periods",
         shortDescription: "Short Description",
         slug: "Slug",
         status: "Status",
@@ -193,21 +235,35 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
         type: "Property Type",
       },
       fieldNotes: {
+        availability: "Used for public rent-date filtering.",
+        features: "Shown publicly as feature pills.",
         galleryImages: "Upload several photos or paste one image URL per line.",
+        internalNotes: "Private admin notes. Never shown on the public website.",
         mainImage: "This is the first photo buyers see.",
         reference: "Generated from the title. You can still edit it.",
+        rentalPeriods: "Choose the rental arrangements this property can support.",
         slug: "Used in the public page URL.",
       },
+      listingModeLabels: { both: "Sale and rent", rent: "Rent only", sale: "Sale only" },
       newBody:
-        "Start with the title, then add location, price, descriptions, and photos. Mark it available only when it is ready to show.",
+        "Start with the title, then add sale or rent settings, availability dates, descriptions, and photos. Mark it available only when it is ready to show.",
       newEyebrow: "New Listing",
       newTitle: "Add a property to the live inventory.",
       placeholders: {
         description: "Full listing description for the property detail page.",
         imageUrl: "Upload an image or paste an image URL",
+        internalNotes: "Owner preferences, key notes, rental reminders, or follow-up context.",
         location: "Torrevieja",
         shortDescription: "One concise paragraph used in cards and previews.",
         title: "Stylish villa near the salt lakes",
+      },
+      rentPricePeriodLabels: { month: "Per month", night: "Per night", week: "Per week" },
+      rentalPeriodLabels: {
+        long_term: "Long term",
+        monthly: "Monthly",
+        nightly: "Nightly",
+        seasonal: "Seasonal",
+        weekly: "Weekly",
       },
     },
     languageLabel: "Admin language",
@@ -285,17 +341,42 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
       checkboxFeatured: "Destacar esta propiedad en la portada",
       editBody: "Actualiza la presentación, precio, estado o galería. Los cambios aparecerán en la web pública al guardar.",
       editEyebrow: "Editar propiedad",
+      featureLabels: {
+        air_conditioning: "Aire acondicionado",
+        furnished: "Amueblado",
+        garage: "Garaje",
+        garden: "Jardín",
+        gated_community: "Urbanización cerrada",
+        heating: "Calefacción",
+        lift: "Ascensor",
+        new_build: "Obra nueva",
+        parking: "Parking",
+        pet_friendly: "Acepta mascotas",
+        pool: "Piscina",
+        sauna: "Sauna",
+        sea_view: "Vistas al mar",
+        terrace: "Terraza",
+        tourist_license: "Licencia turística",
+      },
       fields: {
+        availabilityEnd: "Disponible hasta",
+        availabilityStart: "Disponible desde",
         bathrooms: "Baños",
         bedrooms: "Dormitorios",
         description: "Descripción completa",
+        features: "Características",
         galleryImages: "Imágenes de galería",
         interior: "Interior m²",
+        internalNotes: "Notas privadas",
+        listingMode: "Venta / alquiler",
         location: "Ubicación",
         mainImage: "Imagen principal",
         plot: "Parcela m²",
-        price: "Precio (EUR)",
+        price: "Precio de venta (EUR)",
         reference: "Referencia",
+        rentPrice: "Precio de alquiler desde (EUR)",
+        rentPricePeriod: "Periodo del alquiler",
+        rentalPeriods: "Modalidades de alquiler",
         shortDescription: "Descripción breve",
         slug: "URL corta",
         status: "Estado",
@@ -303,20 +384,34 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
         type: "Tipo de propiedad",
       },
       fieldNotes: {
+        availability: "Se usa en el filtro público de fechas para alquiler.",
+        features: "Se muestran públicamente como etiquetas rápidas.",
         galleryImages: "Sube varias fotos o pega un enlace de imagen por línea.",
+        internalNotes: "Notas privadas para gestión interna. Nunca se muestran en la web pública.",
         mainImage: "Es la primera foto que verán los compradores.",
         reference: "Se genera desde el título. También se puede editar.",
+        rentalPeriods: "Elige las modalidades de alquiler que admite esta propiedad.",
         slug: "Se usa en la URL pública de la propiedad.",
       },
-      newBody: "Empieza con el título, luego añade ubicación, precio, descripciones y fotos. Márcala disponible solo cuando esté lista.",
+      listingModeLabels: { both: "Venta y alquiler", rent: "Solo alquiler", sale: "Solo venta" },
+      newBody: "Empieza con el título, luego añade venta o alquiler, fechas disponibles, descripciones y fotos. Márcala disponible solo cuando esté lista.",
       newEyebrow: "Nueva propiedad",
       newTitle: "Añadir una propiedad al inventario.",
       placeholders: {
         description: "Descripción completa para la página de detalle.",
         imageUrl: "Sube una imagen o pega una URL",
+        internalNotes: "Preferencias del propietario, recordatorios de llaves o contexto de seguimiento.",
         location: "Torrevieja",
         shortDescription: "Un párrafo breve para tarjetas y vistas previas.",
         title: "Villa elegante cerca de las salinas",
+      },
+      rentPricePeriodLabels: { month: "Por mes", night: "Por noche", week: "Por semana" },
+      rentalPeriodLabels: {
+        long_term: "Larga estancia",
+        monthly: "Mensual",
+        nightly: "Noches",
+        seasonal: "Temporada",
+        weekly: "Semanal",
       },
     },
     languageLabel: "Idioma del panel",
@@ -393,17 +488,42 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
       checkboxFeatured: "Показать этот объект на главной странице",
       editBody: "Обновите описание, цену, статус или галерею. После сохранения изменения появятся на сайте.",
       editEyebrow: "Редактировать объект",
+      featureLabels: {
+        air_conditioning: "Кондиционер",
+        furnished: "С мебелью",
+        garage: "Гараж",
+        garden: "Сад",
+        gated_community: "Закрытая урбанизация",
+        heating: "Отопление",
+        lift: "Лифт",
+        new_build: "Новостройка",
+        parking: "Парковка",
+        pet_friendly: "Можно с животными",
+        pool: "Бассейн",
+        sauna: "Сауна",
+        sea_view: "Вид на море",
+        terrace: "Терраса",
+        tourist_license: "Туристическая лицензия",
+      },
       fields: {
+        availabilityEnd: "Доступно до",
+        availabilityStart: "Доступно с",
         bathrooms: "Ванные",
         bedrooms: "Спальни",
         description: "Полное описание",
+        features: "Особенности",
         galleryImages: "Галерея",
         interior: "Площадь м²",
+        internalNotes: "Внутренние заметки",
+        listingMode: "Продажа / аренда",
         location: "Локация",
         mainImage: "Главное фото",
         plot: "Участок м²",
-        price: "Цена (EUR)",
+        price: "Цена продажи (EUR)",
         reference: "Референс",
+        rentPrice: "Аренда от (EUR)",
+        rentPricePeriod: "Период аренды",
+        rentalPeriods: "Форматы аренды",
         shortDescription: "Краткое описание",
         slug: "Короткая ссылка",
         status: "Статус",
@@ -411,20 +531,34 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
         type: "Тип недвижимости",
       },
       fieldNotes: {
+        availability: "Используется в публичном поиске аренды по датам.",
+        features: "Показываются публично как теги объекта.",
         galleryImages: "Загрузите несколько фото или вставьте по одной ссылке в строку.",
+        internalNotes: "Приватные заметки для управления. Никогда не показываются на сайте.",
         mainImage: "Это первое фото, которое увидят покупатели.",
         reference: "Создается из названия. Можно изменить вручную.",
+        rentalPeriods: "Выберите форматы аренды, которые поддерживает объект.",
         slug: "Используется в публичной ссылке объекта.",
       },
-      newBody: "Начните с названия, затем добавьте локацию, цену, описания и фото. Отмечайте доступным только готовый объект.",
+      listingModeLabels: { both: "Продажа и аренда", rent: "Только аренда", sale: "Только продажа" },
+      newBody: "Начните с названия, затем добавьте продажу или аренду, даты доступности, описания и фото. Отмечайте доступным только готовый объект.",
       newEyebrow: "Новая недвижимость",
       newTitle: "Добавить объект в каталог.",
       placeholders: {
         description: "Полное описание для страницы объекта.",
         imageUrl: "Загрузите фото или вставьте URL",
+        internalNotes: "Предпочтения владельца, заметки по ключам, аренде или напоминания для себя.",
         location: "Torrevieja",
         shortDescription: "Короткий абзац для карточек и превью.",
         title: "Стильная вилла рядом с солеными озерами",
+      },
+      rentPricePeriodLabels: { month: "В месяц", night: "За ночь", week: "За неделю" },
+      rentalPeriodLabels: {
+        long_term: "Долгосрочно",
+        monthly: "Помесячно",
+        nightly: "Посуточно",
+        seasonal: "По сезонам",
+        weekly: "Понедельно",
       },
     },
     languageLabel: "Язык админ-панели",

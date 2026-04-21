@@ -5,18 +5,37 @@ import { notFound } from "next/navigation";
 import { ContactActions } from "@/components/contact-actions";
 import { ImageCarousel } from "@/components/image-carousel";
 import { PublicHeader } from "@/components/public-header";
+import { SiteFooter } from "@/components/site-footer";
 import { adminCopy, resolveAdminLocale } from "@/lib/admin-copy";
 import { getAdminAuthState } from "@/lib/auth";
 import {
+  getLocalizedListingModeLabel,
+  getLocalizedPropertyFeatureLabel,
+  getLocalizedRentPricePeriodLabel,
+  getLocalizedRentalPeriodLabel,
   getLocalizedPropertyStatusLabel,
   getLocalizedPropertyTypeLabel,
   publicCopy,
   resolvePublicLocale,
 } from "@/lib/public-copy";
-import { formatPrice } from "@/lib/property-shared";
+import { formatOptionalPrice, formatPrice } from "@/lib/property-shared";
 import { getPropertyBySlug, localizeProperty } from "@/lib/properties";
 
 export const dynamic = "force-dynamic";
+
+function formatListingDate(value: string, locale: string) {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+}
 
 type PropertyDetailPageProps = {
   params: Promise<{
@@ -64,12 +83,29 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
                 {getLocalizedPropertyStatusLabel(locale, localizedProperty.status)}
               </span>
               <span className="pill pill-secondary">
+                {getLocalizedListingModeLabel(locale, localizedProperty.listingMode)}
+              </span>
+              <span className="pill pill-secondary">
                 {getLocalizedPropertyTypeLabel(locale, localizedProperty.type)}
               </span>
             </div>
           </div>
           <aside className="detail-price-card">
-            <strong>{formatPrice(localizedProperty.priceEuro)}</strong>
+            {(localizedProperty.listingMode === "sale" || localizedProperty.listingMode === "both") ? (
+              <>
+                <span>{copy.detail.salePrice}</span>
+                <strong>{formatPrice(localizedProperty.priceEuro)}</strong>
+              </>
+            ) : null}
+            {(localizedProperty.listingMode === "rent" || localizedProperty.listingMode === "both") && localizedProperty.rentPriceEuro ? (
+              <>
+                <span>{copy.detail.rentPrice}</span>
+                <strong>
+                  {formatOptionalPrice(localizedProperty.rentPriceEuro)}{" "}
+                  {localizedProperty.rentPricePeriod ? getLocalizedRentPricePeriodLabel(locale, localizedProperty.rentPricePeriod) : ""}
+                </strong>
+              </>
+            ) : null}
             <ContactActions
               callLabel={copy.buttons.callNow}
               className="contact-actions detail-contact-actions"
@@ -86,6 +122,10 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
             <article className="fact-card">
               <span>{copy.detail.type}</span>
               <strong>{getLocalizedPropertyTypeLabel(locale, localizedProperty.type)}</strong>
+            </article>
+            <article className="fact-card">
+              <span>{copy.detail.listingMode}</span>
+              <strong>{getLocalizedListingModeLabel(locale, localizedProperty.listingMode)}</strong>
             </article>
             <article className="fact-card">
               <span>{copy.detail.bedrooms}</span>
@@ -107,6 +147,15 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
                 <strong>{localizedProperty.plotSqm} m²</strong>
               </article>
             ) : null}
+            {(localizedProperty.listingMode === "rent" || localizedProperty.listingMode === "both") && localizedProperty.availabilityStart ? (
+              <article className="fact-card">
+                <span>{copy.detail.availability}</span>
+                <strong>
+                  {formatListingDate(localizedProperty.availabilityStart, locale)}
+                  {localizedProperty.availabilityEnd ? ` - ${formatListingDate(localizedProperty.availabilityEnd, locale)}` : ""}
+                </strong>
+              </article>
+            ) : null}
           </div>
 
           <article className="detail-copy-card">
@@ -114,6 +163,30 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
             <h2>{copy.detail.whyPause}</h2>
             <p>{localizedProperty.shortDescription}</p>
             <p>{localizedProperty.description}</p>
+            {localizedProperty.features.length > 0 ? (
+              <>
+                <p className="eyebrow">{copy.detail.features}</p>
+                <div className="detail-feature-pills">
+                  {localizedProperty.features.map((feature) => (
+                    <span className="pill pill-secondary" key={feature}>
+                      {getLocalizedPropertyFeatureLabel(locale, feature)}
+                    </span>
+                  ))}
+                </div>
+              </>
+            ) : null}
+            {localizedProperty.rentalPeriods.length > 0 ? (
+              <>
+                <p className="eyebrow">{copy.detail.rentalPeriods}</p>
+                <div className="detail-feature-pills">
+                  {localizedProperty.rentalPeriods.map((period) => (
+                    <span className="pill pill-secondary" key={period}>
+                      {getLocalizedRentalPeriodLabel(locale, period)}
+                    </span>
+                  ))}
+                </div>
+              </>
+            ) : null}
           </article>
         </div>
 
@@ -130,6 +203,8 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
           </div>
         </aside>
       </section>
+
+      <SiteFooter copy={copy} />
     </main>
   );
 }

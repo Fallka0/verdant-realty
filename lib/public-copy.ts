@@ -54,21 +54,30 @@ export type PublicCopy = {
     title: string;
   };
   detail: {
+    availability: string;
     bathrooms: string;
     bedrooms: string;
+    features: string;
     interior: string;
     listingOverview: string;
+    listingMode: string;
     plot: string;
     requestInfo: string;
     requestTitle: string;
+    rentPrice: string;
+    rentalPeriods: string;
+    salePrice: string;
     type: string;
     whyPause: string;
   };
   filters: {
     availableInventory: string;
+    availabilityFrom: string;
+    availabilityTo: string;
     emptyBody: string;
     emptyTitle: string;
     heading: string;
+    listingMode: string;
     minimumBedrooms: string;
     propertyType: string;
     region: string;
@@ -79,7 +88,12 @@ export type PublicCopy = {
     title: string;
     types: {
       all: string;
-      any: string;
+        any: string;
+    };
+    listingModeOptions: {
+      both: string;
+      rent: string;
+      sale: string;
     };
     sortOptions: {
       latest: string;
@@ -216,36 +230,45 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     contact: {
       availabilityLabel: "Best for",
       availabilityValue: "Calls and WhatsApp",
-      eyebrow: "Direct Contact",
-      panelSummary: "If a home already feels right, a quick call or WhatsApp message is often the fastest next step.",
-      panelTitle: "Prefer to speak directly instead of filling out forms?",
+      eyebrow: "Speak Directly",
+      panelSummary: "A quick call or WhatsApp message is often the easiest way to confirm availability, rental timing, or the next step.",
+      panelTitle: "Want quick answers on price, rent dates, or viewings?",
       phoneLabel: "Phone",
-      summary: "When a property stands out, a direct conversation can answer the practical questions much faster.",
-      title: "Reach your agent quickly when a listing feels worth pursuing.",
+      summary: "When a property stands out, direct contact helps answer the practical questions without delay.",
+      title: "Speak with your agent when you want clarity, availability, or a quick next step.",
       whatsappMessage: "Hello, I am interested in a property from Verdant Realty and would like more information.",
     },
     coverage: {
       eyebrow: "A More Personal Search",
       summary:
-        "Buying near the coast often means balancing lifestyle, location, and long-term confidence. Verdant Realty helps buyers move through that decision with more calm and more clarity.",
-      title: "A thoughtful property search should feel personal from the very beginning.",
+        "Whether you are buying, renting, or comparing both, the process should feel calm, clear, and tailored to how you actually want to live on the Costa Blanca.",
+      title: "Property advice feels better when it starts with your pace, your plans, and your priorities.",
     },
     detail: {
+      availability: "Availability",
       bathrooms: "Bathrooms",
       bedrooms: "Bedrooms",
+      features: "Features",
       interior: "Interior",
       listingOverview: "Listing Overview",
+      listingMode: "Listing Type",
       plot: "Plot",
       requestInfo: "Request More Information",
       requestTitle: "Schedule a viewing or ask for more detail.",
+      rentPrice: "Rent",
+      rentalPeriods: "Rent Periods",
+      salePrice: "Sale",
       type: "Type",
       whyPause: "Why buyers will pause on this one.",
     },
     filters: {
       availableInventory: "Available Inventory",
+      availabilityFrom: "Available from",
+      availabilityTo: "Available to",
       emptyBody: "Try broadening the search or lowering the bedroom minimum.",
       emptyTitle: "No properties match those filters yet.",
       heading: "Property Search",
+      listingMode: "Looking for",
       minimumBedrooms: "Minimum Bedrooms",
       propertyType: "Property Type",
       region: "Region",
@@ -258,6 +281,11 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
         all: "All types",
         any: "Any",
       },
+      listingModeOptions: {
+        both: "Sale and rent",
+        rent: "Rent",
+        sale: "Sale",
+      },
       sortOptions: {
         latest: "Latest",
         priceAsc: "Price: low to high",
@@ -265,10 +293,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       },
     },
     hero: {
-      eyebrow: "Homes for sale in Torrevieja and nearby coastal areas",
+      eyebrow: "Homes for sale and rent in Torrevieja and nearby coastal areas",
       text:
-        "Verdant Realty takes a more personal approach to buying on the Costa Blanca: clear guidance, carefully chosen listings, and direct support when a property feels right.",
-      title: "Finding the right home should feel guided, calm, and genuinely personal.",
+        "Verdant Realty offers a more personal way to search across the Costa Blanca: carefully selected homes, clearer guidance, and support that stays close from the first shortlist to the first viewing.",
+      title: "Find a place to buy or rent with guidance that feels calm, personal, and genuinely attentive.",
     },
     inquiry: {
       email: "Email Address",
@@ -288,10 +316,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     languageLabel: "Choose language",
     masonry: {
       eyebrow: "Explore Available Homes",
-      title: "Browse the current collection and open the listings that feel most relevant to you.",
+      title: "Browse current sale and rental listings and open the homes that best match your timing and priorities.",
     },
     footer: {
-      blurb: "Verdant Realty offers a more personal way to explore homes in Torrevieja and the surrounding coast.",
+      blurb: "Verdant Realty offers a calmer, more personal way to explore homes for sale and rent in Torrevieja and the surrounding coast.",
       browseLabel: "Browse Listings",
       copyright: "© Verdant Realty",
     },
@@ -327,65 +355,65 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     },
     overview: {
       body:
-        "Buyers are supported with honest guidance, a calmer pace, and listings presented in a way that makes comparison feel easier.",
+        "Clients receive honest guidance, a calmer pace, and listings explained clearly enough to compare areas, prices, and rental timing with confidence.",
       eyebrow: "What Clients Value",
       items: [
         {
           title: "A more personal approach",
-          copy: "Conversations stay focused on what actually matters to the buyer, not just on pushing the next viewing.",
+          copy: "Conversations stay focused on how a client wants to live, stay, or invest, not on pushing the next viewing.",
         },
         {
           title: "Clear guidance without pressure",
-          copy: "Homes, locations, and differences between areas are explained with more calm and less noise.",
+          copy: "Homes, neighborhoods, price points, and rental timing are explained with more calm and less noise.",
         },
         {
           title: "Care through every step",
-          copy: "From the first shortlist to the first call, the experience is designed to feel attentive and reassuring.",
+          copy: "From the first shortlist to the first call, the experience is designed to feel attentive, practical, and reassuring.",
         },
       ],
-      title: "The right property search feels clearer when there is trust behind it.",
+      title: "The right property search feels clearer when there is trust, context, and real guidance behind it.",
     },
     propertiesPage: {
       eyebrow: "Property Listings",
-      text: "Browse current inventory, refine the search, and open any listing for more detail.",
-      title: "Available homes in Torrevieja and the surrounding coast.",
+      text: "Browse current sale and rental listings, refine by region and dates, and open any property for more detail.",
+      title: "Available homes for sale and rent in Torrevieja and across the surrounding coast.",
     },
     seo: {
-      description: "Browse homes for sale in Torrevieja, La Mata, Orihuela Costa, and nearby coastal areas with Verdant Realty.",
-      ogDescription: "Discover refined property listings across Torrevieja and the surrounding coast.",
-      ogTitle: "Verdant Realty | Coastal Homes in Torrevieja",
-      title: "Verdant Realty | Homes For Sale In Torrevieja",
+      description: "Browse homes for sale and rent in Torrevieja, La Mata, Orihuela Costa, and nearby coastal areas with personal guidance from Verdant Realty.",
+      ogDescription: "Discover carefully presented sale and rental listings across Torrevieja and the surrounding coast.",
+      ogTitle: "Verdant Realty | Homes For Sale And Rent In Torrevieja",
+      title: "Verdant Realty | Homes For Sale And Rent In Torrevieja",
     },
     propertyMeta: {
       bathroomsShort: "bath",
       bedroomsShort: "bed",
       featuredSnapshot: "Featured Snapshot",
-      homesOnline: "sample listings ready",
-      homesSelected: "featured slots on the homepage",
-      homesSelectedLabel: "core target areas nearby",
-      updatedListings: "updated listings",
+      homesOnline: "listings currently online",
+      homesSelected: "featured homes right now",
+      homesSelectedLabel: "coastal areas covered",
+      updatedListings: "current highlighted listings",
     },
     testimonials: {
       eyebrow: "Client Impressions",
       items: [
         {
-          name: "Private buyer",
-          quote: "From the beginning, the search felt focused and reassuring. We could quickly tell which homes deserved real attention.",
-          role: "Relocating from Northern Europe",
+          name: "Relocating client",
+          quote: "From the beginning, the search felt calm and well guided. We quickly understood which homes were genuinely right for us.",
+          role: "Moving to the Costa Blanca",
         },
         {
-          name: "Second-home couple",
-          quote: "The listings made the differences between locations much easier to understand, so our decision came together faster.",
-          role: "Buying near the coast",
+          name: "Seasonal renter",
+          quote: "Availability, timing, and location were explained clearly, which made choosing the right rental period much easier.",
+          role: "Planning an extended coastal stay",
         },
         {
-          name: "Family purchaser",
+          name: "Family buyer",
           quote: "It felt more thoughtful than a generic portal. By the time we reached out, we already felt confident in the shortlist.",
           role: "Looking for a year-round home",
         },
       ],
       summary: "The difference shows up in the tone, the pacing, and how clearly each listing is presented before the first conversation.",
-      title: "A well-guided property search leaves buyers feeling informed rather than overwhelmed.",
+      title: "A well-guided property search leaves clients feeling informed rather than overwhelmed.",
     },
   },
   es: {
@@ -414,36 +442,45 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     contact: {
       availabilityLabel: "Ideal para",
       availabilityValue: "Llamadas y WhatsApp",
-      eyebrow: "Contacto directo",
-      panelSummary: "Si ya te interesa una vivienda, una llamada o un mensaje suele ser la forma más rápida de avanzar.",
-      panelTitle: "¿Prefieres hablar directamente en vez de completar formularios?",
+      eyebrow: "Hablar directamente",
+      panelSummary: "Una llamada o un mensaje suele ser la forma más rápida de confirmar disponibilidad, fechas de alquiler o el siguiente paso.",
+      panelTitle: "¿Quieres resolver rápido precio, fechas o visitas?",
       phoneLabel: "Teléfono",
-      summary: "Cuando una propiedad encaja de verdad, una conversación directa ayuda a resolver dudas con más rapidez.",
-      title: "Habla con tu agente enseguida cuando una propiedad merezca seguir adelante.",
+      summary: "Cuando una propiedad encaja de verdad, el contacto directo ayuda a resolver dudas prácticas sin demora.",
+      title: "Habla con tu agente cuando necesites claridad, disponibilidad o un siguiente paso rápido.",
       whatsappMessage: "Hola, me interesa una propiedad de Verdant Realty y me gustaría recibir más información.",
     },
     coverage: {
       eyebrow: "Una búsqueda más personal",
       summary:
-        "Comprar en la costa implica comparar estilo de vida, zona y tranquilidad para el futuro. Verdant Realty acompaña ese proceso con más calma y más claridad.",
-      title: "La búsqueda de una vivienda debería sentirse personal desde el primer momento.",
+        "Ya sea para comprar, alquilar o comparar ambas opciones, el proceso debería sentirse claro, cercano y adaptado a tu forma real de vivir en la Costa Blanca.",
+      title: "El asesoramiento inmobiliario funciona mejor cuando empieza por tu ritmo, tus planes y tus prioridades.",
     },
     detail: {
+      availability: "Disponibilidad",
       bathrooms: "Baños",
       bedrooms: "Dormitorios",
+      features: "Características",
       interior: "Interior",
       listingOverview: "Resumen de la propiedad",
+      listingMode: "Modalidad",
       plot: "Parcela",
       requestInfo: "Solicitar más información",
       requestTitle: "Solicita una visita o pide más detalles.",
+      rentPrice: "Alquiler",
+      rentalPeriods: "Modalidades de alquiler",
+      salePrice: "Venta",
       type: "Tipo",
       whyPause: "Por qué esta vivienda llama la atención.",
     },
     filters: {
       availableInventory: "Propiedades disponibles",
+      availabilityFrom: "Disponible desde",
+      availabilityTo: "Disponible hasta",
       emptyBody: "Prueba ampliar la búsqueda o bajar el mínimo de dormitorios.",
       emptyTitle: "No hay propiedades con esos filtros.",
       heading: "Búsqueda de propiedades",
+      listingMode: "Busco",
       minimumBedrooms: "Dormitorios mínimos",
       propertyType: "Tipo de propiedad",
       region: "Zona",
@@ -456,6 +493,11 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
         all: "Todos los tipos",
         any: "Cualquiera",
       },
+      listingModeOptions: {
+        both: "Venta y alquiler",
+        rent: "Alquiler",
+        sale: "Venta",
+      },
       sortOptions: {
         latest: "Más recientes",
         priceAsc: "Precio: menor a mayor",
@@ -463,10 +505,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       },
     },
     hero: {
-      eyebrow: "Viviendas en venta en Torrevieja y la costa cercana",
+      eyebrow: "Viviendas en venta y alquiler en Torrevieja y la costa cercana",
       text:
-        "Verdant Realty apuesta por una forma más personal de comprar en la Costa Blanca: orientación clara, selección cuidada y acompañamiento directo cuando una propiedad encaja.",
-      title: "Encontrar la vivienda adecuada debería sentirse guiado, sereno y realmente cercano.",
+        "Verdant Realty ofrece una forma más personal de buscar en la Costa Blanca: viviendas bien seleccionadas, orientación más clara y acompañamiento cercano desde la primera selección hasta la visita.",
+      title: "Encuentra una vivienda para comprar o alquilar con una guía serena, cercana y realmente atenta.",
     },
     inquiry: {
       email: "Correo electrónico",
@@ -486,10 +528,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     languageLabel: "Elegir idioma",
     masonry: {
       eyebrow: "Explora viviendas disponibles",
-      title: "Recorre la selección actual y abre las propiedades que más sentido tengan para ti.",
+      title: "Recorre la selección actual de venta y alquiler y abre las propiedades que mejor encajen con tu momento y tus prioridades.",
     },
     footer: {
-      blurb: "Verdant Realty ofrece una manera más personal de explorar viviendas en Torrevieja y la costa cercana.",
+      blurb: "Verdant Realty ofrece una forma más tranquila y personal de explorar viviendas en venta y alquiler en Torrevieja y la costa cercana.",
       browseLabel: "Ver propiedades",
       copyright: "© Verdant Realty",
     },
@@ -525,56 +567,56 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     },
     overview: {
       body:
-        "El comprador recibe orientación honesta, un ritmo más calmado y una selección presentada de forma que comparar opciones resulte mucho más fácil.",
+        "Los clientes reciben orientación honesta, un ritmo más calmado y anuncios explicados con claridad para comparar zonas, precios y fechas de alquiler con más seguridad.",
       eyebrow: "Lo que valoran los clientes",
       items: [
         {
           title: "Un trato más personal",
-          copy: "Las conversaciones se centran en lo que de verdad importa al comprador, no en empujar la siguiente visita.",
+          copy: "Las conversaciones se centran en cómo quiere vivir, alojarse o invertir cada cliente, no en empujar la siguiente visita.",
         },
         {
           title: "Orientación clara y sin presión",
-          copy: "Las viviendas, las zonas y sus diferencias se explican con más calma y menos ruido.",
+          copy: "Las viviendas, las zonas, los precios y los tiempos de alquiler se explican con más calma y menos ruido.",
         },
         {
           title: "Acompañamiento en cada paso",
-          copy: "Desde la primera selección hasta la primera llamada, todo está pensado para transmitir confianza.",
+          copy: "Desde la primera selección hasta la primera llamada, todo está pensado para transmitir confianza y practicidad.",
         },
       ],
-      title: "La búsqueda se vuelve más clara cuando detrás hay confianza y criterio.",
+      title: "La búsqueda se vuelve más clara cuando detrás hay confianza, contexto y criterio real.",
     },
     propertiesPage: {
       eyebrow: "Listado de propiedades",
-      text: "Explora el inventario actual, ajusta la búsqueda y abre cualquier propiedad para más detalle.",
-      title: "Viviendas disponibles en Torrevieja y la costa cercana.",
+      text: "Explora propiedades en venta y alquiler, filtra por zona y fechas, y abre cada anuncio con más detalle.",
+      title: "Viviendas disponibles en venta y alquiler en Torrevieja y en la costa cercana.",
     },
     seo: {
-      description: "Descubre propiedades en venta en Torrevieja, La Mata, Orihuela Costa y otras zonas cercanas con Verdant Realty.",
-      ogDescription: "Explora una selección cuidada de viviendas en Torrevieja y la costa cercana.",
-      ogTitle: "Verdant Realty | Viviendas en Torrevieja",
-      title: "Verdant Realty | Viviendas En Venta En Torrevieja",
+      description: "Descubre propiedades en venta y alquiler en Torrevieja, La Mata, Orihuela Costa y otras zonas cercanas con la atención personal de Verdant Realty.",
+      ogDescription: "Explora una selección cuidada de viviendas en venta y alquiler en Torrevieja y la costa cercana.",
+      ogTitle: "Verdant Realty | Viviendas En Venta Y Alquiler En Torrevieja",
+      title: "Verdant Realty | Viviendas En Venta Y Alquiler En Torrevieja",
     },
     propertyMeta: {
       bathroomsShort: "baño",
       bedroomsShort: "hab",
       featuredSnapshot: "Propiedad destacada",
-      homesOnline: "propiedades listas para mostrar",
-      homesSelected: "espacios destacados en la portada",
-      homesSelectedLabel: "zonas clave cercanas",
-      updatedListings: "listados actualizados",
+      homesOnline: "propiedades activas ahora",
+      homesSelected: "viviendas destacadas ahora",
+      homesSelectedLabel: "zonas costeras cubiertas",
+      updatedListings: "selección actual destacada",
     },
     testimonials: {
       eyebrow: "Experiencias",
       items: [
         {
-          name: "Compradora internacional",
+          name: "Cliente internacional",
           quote: "La búsqueda se sintió ordenada y tranquila desde el principio. Era fácil ver qué viviendas merecían de verdad una visita.",
-          role: "Mudanza a la costa",
+          role: "Mudanza a la Costa Blanca",
         },
         {
-          name: "Pareja compradora",
-          quote: "Nos ayudó mucho poder entender mejor cada zona y no solo mirar viviendas sueltas. Todo estaba presentado con criterio.",
-          role: "Segunda residencia",
+          name: "Cliente de alquiler",
+          quote: "Tener claras las fechas disponibles y las diferencias entre zonas nos ayudó muchísimo a elegir con más seguridad.",
+          role: "Estancia larga en la costa",
         },
         {
           name: "Familia compradora",
@@ -582,8 +624,8 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
           role: "Compra para todo el año",
         },
       ],
-      summary: "La diferencia se nota en el tono, en la claridad de cada anuncio y en la forma en que el proceso acompaña al comprador.",
-      title: "Cuando la búsqueda está bien guiada, el comprador avanza con más calma y confianza.",
+      summary: "La diferencia se nota en el tono, en la claridad de cada anuncio y en la forma en que el proceso acompaña al cliente.",
+      title: "Cuando la búsqueda está bien guiada, el cliente avanza con más calma y confianza.",
     },
   },
   ru: {
@@ -612,36 +654,45 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     contact: {
       availabilityLabel: "Удобно для",
       availabilityValue: "Звонков и WhatsApp",
-      eyebrow: "Прямой контакт",
-      panelSummary: "Если объект уже заинтересовал, звонок или сообщение в WhatsApp обычно помогают быстрее перейти к следующему шагу.",
-      panelTitle: "Удобнее обсудить детали напрямую?",
+      eyebrow: "Связаться напрямую",
+      panelSummary: "Звонок или сообщение в WhatsApp обычно помогают быстрее уточнить цену, даты аренды и следующий шаг.",
+      panelTitle: "Хотите быстро уточнить цену, даты или просмотр?",
       phoneLabel: "Телефон",
-      summary: "Когда объект действительно подходит, короткий разговор часто снимает практические вопросы быстрее, чем переписка.",
-      title: "Свяжитесь с агентом сразу, когда объект кажется действительно подходящим.",
+      summary: "Когда объект действительно подходит, прямой разговор помогает быстрее закрыть практические вопросы.",
+      title: "Свяжитесь с агентом, когда вам нужна ясность по объекту, доступности или следующему шагу.",
       whatsappMessage: "Здравствуйте, меня заинтересовал объект на Verdant Realty. Хотелось бы получить больше информации.",
     },
     coverage: {
       eyebrow: "Более личный поиск",
       summary:
-        "Покупка жилья у моря почти всегда связана не только с объектом, но и с образом жизни, районом и ощущением уверенности в решении. Verdant Realty помогает пройти этот путь спокойнее и яснее.",
-      title: "Поиск недвижимости должен ощущаться личным и внимательным с самого начала.",
+        "Покупаете ли вы, арендуете или сравниваете оба варианта, сам процесс должен быть спокойным, понятным и подстроенным под ваш реальный образ жизни на Коста-Бланке.",
+      title: "Подбор недвижимости ощущается лучше, когда в центре внимания ваш ритм, ваши планы и ваши приоритеты.",
     },
     detail: {
+      availability: "Доступность",
       bathrooms: "Ванные",
       bedrooms: "Спальни",
+      features: "Особенности",
       interior: "Площадь",
       listingOverview: "Обзор объекта",
+      listingMode: "Формат",
       plot: "Участок",
       requestInfo: "Запросить информацию",
       requestTitle: "Запросите просмотр или дополнительную информацию.",
+      rentPrice: "Аренда",
+      rentalPeriods: "Форматы аренды",
+      salePrice: "Продажа",
       type: "Тип",
       whyPause: "Почему этот объект привлекает внимание.",
     },
     filters: {
       availableInventory: "Доступные объекты",
+      availabilityFrom: "Доступно с",
+      availabilityTo: "Доступно до",
       emptyBody: "Попробуйте расширить поиск или уменьшить минимум по спальням.",
       emptyTitle: "По этим фильтрам пока ничего не найдено.",
       heading: "Поиск недвижимости",
+      listingMode: "Интересует",
       minimumBedrooms: "Минимум спален",
       propertyType: "Тип недвижимости",
       region: "Район",
@@ -654,6 +705,11 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
         all: "Все типы",
         any: "Любой",
       },
+      listingModeOptions: {
+        both: "Продажа и аренда",
+        rent: "Аренда",
+        sale: "Продажа",
+      },
       sortOptions: {
         latest: "Сначала новые",
         priceAsc: "Цена: по возрастанию",
@@ -661,10 +717,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       },
     },
     hero: {
-      eyebrow: "Объекты на продажу в Торревьехе и рядом с побережьем",
+      eyebrow: "Объекты для продажи и аренды в Торревьехе и рядом с побережьем",
       text:
-        "Verdant Realty предлагает более личный подход к покупке на Коста-Бланке: понятное сопровождение, тщательно подобранные объекты и прямую связь, когда вариант действительно подходит.",
-      title: "Поиск дома должен ощущаться спокойным, понятным и по-настоящему личным.",
+        "Verdant Realty предлагает более личный подход к поиску на Коста-Бланке: тщательно подобранные объекты, более понятное сопровождение и прямую связь от первого шорт-листа до просмотра.",
+      title: "Найдите недвижимость для покупки или аренды с сопровождением, которое ощущается спокойным, личным и внимательным.",
     },
     inquiry: {
       email: "Электронная почта",
@@ -684,10 +740,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     languageLabel: "Выберите язык",
     masonry: {
       eyebrow: "Смотреть доступные объекты",
-      title: "Изучайте актуальные предложения и открывайте те объекты, которые действительно подходят именно вам.",
+      title: "Изучайте актуальные предложения по продаже и аренде и открывайте объекты, которые лучше всего подходят по срокам и приоритетам.",
     },
     footer: {
-      blurb: "Verdant Realty помогает искать жилье в Торревьехе и на побережье рядом более спокойно, лично и внимательно.",
+      blurb: "Verdant Realty помогает искать жилье для покупки и аренды в Торревьехе и на побережье рядом спокойнее, внимательнее и более лично.",
       browseLabel: "Смотреть объекты",
       copyright: "© Verdant Realty",
     },
@@ -723,56 +779,56 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     },
     overview: {
       body:
-        "Покупатели получают честную поддержку, более спокойный ритм поиска и подачу, при которой сравнивать варианты становится проще.",
+        "Клиенты получают честную поддержку, более спокойный ритм поиска и подачу, при которой легче сравнивать районы, цены и сроки аренды.",
       eyebrow: "Что ценят клиенты",
       items: [
         {
           title: "Более личный подход",
-          copy: "Разговор строится вокруг того, что действительно важно покупателю, а не вокруг давления и спешки.",
+          copy: "Разговор строится вокруг того, как человек хочет жить, отдыхать или инвестировать, а не вокруг давления и спешки.",
         },
         {
           title: "Понятно и без лишнего шума",
-          copy: "Разница между объектами и районами объясняется спокойно, ясно и без перегрузки лишними деталями.",
+          copy: "Разница между объектами, районами, ценами и сроками аренды объясняется спокойно и без лишнего шума.",
         },
         {
           title: "Внимание на каждом этапе",
-          copy: "От первого просмотра до первого звонка поиск выстроен так, чтобы людям было легче доверять своему выбору.",
+          copy: "От первого шорт-листа до первого звонка поиск выстроен так, чтобы людям было легче доверять своему выбору.",
         },
       ],
-      title: "Когда за поиском стоит доверие, принимать решение становится легче.",
+      title: "Когда за поиском стоит доверие, контекст и реальная помощь, принимать решение становится легче.",
     },
     propertiesPage: {
       eyebrow: "Каталог недвижимости",
-      text: "Просматривайте текущие объекты, используйте фильтры и открывайте подробные карточки.",
-      title: "Доступные объекты в Торревьехе и на побережье рядом.",
+      text: "Смотрите объекты на продажу и в аренду, фильтруйте по району и датам и открывайте подробные карточки.",
+      title: "Доступные объекты для продажи и аренды в Торревьехе и на побережье рядом.",
     },
     seo: {
-      description: "Смотрите объекты в Торревьехе, Ла Мата, Ориуэла Коста и соседних прибрежных районах вместе с Verdant Realty.",
-      ogDescription: "Подборка домов и квартир у побережья Торревьехи с более ясной и спокойной подачей.",
-      ogTitle: "Verdant Realty | Недвижимость в Торревьехе",
-      title: "Verdant Realty | Недвижимость На Побережье Торревьехи",
+      description: "Смотрите объекты на продажу и в аренду в Торревьехе, Ла Мата, Ориуэла Коста и соседних прибрежных районах вместе с Verdant Realty.",
+      ogDescription: "Подборка объектов для продажи и аренды у побережья Торревьехи с более ясной, личной и спокойной подачей.",
+      ogTitle: "Verdant Realty | Продажа И Аренда В Торревьехе",
+      title: "Verdant Realty | Недвижимость Для Продажи И Аренды В Торревьехе",
     },
     propertyMeta: {
       bathroomsShort: "ван.",
       bedroomsShort: "спал.",
       featuredSnapshot: "Выбранный объект",
-      homesOnline: "объектов в каталоге",
-      homesSelected: "объектов на главной",
-      homesSelectedLabel: "ключевых районов рядом",
-      updatedListings: "актуальные объекты",
+      homesOnline: "активных объектов сейчас",
+      homesSelected: "выделенных объектов сейчас",
+      homesSelectedLabel: "охваченных прибрежных районов",
+      updatedListings: "актуальная подборка объектов",
     },
     testimonials: {
       eyebrow: "Впечатления клиентов",
       items: [
         {
-          name: "Частный покупатель",
+          name: "Клиент по переезду",
           quote: "С самого начала поиск ощущался спокойным и понятным. Сразу было видно, какие объекты действительно заслуживают внимания.",
-          role: "Переезд к морю",
+          role: "Переезд на Коста-Бланку",
         },
         {
-          name: "Пара покупателей",
-          quote: "Нам очень помогло, что сайт показывал не только сами дома, но и разницу между районами. Решение принимать стало легче.",
-          role: "Покупка второй резиденции",
+          name: "Клиент по аренде",
+          quote: "Очень помогло, что сразу были понятны доступные даты и разница между районами. Выбирать стало намного легче.",
+          role: "Длительное проживание у моря",
         },
         {
           name: "Семья покупателя",
@@ -780,8 +836,8 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
           role: "Покупка для постоянного проживания",
         },
       ],
-      summary: "Когда поиск выглядит более спокойным и личным, людям легче перейти от просмотра к реальному контакту.",
-      title: "Хороший опыт поиска запоминается не меньше, чем сами объекты.",
+      summary: "Когда поиск выглядит спокойным, понятным и более личным, людям легче перейти от просмотра к реальному контакту.",
+      title: "Хорошо выстроенный поиск запоминается не меньше, чем сами объекты.",
     },
   },
   de: {
@@ -810,36 +866,45 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     contact: {
       availabilityLabel: "Am besten für",
       availabilityValue: "Anrufe und WhatsApp",
-      eyebrow: "Direkter Kontakt",
-      panelSummary: "Wenn ein Objekt bereits passt, bringt ein kurzer Anruf oder eine WhatsApp-Nachricht oft am schnellsten Klarheit.",
-      panelTitle: "Sie möchten lieber direkt sprechen als Formulare ausfüllen?",
+      eyebrow: "Direkt sprechen",
+      panelSummary: "Ein kurzer Anruf oder eine WhatsApp-Nachricht ist oft der schnellste Weg, um Preis, Mietzeitraum oder den nächsten Schritt zu klären.",
+      panelTitle: "Sie möchten Preis, Termine oder Besichtigung schnell klären?",
       phoneLabel: "Telefon",
-      summary: "Wenn eine Immobilie wirklich interessant wirkt, lassen sich praktische Fragen in einem direkten Gespräch meist schneller klären.",
-      title: "Sprechen Sie direkt mit Ihrer Ansprechpartnerin, sobald ein Objekt ernsthaft infrage kommt.",
+      summary: "Wenn eine Immobilie wirklich interessant wirkt, lassen sich praktische Fragen im direkten Gespräch meist schneller klären.",
+      title: "Sprechen Sie direkt mit Ihrer Ansprechpartnerin, wenn Sie Klarheit zu Objekt, Verfügbarkeit oder dem nächsten Schritt möchten.",
       whatsappMessage: "Hallo, ich interessiere mich für eine Immobilie von Verdant Realty und hätte gern weitere Informationen.",
     },
     coverage: {
       eyebrow: "Eine persönlichere Suche",
       summary:
-        "Der Kauf an der Küste ist oft mehr als nur eine Objektentscheidung. Verdant Realty begleitet diesen Weg mit mehr Ruhe, mehr Klarheit und einem persönlicheren Blick auf das, was wirklich passt.",
-      title: "Die Suche nach einem Zuhause sollte sich von Anfang an persönlich und gut begleitet anfühlen.",
+        "Ob Kauf, Miete oder beides im Vergleich: Die Suche sollte ruhig, klar und auf die tatsächlichen Lebenspläne an der Costa Blanca abgestimmt sein.",
+      title: "Immobilienberatung fühlt sich besser an, wenn sie bei Ihrem Tempo, Ihren Plänen und Ihren Prioritäten beginnt.",
     },
     detail: {
+      availability: "Verfügbarkeit",
       bathrooms: "Bäder",
       bedrooms: "Schlafzimmer",
+      features: "Merkmale",
       interior: "Wohnfläche",
       listingOverview: "Objektüberblick",
+      listingMode: "Angebotsart",
       plot: "Grundstück",
       requestInfo: "Mehr Informationen anfragen",
       requestTitle: "Fragen Sie einen Besichtigungstermin oder weitere Details an.",
+      rentPrice: "Miete",
+      rentalPeriods: "Mietzeiträume",
+      salePrice: "Kauf",
       type: "Typ",
       whyPause: "Warum dieses Objekt im Gedächtnis bleibt.",
     },
     filters: {
       availableInventory: "Verfügbare Immobilien",
+      availabilityFrom: "Verfügbar ab",
+      availabilityTo: "Verfügbar bis",
       emptyBody: "Versuchen Sie eine breitere Suche oder weniger Schlafzimmer als Minimum.",
       emptyTitle: "Zu diesen Filtern wurden noch keine Immobilien gefunden.",
       heading: "Immobiliensuche",
+      listingMode: "Gesucht",
       minimumBedrooms: "Mindestens Schlafzimmer",
       propertyType: "Objektart",
       region: "Region",
@@ -852,6 +917,11 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
         all: "Alle Arten",
         any: "Beliebig",
       },
+      listingModeOptions: {
+        both: "Kauf und Miete",
+        rent: "Miete",
+        sale: "Kauf",
+      },
       sortOptions: {
         latest: "Neueste",
         priceAsc: "Preis: aufsteigend",
@@ -859,10 +929,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       },
     },
     hero: {
-      eyebrow: "Immobilien zum Verkauf in Torrevieja und an der nahen Küste",
+      eyebrow: "Immobilien zum Kauf und zur Miete in Torrevieja und an der nahen Küste",
       text:
-        "Verdant Realty steht für einen persönlicheren Weg zum Immobilienkauf an der Costa Blanca: klare Begleitung, sorgfältig ausgewählte Angebote und direkte Unterstützung, wenn sich ein Objekt richtig anfühlt.",
-      title: "Die Suche nach dem richtigen Zuhause sollte ruhig, klar und wirklich persönlich wirken.",
+        "Verdant Realty steht für einen persönlicheren Weg der Suche an der Costa Blanca: sorgfältig ausgewählte Angebote, klarere Begleitung und direkte Unterstützung vom ersten Shortlist-Moment bis zur Besichtigung.",
+      title: "Finden Sie ein Zuhause zum Kauf oder zur Miete mit einer Begleitung, die ruhig, persönlich und aufmerksam wirkt.",
     },
     inquiry: {
       email: "E-Mail-Adresse",
@@ -882,10 +952,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     languageLabel: "Sprache wählen",
     masonry: {
       eyebrow: "Verfügbare Immobilien entdecken",
-      title: "Durchstöbern Sie die aktuelle Auswahl und öffnen Sie die Objekte, die für Sie wirklich relevant sind.",
+      title: "Durchstöbern Sie aktuelle Kauf- und Mietangebote und öffnen Sie die Objekte, die am besten zu Ihrem Zeitplan und Ihren Prioritäten passen.",
     },
     footer: {
-      blurb: "Verdant Realty begleitet die Immobiliensuche in Torrevieja und an der nahen Küste auf eine persönlichere und ruhigere Weise.",
+      blurb: "Verdant Realty begleitet die Suche nach Kauf- und Mietimmobilien in Torrevieja und an der nahen Küste auf eine persönlichere und ruhigere Weise.",
       browseLabel: "Immobilien ansehen",
       copyright: "© Verdant Realty",
     },
@@ -921,56 +991,56 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     },
     overview: {
       body:
-        "Käuferinnen und Käufer erhalten ehrliche Begleitung, ein ruhigeres Tempo und eine Darstellung, die Vergleiche zwischen Objekten und Lagen leichter macht.",
+        "Kundinnen und Kunden erhalten ehrliche Begleitung, ein ruhigeres Tempo und eine Darstellung, die Vergleiche zwischen Lagen, Preisen und Mietzeiträumen leichter macht.",
       eyebrow: "Was Kunden schätzen",
       items: [
         {
           title: "Ein persönlicherer Umgang",
-          copy: "Gespräche orientieren sich daran, was für den Käufer wirklich wichtig ist, nicht nur am nächsten Besichtigungstermin.",
+          copy: "Gespräche orientieren sich daran, wie jemand leben, wohnen oder investieren möchte, nicht nur am nächsten Besichtigungstermin.",
         },
         {
           title: "Klarheit ohne Druck",
-          copy: "Objekte, Lagen und Unterschiede werden ruhig erklärt, damit Entscheidungen mit mehr Sicherheit getroffen werden können.",
+          copy: "Objekte, Lagen, Preise und Mietzeiträume werden ruhig erklärt, damit Entscheidungen mit mehr Sicherheit getroffen werden können.",
         },
         {
           title: "Begleitung in jedem Schritt",
-          copy: "Von der ersten Auswahl bis zum ersten Gespräch ist der Ablauf darauf ausgelegt, Vertrauen aufzubauen.",
+          copy: "Von der ersten Auswahl bis zum ersten Gespräch ist der Ablauf darauf ausgelegt, Vertrauen und Orientierung aufzubauen.",
         },
       ],
-      title: "Mit Vertrauen im Prozess wird auch die Entscheidung selbst klarer.",
+      title: "Mit Vertrauen, Kontext und echter Begleitung wird auch die Entscheidung selbst klarer.",
     },
     propertiesPage: {
       eyebrow: "Immobilienübersicht",
-      text: "Durchsuchen Sie das aktuelle Angebot, nutzen Sie Filter und öffnen Sie jede Immobilie im Detail.",
-      title: "Verfügbare Immobilien in Torrevieja und an der umliegenden Küste.",
+      text: "Durchsuchen Sie aktuelle Kauf- und Mietangebote, filtern Sie nach Region und Daten und öffnen Sie jede Immobilie im Detail.",
+      title: "Verfügbare Immobilien zum Kauf und zur Miete in Torrevieja und an der umliegenden Küste.",
     },
     seo: {
-      description: "Entdecken Sie Immobilien in Torrevieja, La Mata, Orihuela Costa und weiteren Küstenlagen mit Verdant Realty.",
-      ogDescription: "Ausgewählte Immobilien an der Costa Blanca, klar und hochwertig präsentiert.",
-      ogTitle: "Verdant Realty | Immobilien in Torrevieja",
-      title: "Verdant Realty | Immobilien An Der Küste Von Torrevieja",
+      description: "Entdecken Sie Kauf- und Mietimmobilien in Torrevieja, La Mata, Orihuela Costa und weiteren Küstenlagen mit persönlicher Begleitung von Verdant Realty.",
+      ogDescription: "Ausgewählte Kauf- und Mietimmobilien an der Costa Blanca, klar, persönlich und hochwertig präsentiert.",
+      ogTitle: "Verdant Realty | Immobilien Zum Kauf Und Zur Miete In Torrevieja",
+      title: "Verdant Realty | Immobilien Zum Kauf Und Zur Miete In Torrevieja",
     },
     propertyMeta: {
       bathroomsShort: "Bad",
       bedroomsShort: "SZ",
       featuredSnapshot: "Ausgewähltes Objekt",
-      homesOnline: "vorbereitete Immobilien online",
-      homesSelected: "hervorgehobene Plätze auf der Startseite",
-      homesSelectedLabel: "wichtige Zielgebiete in der Nähe",
-      updatedListings: "aktualisierte Angebote",
+      homesOnline: "aktive Immobilien online",
+      homesSelected: "aktuell hervorgehobene Objekte",
+      homesSelectedLabel: "abgedeckte Küstenlagen",
+      updatedListings: "aktuell hervorgehobene Angebote",
     },
     testimonials: {
       eyebrow: "Stimmen zum Ablauf",
       items: [
         {
-          name: "Privater Käufer",
+          name: "Umziehender Kunde",
           quote: "Die Suche wirkte von Anfang an ruhig und gut strukturiert. Man merkte schnell, welche Objekte wirklich näher angeschaut werden sollten.",
-          role: "Umzug an die Küste",
+          role: "Umzug an die Costa Blanca",
         },
         {
-          name: "Kaufinteressiertes Paar",
-          quote: "Uns half besonders, dass nicht nur die Immobilien, sondern auch die Unterschiede zwischen den Lagen klar erklärt wurden.",
-          role: "Zweitwohnsitz an der Costa Blanca",
+          name: "Mietinteressierter Kunde",
+          quote: "Besonders hilfreich waren die klaren Hinweise zu Verfügbarkeit und Lage. So ließ sich der richtige Mietzeitraum viel leichter planen.",
+          role: "Längerer Aufenthalt an der Küste",
         },
         {
           name: "Familienkauf",
@@ -979,7 +1049,7 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
         },
       ],
       summary: "Der Unterschied zeigt sich im Ton, in der Klarheit der Exposés und darin, wie ruhig der Weg zur Anfrage geführt wird.",
-      title: "Eine gut geführte Immobiliensuche gibt Käufern Sicherheit statt Überforderung.",
+      title: "Eine gut geführte Immobiliensuche gibt Kundinnen und Kunden Sicherheit statt Überforderung.",
     },
   },
 };
@@ -1032,6 +1102,138 @@ export function getLocalizedPropertyStatusLabel(locale: PublicLocale, status: st
   } as const;
 
   return labels[locale][status as keyof (typeof labels)[typeof locale]] ?? status;
+}
+
+export function getLocalizedListingModeLabel(locale: PublicLocale, mode: string) {
+  const labels = {
+    en: { both: "Sale and rent", rent: "Rent", sale: "Sale" },
+    es: { both: "Venta y alquiler", rent: "Alquiler", sale: "Venta" },
+    ru: { both: "Продажа и аренда", rent: "Аренда", sale: "Продажа" },
+    de: { both: "Kauf und Miete", rent: "Miete", sale: "Kauf" },
+  } as const;
+
+  return labels[locale][mode as keyof (typeof labels)[typeof locale]] ?? mode;
+}
+
+export function getLocalizedRentPricePeriodLabel(locale: PublicLocale, period: string) {
+  const labels = {
+    en: { month: "per month", night: "per night", week: "per week" },
+    es: { month: "al mes", night: "por noche", week: "por semana" },
+    ru: { month: "в месяц", night: "за ночь", week: "в неделю" },
+    de: { month: "pro Monat", night: "pro Nacht", week: "pro Woche" },
+  } as const;
+
+  return labels[locale][period as keyof (typeof labels)[typeof locale]] ?? period;
+}
+
+export function getLocalizedRentalPeriodLabel(locale: PublicLocale, period: string) {
+  const labels = {
+    en: {
+      long_term: "Long term",
+      monthly: "Monthly",
+      nightly: "Nightly",
+      seasonal: "Seasonal",
+      weekly: "Weekly",
+    },
+    es: {
+      long_term: "Larga estancia",
+      monthly: "Mensual",
+      nightly: "Por noches",
+      seasonal: "Temporada",
+      weekly: "Semanal",
+    },
+    ru: {
+      long_term: "Долгосрочно",
+      monthly: "Помесячно",
+      nightly: "Посуточно",
+      seasonal: "По сезонам",
+      weekly: "Понедельно",
+    },
+    de: {
+      long_term: "Langfristig",
+      monthly: "Monatlich",
+      nightly: "Nächte",
+      seasonal: "Saisonal",
+      weekly: "Wöchentlich",
+    },
+  } as const;
+
+  return labels[locale][period as keyof (typeof labels)[typeof locale]] ?? period;
+}
+
+export function getLocalizedPropertyFeatureLabel(locale: PublicLocale, feature: string) {
+  const labels = {
+    en: {
+      air_conditioning: "Air conditioning",
+      furnished: "Furnished",
+      garage: "Garage",
+      garden: "Garden",
+      gated_community: "Gated community",
+      heating: "Heating",
+      lift: "Lift",
+      new_build: "New build",
+      parking: "Parking",
+      pet_friendly: "Pet friendly",
+      pool: "Pool",
+      sauna: "Sauna",
+      sea_view: "Sea view",
+      terrace: "Terrace",
+      tourist_license: "Tourist license",
+    },
+    es: {
+      air_conditioning: "Aire acondicionado",
+      furnished: "Amueblado",
+      garage: "Garaje",
+      garden: "Jardín",
+      gated_community: "Urbanización cerrada",
+      heating: "Calefacción",
+      lift: "Ascensor",
+      new_build: "Obra nueva",
+      parking: "Parking",
+      pet_friendly: "Acepta mascotas",
+      pool: "Piscina",
+      sauna: "Sauna",
+      sea_view: "Vistas al mar",
+      terrace: "Terraza",
+      tourist_license: "Licencia turística",
+    },
+    ru: {
+      air_conditioning: "Кондиционер",
+      furnished: "С мебелью",
+      garage: "Гараж",
+      garden: "Сад",
+      gated_community: "Закрытая урбанизация",
+      heating: "Отопление",
+      lift: "Лифт",
+      new_build: "Новостройка",
+      parking: "Парковка",
+      pet_friendly: "Можно с животными",
+      pool: "Бассейн",
+      sauna: "Сауна",
+      sea_view: "Вид на море",
+      terrace: "Терраса",
+      tourist_license: "Туристическая лицензия",
+    },
+    de: {
+      air_conditioning: "Klimaanlage",
+      furnished: "Möbliert",
+      garage: "Garage",
+      garden: "Garten",
+      gated_community: "Geschlossene Anlage",
+      heating: "Heizung",
+      lift: "Aufzug",
+      new_build: "Neubau",
+      parking: "Stellplatz",
+      pet_friendly: "Haustierfreundlich",
+      pool: "Pool",
+      sauna: "Sauna",
+      sea_view: "Meerblick",
+      terrace: "Terrasse",
+      tourist_license: "Touristenlizenz",
+    },
+  } as const;
+
+  return labels[locale][feature as keyof (typeof labels)[typeof locale]] ?? feature;
 }
 
 export function getLocalizedResultsLabel(locale: PublicLocale, count: number) {
