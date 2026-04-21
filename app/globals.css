@@ -1392,9 +1392,9 @@ textarea {
 }
 
 .property-card-footer {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(8.75rem, 10.75rem);
+  align-items: end;
   gap: 0.75rem;
   margin-top: auto;
   padding-top: 0.25rem;
@@ -1404,7 +1404,6 @@ textarea {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
-  flex: 1 1 0;
   min-width: 0;
 }
 
@@ -1414,12 +1413,14 @@ textarea {
   font-family: var(--font-ui);
   color: var(--text);
   letter-spacing: -0.01em;
+  line-height: 1.1;
 }
 
 .rent-price-tag {
   color: var(--muted);
   font-size: 0.82rem;
   line-height: 1.4;
+  max-width: 12ch;
 }
 
 .rent-price-tag-placeholder {
@@ -1427,11 +1428,12 @@ textarea {
 }
 
 .property-card-footer .button {
+  width: 100%;
   min-width: 0;
-  max-width: 100%;
-  flex: 0 1 10.5rem;
   padding-inline: 1.25rem;
-  white-space: normal;
+  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
 }
 
 /* Button variants */
@@ -3120,8 +3122,8 @@ textarea {
   }
 
   .property-card-footer {
+    grid-template-columns: 1fr;
     align-items: stretch;
-    flex-direction: column;
     gap: 0.7rem;
   }
 
