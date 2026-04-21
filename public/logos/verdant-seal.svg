@@ -1,0 +1,14 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" rx="40" fill="#F8F2E8"/>
+  <rect x="70" y="70" width="1060" height="660" rx="32" fill="#FCF8F0" stroke="#123524" stroke-opacity="0.1" stroke-width="2"/>
+  <rect x="355" y="130" width="490" height="390" rx="54" fill="#123524"/>
+  <rect x="382" y="157" width="436" height="336" rx="36" stroke="#D4B26A" stroke-width="2" stroke-opacity="0.55"/>
+  <circle cx="600" cy="327" r="115" fill="#FCF8F0" fill-opacity="0.98"/>
+  <path d="M545 266L600 389L655 266" stroke="#123524" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M692 266C728 243 773 244 807 271C778 282 751 305 737 334C703 324 681 300 692 266Z" fill="#D4B26A"/>
+  <text x="600" y="218" text-anchor="middle" fill="#D4B26A" font-size="22" font-family="Lato, Arial, sans-serif" letter-spacing="7">COSTA BLANCA</text>
+  <text x="600" y="472" text-anchor="middle" fill="#D4B26A" font-size="22" font-family="Lato, Arial, sans-serif" letter-spacing="7">TORREVIEJA PROPERTY</text>
+  <line x1="318" y1="590" x2="882" y2="590" stroke="#123524" stroke-opacity="0.14" stroke-width="2"/>
+  <text x="600" y="655" text-anchor="middle" fill="#123524" font-size="72" font-family="Cormorant Garamond, Georgia, serif" letter-spacing="10">VERDANT REALTY</text>
+  <text x="600" y="698" text-anchor="middle" fill="#123524" fill-opacity="0.72" font-size="24" font-family="Lato, Arial, sans-serif" letter-spacing="6">BOUTIQUE SEAL CONCEPT</text>
+</svg>
