@@ -41,7 +41,7 @@ export function PublicHeader({
       </Link>
 
       <div className="mobile-language-slot">
-        <LanguageSwitcher currentLocale={currentLocale} label={languageLabel} />
+        <LanguageSwitcher compact currentLocale={currentLocale} label={languageLabel} />
       </div>
 
       <button
