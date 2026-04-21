@@ -63,12 +63,12 @@ export function PropertyCard({
             {property.interiorSqm ? <span>{property.interiorSqm} m²</span> : null}
           </div>
 
-          <div className="property-card-footer">
-            <div className="price-stack">
-              <div className="price-line">
-                {hasSalePrice ? (
-                  <strong className="price-tag">{formatPrice(property.priceEuro)}</strong>
-                ) : null}
+        <div className="property-card-footer">
+          <div className="price-stack">
+            <div className={`price-line ${hasRentPrice ? "price-line-dual" : "price-line-single"}`}>
+              {hasSalePrice ? (
+                <strong className="price-tag">{formatPrice(property.priceEuro)}</strong>
+              ) : null}
                 {hasRentPrice ? (
                   <span className="price-tag rent-price-inline">
                     {formatOptionalPrice(property.rentPriceEuro)}{" "}
