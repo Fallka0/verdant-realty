@@ -19,6 +19,17 @@ export type AdminCopy = {
     heroBody: string;
     heroEyebrow: string;
     heroTitle: (count: number) => string;
+    inquiries: {
+      email: string;
+      empty: string;
+      eyebrow: string;
+      message: string;
+      phone: string;
+      preferredTime: string;
+      property: string;
+      reply: string;
+      title: string;
+    };
     listingsEyebrow: string;
     listingsTitle: string;
     stats: {
@@ -175,6 +186,17 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
         "Keep the public site fresh from one calmer workspace. Drafts stay private, while available and reserved homes can appear across the live property pages.",
       heroEyebrow: "Inventory Overview",
       heroTitle: (count) => `${count} properties in the system`,
+      inquiries: {
+        email: "Email",
+        empty: "New customer messages and viewing requests will appear here.",
+        eyebrow: "Customer Contact",
+        message: "Message",
+        phone: "Phone",
+        preferredTime: "Preferred viewing time",
+        property: "Property",
+        reply: "Reply",
+        title: "Recent inquiries",
+      },
       listingsEyebrow: "Listings",
       listingsTitle: "Manage inventory",
       stats: {
@@ -324,6 +346,17 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
         "Mantén la web pública actualizada desde un espacio más sencillo. Los borradores son privados; las viviendas disponibles o reservadas pueden aparecer en la web.",
       heroEyebrow: "Resumen del inventario",
       heroTitle: (count) => `${count} propiedades en el sistema`,
+      inquiries: {
+        email: "Correo",
+        empty: "Aquí aparecerán los nuevos mensajes de clientes y las solicitudes de visita.",
+        eyebrow: "Contacto de clientes",
+        message: "Mensaje",
+        phone: "Teléfono",
+        preferredTime: "Horario preferido",
+        property: "Propiedad",
+        reply: "Responder",
+        title: "Consultas recientes",
+      },
       listingsEyebrow: "Propiedades",
       listingsTitle: "Gestionar inventario",
       stats: {
@@ -471,6 +504,17 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
         "Обновляйте сайт из одного спокойного рабочего места. Черновики остаются приватными, а доступные и зарезервированные объекты могут появляться на сайте.",
       heroEyebrow: "Обзор каталога",
       heroTitle: (count) => `${count} объектов в системе`,
+      inquiries: {
+        email: "Email",
+        empty: "Здесь будут появляться новые сообщения клиентов и запросы на просмотр.",
+        eyebrow: "Контакты клиентов",
+        message: "Сообщение",
+        phone: "Телефон",
+        preferredTime: "Предпочтительное время",
+        property: "Объект",
+        reply: "Ответить",
+        title: "Последние запросы",
+      },
       listingsEyebrow: "Объекты",
       listingsTitle: "Управление каталогом",
       stats: {

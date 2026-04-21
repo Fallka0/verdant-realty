@@ -7,6 +7,7 @@ type InquiryEmailInput = {
   name: string;
   phone: string;
   propertyTitle: string;
+  timeline?: string;
 };
 
 type InquiryEmailConfig = {
@@ -62,6 +63,7 @@ function buildTextBody(input: InquiryEmailInput) {
     `Name: ${input.name}`,
     `Email: ${input.email}`,
     `Phone: ${input.phone || "Not provided"}`,
+    `Preferred viewing time: ${input.timeline || "Not provided"}`,
     `Locale: ${input.locale}`,
     `Property: ${input.propertyTitle || "General inquiry"}`,
     "",
@@ -77,6 +79,7 @@ function buildHtmlBody(input: InquiryEmailInput) {
       <p style="margin: 0 0 8px;"><strong>Name:</strong> ${escapeHtml(input.name)}</p>
       <p style="margin: 0 0 8px;"><strong>Email:</strong> ${escapeHtml(input.email)}</p>
       <p style="margin: 0 0 8px;"><strong>Phone:</strong> ${escapeHtml(input.phone || "Not provided")}</p>
+      <p style="margin: 0 0 8px;"><strong>Preferred viewing time:</strong> ${escapeHtml(input.timeline || "Not provided")}</p>
       <p style="margin: 0 0 8px;"><strong>Locale:</strong> ${escapeHtml(input.locale)}</p>
       <p style="margin: 0 0 16px;"><strong>Property:</strong> ${escapeHtml(
         input.propertyTitle || "General inquiry",

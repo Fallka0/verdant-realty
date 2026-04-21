@@ -540,6 +540,44 @@ textarea {
   gap: 1rem;
 }
 
+.inquiry-mode-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+}
+
+.inquiry-mode-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.6rem;
+  padding: 0.6rem 1rem;
+  border: 1px solid rgba(18, 53, 36, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 251, 244, 0.68);
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.inquiry-mode-button:hover,
+.inquiry-mode-button:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(212, 178, 106, 0.52);
+}
+
+.inquiry-mode-button.active {
+  background: var(--text);
+  border-color: var(--text);
+  color: #fffaf1;
+}
+
 .inquiry-form label {
   display: flex;
   flex-direction: column;
@@ -1066,6 +1104,11 @@ textarea {
   gap: 1.25rem;
 }
 
+.neighborhood-card-link {
+  display: block;
+  color: inherit;
+}
+
 .neighborhood-card {
   position: relative;
   min-height: 18rem;
@@ -1080,6 +1123,15 @@ textarea {
   background-size: cover;
   background-position: center;
   background-color: #ddd5c8;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.neighborhood-card-link:hover .neighborhood-card,
+.neighborhood-card-link:focus-visible .neighborhood-card {
+  transform: translateY(-3px);
+  box-shadow: 0 24px 48px rgba(18, 53, 36, 0.18);
 }
 
 .neighborhood-card::before {
@@ -1114,6 +1166,103 @@ textarea {
   font-size: 0.9rem;
   line-height: 1.65;
   margin: 0;
+}
+
+.region-page {
+  display: grid;
+  gap: 2.25rem;
+}
+
+.region-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 28rem;
+  border: 1px solid rgba(18, 53, 36, 0.08);
+  border-radius: 32px;
+  background:
+    linear-gradient(180deg, rgba(18, 53, 36, 0.1), rgba(18, 53, 36, 0.62)),
+    var(--region-image, linear-gradient(135deg, rgba(255, 251, 244, 0.94), rgba(243, 235, 223, 0.8)));
+  background-size: cover;
+  background-position: center;
+  box-shadow: var(--shadow);
+}
+
+.region-hero-copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  align-content: end;
+  gap: 1rem;
+  min-height: 28rem;
+  padding: 2.25rem;
+}
+
+.region-hero-copy h1 {
+  margin: 0;
+  max-width: 14ch;
+  color: #fffaf1;
+  font-family: var(--font-display);
+  font-size: clamp(2.7rem, 5vw, 4.6rem);
+  font-weight: 600;
+  line-height: 0.98;
+}
+
+.region-hero-copy p {
+  max-width: 42rem;
+  margin: 0;
+  color: rgba(255, 250, 241, 0.9);
+  line-height: 1.75;
+}
+
+.region-credit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: fit-content;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid rgba(255, 250, 241, 0.18);
+  border-radius: 999px;
+  background: rgba(18, 53, 36, 0.22);
+  color: rgba(255, 250, 241, 0.92);
+  font-size: 0.82rem;
+}
+
+.region-content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+  gap: 1.5rem;
+}
+
+.region-copy-card,
+.region-highlight-card {
+  padding: 1.75rem;
+  border: 1px solid rgba(18, 53, 36, 0.08);
+  border-radius: 26px;
+  background: rgba(255, 251, 244, 0.7);
+}
+
+.region-copy-card h2,
+.region-highlight-card h2 {
+  margin: 0 0 0.8rem;
+  font-size: 1.35rem;
+}
+
+.region-copy-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.region-highlights {
+  margin: 0;
+  padding-left: 1.15rem;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.region-listing-stack {
+  display: grid;
+  gap: 1.5rem;
 }
 
 /* Property grid and card */
@@ -1271,6 +1420,10 @@ textarea {
   color: var(--muted);
   font-size: 0.82rem;
   line-height: 1.4;
+}
+
+.rent-price-tag-placeholder {
+  visibility: hidden;
 }
 
 .property-card-footer .button {
@@ -2093,6 +2246,56 @@ textarea {
   line-height: 1.7;
 }
 
+.admin-inquiry-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-inquiry-card {
+  display: grid;
+  gap: 0.7rem;
+  padding: 1.2rem;
+  border: 1px solid rgba(18, 53, 36, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 251, 244, 0.52);
+}
+
+.admin-inquiry-topline {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.admin-inquiry-topline strong {
+  font-size: 1rem;
+}
+
+.admin-inquiry-topline span,
+.admin-inquiry-meta span {
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+
+.admin-inquiry-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.2rem;
+}
+
+.admin-inquiry-message {
+  margin: 0;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+.admin-inquiry-actions {
+  display: flex;
+  justify-content: flex-start;
+}
+
 .setup-card {
   padding: 1.5rem;
 }
@@ -2849,6 +3052,10 @@ textarea {
   .neighborhood-grid,
   .stats-grid,
   .advantage-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .region-content-grid {
     grid-template-columns: 1fr;
   }
 

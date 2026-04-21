@@ -113,14 +113,21 @@ export type PublicCopy = {
     emailPlaceholder: string;
     error: string;
     fullName: string;
+    generalInquiry: string;
     message: string;
     messagePlaceholder: string;
     optional: string;
     phone: string;
     propertyInquiry: string;
     rateLimited: string;
+    requestViewing: string;
+    requestViewingPlaceholder: string;
+    requestViewingTemplate: string;
     sendingAria: string;
     success: string;
+    timeline: string;
+    timelinePlaceholder: string;
+    typeLabel: string;
     yourName: string;
   };
   languageLabel: string;
@@ -310,14 +317,21 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       emailPlaceholder: "you@example.com",
       error: "Something went wrong. Please try again.",
       fullName: "Full Name",
+      generalInquiry: "General inquiry",
       message: "Message",
       messagePlaceholder: "Tell us what kind of property you are looking for.",
       optional: "Optional",
       phone: "Phone Number",
       propertyInquiry: "Property Inquiry",
       rateLimited: "Too many inquiries were sent just now. Please wait a few minutes and try again.",
+      requestViewing: "Request viewing",
+      requestViewingPlaceholder: "Add any timing details, questions, or special requests for the viewing.",
+      requestViewingTemplate: "Hello, I would like to request a viewing for {title} in {location}. Please let me know the available time slots.",
       sendingAria: "Sending your property inquiry",
       success: "Inquiry sent successfully.",
+      timeline: "Preferred viewing time",
+      timelinePlaceholder: "For example: this week, Friday afternoon, or next Tuesday",
+      typeLabel: "Inquiry type",
       yourName: "Your name",
     },
     languageLabel: "Choose language",
@@ -527,14 +541,21 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       emailPlaceholder: "tu@correo.com",
       error: "Algo salió mal. Inténtalo de nuevo.",
       fullName: "Nombre completo",
+      generalInquiry: "Consulta general",
       message: "Mensaje",
       messagePlaceholder: "Cuéntanos qué tipo de propiedad estás buscando.",
       optional: "Opcional",
       phone: "Teléfono",
       propertyInquiry: "Consulta sobre la propiedad",
       rateLimited: "Se han enviado demasiadas consultas en este momento. Espera unos minutos y vuelve a intentarlo.",
+      requestViewing: "Solicitar visita",
+      requestViewingPlaceholder: "Añade horarios, dudas o cualquier detalle útil para la visita.",
+      requestViewingTemplate: "Hola, me gustaría solicitar una visita para {title} en {location}. Por favor, indíqueme qué horarios están disponibles.",
       sendingAria: "Enviando tu consulta sobre la propiedad",
       success: "Consulta enviada correctamente.",
+      timeline: "Horario preferido para la visita",
+      timelinePlaceholder: "Por ejemplo: esta semana, viernes por la tarde o el próximo martes",
+      typeLabel: "Tipo de consulta",
       yourName: "Tu nombre",
     },
     languageLabel: "Elegir idioma",
@@ -744,14 +765,21 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       emailPlaceholder: "you@example.com",
       error: "Что-то пошло не так. Попробуйте еще раз.",
       fullName: "Полное имя",
+      generalInquiry: "Общий запрос",
       message: "Сообщение",
       messagePlaceholder: "Расскажите, какую недвижимость вы ищете.",
       optional: "Необязательно",
       phone: "Телефон",
       propertyInquiry: "Запрос по объекту",
       rateLimited: "Слишком много запросов за короткое время. Подождите несколько минут и попробуйте снова.",
+      requestViewing: "Запросить просмотр",
+      requestViewingPlaceholder: "Добавьте удобное время, вопросы или любые детали по просмотру.",
+      requestViewingTemplate: "Здравствуйте, я хотел(а) бы запросить просмотр объекта {title} в {location}. Подскажите, пожалуйста, какие даты и время доступны.",
       sendingAria: "Отправка запроса по объекту",
       success: "Запрос успешно отправлен.",
+      timeline: "Предпочтительное время просмотра",
+      timelinePlaceholder: "Например: на этой неделе, в пятницу днем или в следующий вторник",
+      typeLabel: "Тип запроса",
       yourName: "Ваше имя",
     },
     languageLabel: "Выберите язык",
@@ -961,14 +989,21 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       emailPlaceholder: "you@example.com",
       error: "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
       fullName: "Vollständiger Name",
+      generalInquiry: "Allgemeine Anfrage",
       message: "Nachricht",
       messagePlaceholder: "Teilen Sie uns mit, nach welcher Immobilie Sie suchen.",
       optional: "Optional",
       phone: "Telefonnummer",
       propertyInquiry: "Anfrage zur Immobilie",
       rateLimited: "Es wurden gerade zu viele Anfragen gesendet. Bitte warten Sie einige Minuten und versuchen Sie es erneut.",
+      requestViewing: "Besichtigung anfragen",
+      requestViewingPlaceholder: "Ergänzen Sie gewünschte Zeiten, Fragen oder Hinweise zur Besichtigung.",
+      requestViewingTemplate: "Hallo, ich möchte gern eine Besichtigung für {title} in {location} anfragen. Bitte teilen Sie mir mit, welche Termine verfügbar sind.",
       sendingAria: "Ihre Immobilienanfrage wird gesendet",
       success: "Anfrage erfolgreich gesendet.",
+      timeline: "Bevorzugte Besichtigungszeit",
+      timelinePlaceholder: "Zum Beispiel: diese Woche, Freitag Nachmittag oder nächsten Dienstag",
+      typeLabel: "Anfrageart",
       yourName: "Ihr Name",
     },
     languageLabel: "Sprache wählen",

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { ContactActions } from "@/components/contact-actions";
 import { ImageCarousel } from "@/components/image-carousel";
+import { InquiryForm } from "@/components/inquiry-form";
 import { PublicHeader } from "@/components/public-header";
 import { SiteFooter } from "@/components/site-footer";
 import { adminCopy, resolveAdminLocale } from "@/lib/admin-copy";
@@ -199,6 +200,15 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
               className="contact-actions sticky-contact-actions"
               whatsappLabel={copy.buttons.whatsapp}
               whatsappMessage={`${copy.contact.whatsappMessage} ${localizedProperty.title}`}
+            />
+            <InquiryForm
+              copy={copy}
+              locale={locale}
+              property={{
+                id: localizedProperty.id,
+                location: localizedProperty.location,
+                title: localizedProperty.title,
+              }}
             />
           </div>
         </aside>
