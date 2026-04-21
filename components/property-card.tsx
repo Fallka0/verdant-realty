@@ -29,8 +29,13 @@ export function PropertyCard({
   locale,
   property,
 }: PropertyCardProps) {
+  const hasSalePrice = property.listingMode === "sale" || property.listingMode === "both";
+  const hasRentPrice =
+    (property.listingMode === "rent" || property.listingMode === "both") && Boolean(property.rentPriceEuro);
+  const cardPriceVariant = hasSalePrice && hasRentPrice ? "property-card-dual-price" : "property-card-single-price";
+
   return (
-    <article className="property-card">
+    <article className={`property-card ${cardPriceVariant}`}>
       <div className="property-image-wrap">
         <Image
           className="property-image"
@@ -60,17 +65,13 @@ export function PropertyCard({
 
         <div className="property-card-footer">
           <div className="price-stack">
-            {(property.listingMode === "sale" || property.listingMode === "both") ? (
+            {hasSalePrice ? (
               <strong className="price-tag">{formatPrice(property.priceEuro)}</strong>
             ) : null}
-            {(property.listingMode === "rent" || property.listingMode === "both") && property.rentPriceEuro ? (
+            {hasRentPrice ? (
               <span className="rent-price-tag">
                 {formatOptionalPrice(property.rentPriceEuro)}{" "}
                 {property.rentPricePeriod ? getLocalizedRentPricePeriodLabel(locale, property.rentPricePeriod) : ""}
-              </span>
-            ) : property.listingMode === "sale" ? (
-              <span aria-hidden="true" className="rent-price-tag rent-price-tag-placeholder">
-                &nbsp;
               </span>
             ) : null}
           </div>
