@@ -1425,9 +1425,9 @@ textarea {
   display: grid;
   grid-template-columns: 1fr;
   align-items: stretch;
-  gap: 0.28rem;
+  gap: 0.36rem;
   margin-top: auto;
-  padding-top: 0.15rem;
+  padding-top: 0.3rem;
 }
 
 .price-stack {
@@ -1436,30 +1436,30 @@ textarea {
   min-width: 0;
   align-items: flex-start;
   justify-content: flex-start;
-  min-height: 2.85rem;
+  min-height: 2.7rem;
 }
 
 .price-line {
   display: flex;
   flex-wrap: wrap;
   gap: 1.4rem;
-  align-items: baseline;
+  align-items: center;
 }
 
 .price-tag {
-  font-size: 1.15rem;
+  font-size: 1.28rem;
   font-weight: 700;
   font-family: var(--font-ui);
   color: var(--text);
   letter-spacing: -0.01em;
-  line-height: 1.1;
+  line-height: 1;
 }
 
 .rent-price-inline {
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: 0.96rem;
   font-weight: 500;
-  line-height: 1.35;
+  line-height: 1.2;
   letter-spacing: 0;
 }
 
