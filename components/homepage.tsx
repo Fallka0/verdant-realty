@@ -7,11 +7,11 @@ import { PublicHeader } from "@/components/public-header";
 import { PropertyCard } from "@/components/property-card";
 import { ReactBitsMasonry } from "@/components/react-bits-masonry";
 import { SiteFooter } from "@/components/site-footer";
+import { regions, regionSlugs } from "@/lib/regions";
 import { formatOptionalPrice, formatPrice, type PropertyRecord } from "@/lib/property-shared";
 import {
   getLocalizedListingModeLabel,
   getLocalizedRentPricePeriodLabel,
-  neighborhoodImages,
   type PublicCopy,
   type PublicLocale,
 } from "@/lib/public-copy";
@@ -142,17 +142,26 @@ export function Homepage({ adminLabel, copy, currentLocale, featuredProperties, 
           <h3>{copy.neighborhoods.title}</h3>
         </div>
         <div className="neighborhood-grid">
-          {copy.neighborhoods.cards.map((card) => (
-            <article
-              className="neighborhood-card"
-              key={card.area}
-              style={{ "--neighborhood-image": `url("${neighborhoodImages[card.area as keyof typeof neighborhoodImages]}")` } as CSSProperties}
-            >
-              <p className="eyebrow">{card.area}</p>
-              <h3>{card.title}</h3>
-              <p>{card.summary}</p>
-            </article>
-          ))}
+          {copy.neighborhoods.cards.map((card, index) => {
+            const slug = regionSlugs[index];
+            if (!slug) {
+              return null;
+            }
+            const region = regions[slug];
+
+            return (
+              <Link className="neighborhood-card-link" href={`/regions/${slug}`} key={slug}>
+                <article
+                  className="neighborhood-card"
+                  style={{ "--neighborhood-image": `url("${region.imageUrl}")` } as CSSProperties}
+                >
+                  <p className="eyebrow">{card.area}</p>
+                  <h3>{card.title}</h3>
+                  <p>{card.summary}</p>
+                </article>
+              </Link>
+            );
+          })}
         </div>
       </section>
 

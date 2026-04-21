@@ -132,23 +132,50 @@ export default async function AdminDashboardPage() {
 
         {inquiries.length > 0 ? (
           <div className="admin-inquiry-list">
-            {inquiries.map((inquiry) => (
-              <article className="admin-inquiry-card" key={inquiry.id}>
-                <div className="admin-inquiry-topline">
-                  <strong>{inquiry.name}</strong>
-                  <span>{new Date(inquiry.createdAt).toLocaleString(locale)}</span>
-                </div>
-                <div className="admin-inquiry-meta">
-                  <span><strong>{copy.dashboard.inquiries.property}:</strong> {inquiry.propertyTitle ?? "General inquiry"}</span>
-                  <span><strong>{copy.dashboard.inquiries.email}:</strong> {inquiry.email}</span>
-                  {inquiry.phone ? <span><strong>{copy.dashboard.inquiries.phone}:</strong> {inquiry.phone}</span> : null}
-                  {inquiry.timeline ? <span><strong>{copy.dashboard.inquiries.preferredTime}:</strong> {inquiry.timeline}</span> : null}
-                </div>
-                <p className="admin-inquiry-message">
-                  <strong>{copy.dashboard.inquiries.message}:</strong> {inquiry.message}
-                </p>
-              </article>
-            ))}
+            {inquiries.map((inquiry) => {
+              const subject = inquiry.propertyTitle
+                ? `Re: ${inquiry.propertyTitle}`
+                : "Re: Verdant Realty inquiry";
+              const replyBody = [
+                `Hello ${inquiry.name},`,
+                "",
+                "Thank you for your inquiry.",
+                "",
+                inquiry.propertyTitle ? `Property: ${inquiry.propertyTitle}` : "",
+                inquiry.timeline ? `Preferred viewing time: ${inquiry.timeline}` : "",
+                "",
+                "Kind regards,",
+                "Verdant Realty",
+              ]
+                .filter(Boolean)
+                .join("\n");
+
+              return (
+                <article className="admin-inquiry-card" key={inquiry.id}>
+                  <div className="admin-inquiry-topline">
+                    <strong>{inquiry.name}</strong>
+                    <span>{new Date(inquiry.createdAt).toLocaleString(locale)}</span>
+                  </div>
+                  <div className="admin-inquiry-meta">
+                    <span><strong>{copy.dashboard.inquiries.property}:</strong> {inquiry.propertyTitle ?? "General inquiry"}</span>
+                    <span><strong>{copy.dashboard.inquiries.email}:</strong> {inquiry.email}</span>
+                    {inquiry.phone ? <span><strong>{copy.dashboard.inquiries.phone}:</strong> {inquiry.phone}</span> : null}
+                    {inquiry.timeline ? <span><strong>{copy.dashboard.inquiries.preferredTime}:</strong> {inquiry.timeline}</span> : null}
+                  </div>
+                  <p className="admin-inquiry-message">
+                    <strong>{copy.dashboard.inquiries.message}:</strong> {inquiry.message}
+                  </p>
+                  <div className="admin-inquiry-actions">
+                    <a
+                      className="button button-secondary"
+                      href={`mailto:${encodeURIComponent(inquiry.email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(replyBody)}`}
+                    >
+                      {copy.dashboard.inquiries.reply}
+                    </a>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         ) : (
           <div className="admin-empty-state">

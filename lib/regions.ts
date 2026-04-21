@@ -1,0 +1,251 @@
+import type { PublicLocale } from "@/lib/public-copy";
+import type { PropertyRecord } from "@/lib/property-shared";
+
+export const regionSlugs = ["torrevieja", "la-mata", "orihuela-costa", "guardamar-del-segura"] as const;
+
+export type RegionSlug = (typeof regionSlugs)[number];
+
+type RegionContent = {
+  areaLabel: string;
+  body: string;
+  highlights: string[];
+  title: string;
+};
+
+type RegionEntry = {
+  imageUrl: string;
+  imageCreditLabel: string;
+  imageSourceUrl: string;
+  localeContent: Record<PublicLocale, RegionContent>;
+  matchLocation: (property: PropertyRecord) => boolean;
+  name: string;
+  slug: RegionSlug;
+};
+
+export const regions: Record<RegionSlug, RegionEntry> = {
+  torrevieja: {
+    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Paseo%20Juan%20Aparicio.jpg",
+    imageCreditLabel: "Wikimedia Commons",
+    imageSourceUrl: "https://commons.wikimedia.org/wiki/Category:Beaches_of_Torrevieja",
+    localeContent: {
+      en: {
+        areaLabel: "Torrevieja",
+        body:
+          "Torrevieja blends a lively seafront, city services, marinas, and the town’s salt-lagoon identity. It suits clients who want everyday convenience, a walkable coastline, and an active property market that works for both year-round living and second homes.",
+        highlights: [
+          "Lively promenade and marina atmosphere",
+          "Strong year-round services and international community",
+          "Easy access to beaches, dining, and everyday amenities",
+        ],
+        title: "A coastal city with an active seafront and strong everyday convenience.",
+      },
+      es: {
+        areaLabel: "Torrevieja",
+        body:
+          "Torrevieja combina paseo marítimo, servicios urbanos, marinas y la identidad propia de sus salinas. Encaja muy bien para quien busca vida diaria cómoda, costa caminable y un mercado inmobiliario activo tanto para vivir todo el año como para segunda residencia.",
+        highlights: [
+          "Paseo marítimo animado y ambiente de puerto",
+          "Buenos servicios todo el año y comunidad internacional",
+          "Acceso fácil a playas, restauración y vida diaria",
+        ],
+        title: "Una ciudad costera con paseo marítimo activo y mucha comodidad en el día a día.",
+      },
+      ru: {
+        areaLabel: "Торревьеха",
+        body:
+          "Торревьеха сочетает активную набережную, городскую инфраструктуру, марины и узнаваемый характер соляных лагун. Этот район подходит тем, кто хочет удобство повседневной жизни, прогулочную береговую линию и активный рынок недвижимости для постоянного проживания или второго дома.",
+        highlights: [
+          "Живая набережная и атмосфера морского города",
+          "Сильная инфраструктура круглый год и международная среда",
+          "Близость к пляжам, ресторанам и повседневным сервисам",
+        ],
+        title: "Прибрежный город с активной набережной и сильной городской инфраструктурой.",
+      },
+      de: {
+        areaLabel: "Torrevieja",
+        body:
+          "Torrevieja verbindet eine lebendige Promenade, städtische Infrastruktur, Marinas und die besondere Identität der Salzlagunen. Die Lage passt gut zu Menschen, die Alltagskomfort, eine gut erreichbare Küste und einen aktiven Immobilienmarkt für Dauerwohnen oder Zweitwohnsitz suchen.",
+        highlights: [
+          "Lebendige Promenade und maritimes Stadtgefühl",
+          "Starke Ganzjahres-Infrastruktur und internationale Community",
+          "Kurze Wege zu Stränden, Gastronomie und Alltag",
+        ],
+        title: "Eine Küstenstadt mit aktiver Uferpromenade und viel Alltagskomfort.",
+      },
+    },
+    matchLocation: (property) =>
+      property.location.toLowerCase().includes("torrevieja") && !property.location.toLowerCase().includes("la mata"),
+    name: "Torrevieja",
+    slug: "torrevieja",
+  },
+  "la-mata": {
+    imageUrl:
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Playa%20de%20la%20Mata%20in%20La%20Mata%2C%20Torrevieja%2C%20Alicante%2C%20Spain%2C%202022%20January.jpg",
+    imageCreditLabel: "Wikimedia Commons",
+    imageSourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Playa_de_la_Mata_in_La_Mata%2C_Torrevieja%2C_Alicante%2C_Spain%2C_2022_January.jpg",
+    localeContent: {
+      en: {
+        areaLabel: "La Mata",
+        body:
+          "La Mata stands out for its long sandy beach, open seafront, and calmer residential rhythm. It is especially attractive for clients who care about sea views, long beach walks, and a more relaxed coastal atmosphere without feeling isolated.",
+        highlights: [
+          "One of the broadest and longest beaches in the area",
+          "Promenade, dunes, and easy outdoor lifestyle",
+          "A calmer pace that still stays connected to Torrevieja",
+        ],
+        title: "Beachfront calm, open light, and a more relaxed coastal rhythm.",
+      },
+      es: {
+        areaLabel: "La Mata",
+        body:
+          "La Mata destaca por su playa larga, su frente marítimo abierto y un ritmo residencial más calmado. Resulta muy atractiva para quien valora vistas al mar, paseos junto a la playa y una sensación costera más relajada sin quedar aislado.",
+        highlights: [
+          "Una de las playas más largas y amplias de la zona",
+          "Paseo, dunas y estilo de vida muy exterior",
+          "Un ritmo más tranquilo pero bien conectado con Torrevieja",
+        ],
+        title: "Calma frente al mar, mucha luz y una forma de vivir más relajada.",
+      },
+      ru: {
+        areaLabel: "Ла Мата",
+        body:
+          "Ла Мата выделяется длинным песчаным пляжем, открытой береговой линией и более спокойным жилым ритмом. Это хороший выбор для тех, кто ценит виды на море, прогулки вдоль пляжа и более расслабленную атмосферу у воды без ощущения изоляции.",
+        highlights: [
+          "Один из самых длинных и широких пляжей в районе",
+          "Набережная, дюны и выраженный outdoor-ритм",
+          "Спокойнее, но при этом рядом с Торревьехой",
+        ],
+        title: "Спокойствие у моря, много света и более расслабленный ритм побережья.",
+      },
+      de: {
+        areaLabel: "La Mata",
+        body:
+          "La Mata zeichnet sich durch seinen langen Sandstrand, den offenen Küstenraum und ein ruhigeres Wohngefühl aus. Die Lage ist besonders attraktiv für Menschen, die Meerblick, lange Strandspaziergänge und eine entspanntere Küstenatmosphäre suchen, ohne abgelegen zu wohnen.",
+        highlights: [
+          "Einer der längsten und breitesten Strände der Gegend",
+          "Promenade, Dünen und starkes Outdoor-Gefühl",
+          "Ruhigeres Wohnen mit guter Verbindung nach Torrevieja",
+        ],
+        title: "Mehr Ruhe direkt am Meer, viel Licht und ein entspannter Küstenrhythmus.",
+      },
+    },
+    matchLocation: (property) => property.location.toLowerCase().includes("la mata"),
+    name: "La Mata",
+    slug: "la-mata",
+  },
+  "orihuela-costa": {
+    imageUrl:
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Coastal%20walking%20path%20at%20Playa%20de%20Cabo%20Roig%20in%20Orihuela%20Costa%2C%20Orihuela%2C%20Alicante%2C%20Spain%2C%202022%20January.jpg",
+    imageCreditLabel: "Wikimedia Commons",
+    imageSourceUrl: "https://commons.wikimedia.org/wiki/Category:Beaches_of_Orihuela",
+    localeContent: {
+      en: {
+        areaLabel: "Orihuela Costa",
+        body:
+          "Orihuela Costa offers a long stretch of coastline with beaches, coves, promenades, and residential communities spread across multiple coastal pockets. It is a strong fit for clients who want resort-style inventory, outdoor living, and established international demand.",
+        highlights: [
+          "16 km of coastline with beaches, coves, and coastal walks",
+          "Large residential choice across Punta Prima, Cabo Roig, Campoamor, and more",
+          "Popular for second homes, rentals, and lifestyle buyers",
+        ],
+        title: "Resort energy, broad inventory, and a coastline shaped by distinct micro-areas.",
+      },
+      es: {
+        areaLabel: "Orihuela Costa",
+        body:
+          "Orihuela Costa ofrece un largo frente litoral con playas, calas, paseos y urbanizaciones repartidas en distintos núcleos costeros. Encaja muy bien para clientes que buscan oferta residencial amplia, vida exterior y demanda internacional consolidada.",
+        highlights: [
+          "16 km de costa con playas, calas y senderos litorales",
+          "Gran variedad residencial entre Punta Prima, Cabo Roig, Campoamor y más",
+          "Muy valorada para segunda residencia, alquiler y estilo de vida costero",
+        ],
+        title: "Ambiente residencial y turístico con mucha oferta y una costa muy diversa.",
+      },
+      ru: {
+        areaLabel: "Ориуэла Коста",
+        body:
+          "Ориуэла Коста предлагает длинную береговую линию с пляжами, бухтами, прогулочными маршрутами и жилыми урбанизациями в разных прибрежных зонах. Это сильный вариант для клиентов, которым нужен большой выбор, outdoor-образ жизни и устойчивый международный спрос.",
+        highlights: [
+          "16 км побережья с пляжами, бухтами и прогулочными тропами",
+          "Широкий выбор жилых зон: Punta Prima, Cabo Roig, Campoamor и другие",
+          "Высокий интерес со стороны владельцев второй недвижимости и аренды",
+        ],
+        title: "Курортная энергия, широкий выбор объектов и побережье с разными микролокациями.",
+      },
+      de: {
+        areaLabel: "Orihuela Costa",
+        body:
+          "Orihuela Costa bietet einen langen Küstenabschnitt mit Stränden, Buchten, Promenaden und Wohnanlagen in mehreren Küstenlagen. Die Gegend passt gut zu Menschen, die breite Auswahl, Outdoor-Lebensstil und stabile internationale Nachfrage suchen.",
+        highlights: [
+          "16 km Küste mit Stränden, Buchten und Küstenwegen",
+          "Große Auswahl zwischen Punta Prima, Cabo Roig, Campoamor und weiteren Lagen",
+          "Beliebt für Zweitwohnsitze, Vermietung und Lifestyle-Käufe",
+        ],
+        title: "Resort-Atmosphäre, breite Auswahl und eine Küste mit klar unterscheidbaren Teilbereichen.",
+      },
+    },
+    matchLocation: (property) => property.location.toLowerCase().includes("orihuela costa"),
+    name: "Orihuela Costa",
+    slug: "orihuela-costa",
+  },
+  "guardamar-del-segura": {
+    imageUrl:
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Guardamar%20del%20Segura%20panorama%20from%20hotel%20Poseidon.jpg",
+    imageCreditLabel: "Wikimedia Commons",
+    imageSourceUrl: "https://commons.wikimedia.org/wiki/File:Guardamar_del_Segura_panorama_from_hotel_Poseidon.jpg",
+    localeContent: {
+      en: {
+        areaLabel: "Guardamar del Segura",
+        body:
+          "Guardamar combines long sandy beaches, pinewoods, dunes, and a quieter town atmosphere that feels softer than the denser resort areas to the south. It suits clients who want more space, a greener edge, and a coastal setting that still feels grounded year-round.",
+        highlights: [
+          "About 9 km of beaches with dunes and pinewoods",
+          "A calmer town feel with strong natural surroundings",
+          "Appeals to buyers and renters looking for space and a softer pace",
+        ],
+        title: "Greener edges, long beaches, and a quieter pace by the sea.",
+      },
+      es: {
+        areaLabel: "Guardamar del Segura",
+        body:
+          "Guardamar combina largas playas de arena, pinares, dunas y una atmósfera más tranquila que las zonas residenciales más densas del sur. Encaja muy bien para quien busca más espacio, entorno natural y una vida costera con ritmo más suave durante todo el año.",
+        highlights: [
+          "Cerca de 9 km de playas con dunas y pinares",
+          "Un ambiente más sereno con fuerte presencia natural",
+          "Atractivo para compradores e inquilinos que valoran espacio y calma",
+        ],
+        title: "Más verde, playas largas y un ritmo costero más pausado.",
+      },
+      ru: {
+        areaLabel: "Гуардамар-дель-Сегура",
+        body:
+          "Гуардамар сочетает длинные песчаные пляжи, сосновые рощи, дюны и более спокойную городскую атмосферу, чем в плотных курортных зонах южнее. Это хороший выбор для тех, кто ищет больше пространства, зеленое окружение и мягкий прибрежный ритм круглый год.",
+        highlights: [
+          "Около 9 км пляжей с дюнами и сосновыми лесами",
+          "Более спокойный городской ритм и сильное природное окружение",
+          "Подходит тем, кто ценит простор, природу и размеренную жизнь",
+        ],
+        title: "Больше зелени, длинные пляжи и более тихий ритм у моря.",
+      },
+      de: {
+        areaLabel: "Guardamar del Segura",
+        body:
+          "Guardamar verbindet lange Sandstrände, Pinienwälder, Dünen und ein ruhigeres Ortsgefühl als die dichteren Resortlagen weiter südlich. Die Gegend passt gut zu Menschen, die mehr Raum, Natur und einen weicheren Küstenrhythmus für das ganze Jahr suchen.",
+        highlights: [
+          "Rund 9 km Strände mit Dünen und Pinienwäldern",
+          "Ruhigeres Ortsgefühl mit starkem Naturbezug",
+          "Gut für Käufer und Mieter, die Platz und Gelassenheit suchen",
+        ],
+        title: "Mehr Grün, lange Strände und ein ruhigeres Leben am Meer.",
+      },
+    },
+    matchLocation: (property) => property.location.toLowerCase().includes("guardamar del segura"),
+    name: "Guardamar del Segura",
+    slug: "guardamar-del-segura",
+  },
+};
+
+export function getRegionBySlug(slug: string) {
+  return regions[slug as RegionSlug] ?? null;
+}

@@ -27,6 +27,7 @@ export type AdminCopy = {
       phone: string;
       preferredTime: string;
       property: string;
+      reply: string;
       title: string;
     };
     listingsEyebrow: string;
@@ -193,6 +194,7 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
         phone: "Phone",
         preferredTime: "Preferred viewing time",
         property: "Property",
+        reply: "Reply",
         title: "Recent inquiries",
       },
       listingsEyebrow: "Listings",
@@ -352,6 +354,7 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
         phone: "Teléfono",
         preferredTime: "Horario preferido",
         property: "Propiedad",
+        reply: "Responder",
         title: "Consultas recientes",
       },
       listingsEyebrow: "Propiedades",
@@ -509,6 +512,7 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
         phone: "Телефон",
         preferredTime: "Предпочтительное время",
         property: "Объект",
+        reply: "Ответить",
         title: "Последние запросы",
       },
       listingsEyebrow: "Объекты",
