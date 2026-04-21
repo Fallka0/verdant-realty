@@ -5,6 +5,7 @@ import { useDeferredValue, useState } from "react";
 import { PropertyCard } from "@/components/property-card";
 import { propertyTypes, type PropertyRecord, type PropertyType } from "@/lib/property-shared";
 import {
+  areaNames,
   getLocalizedResultsLabel,
   getLocalizedPropertyTypeLabel,
   type PublicCopy,
@@ -19,25 +20,30 @@ type PropertyFiltersProps = {
 
 export function PropertyFilters({ copy, locale, properties }: PropertyFiltersProps) {
   const [search, setSearch] = useState("");
+  const [selectedRegion, setSelectedRegion] = useState<"all" | (typeof areaNames)[number]>("all");
   const [selectedType, setSelectedType] = useState<"all" | PropertyType>("all");
   const [minimumBedrooms, setMinimumBedrooms] = useState("0");
   const [sort, setSort] = useState<"latest" | "price-asc" | "price-desc">("latest");
 
   const deferredSearch = useDeferredValue(search);
   const normalizedSearch = deferredSearch.trim().toLowerCase();
+  const availableRegions = areaNames.filter((region) =>
+    properties.some((property) => property.location.toLowerCase().includes(region.toLowerCase())),
+  );
 
   const filteredProperties = properties
     .filter((property) => {
       const matchesSearch =
         normalizedSearch.length === 0 ||
         property.title.toLowerCase().includes(normalizedSearch) ||
-        property.location.toLowerCase().includes(normalizedSearch) ||
         property.referenceCode.toLowerCase().includes(normalizedSearch);
 
+      const matchesRegion =
+        selectedRegion === "all" || property.location.toLowerCase().includes(selectedRegion.toLowerCase());
       const matchesType = selectedType === "all" || property.type === selectedType;
       const matchesBedrooms = property.bedrooms >= Number(minimumBedrooms);
 
-      return matchesSearch && matchesType && matchesBedrooms;
+      return matchesSearch && matchesRegion && matchesType && matchesBedrooms;
     })
     .sort((left, right) => {
       if (sort === "price-asc") {
@@ -68,6 +74,18 @@ export function PropertyFilters({ copy, locale, properties }: PropertyFiltersPro
               onChange={(event) => setSearch(event.target.value)}
               placeholder={copy.filters.searchPlaceholder}
             />
+          </label>
+
+          <label>
+            {copy.filters.region}
+            <select value={selectedRegion} onChange={(event) => setSelectedRegion(event.target.value as "all" | (typeof areaNames)[number])}>
+              <option value="all">{copy.filters.types.all}</option>
+              {availableRegions.map((region) => (
+                <option key={region} value={region}>
+                  {region}
+                </option>
+              ))}
+            </select>
           </label>
 
           <label>
