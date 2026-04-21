@@ -1311,6 +1311,10 @@ textarea {
   line-height: 1.4;
 }
 
+.rent-price-tag-placeholder {
+  visibility: hidden;
+}
+
 .property-card-footer .button {
   min-width: 0;
   max-width: 100%;

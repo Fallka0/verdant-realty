@@ -65,7 +65,12 @@ export function PropertyCard({
             ) : null}
             {(property.listingMode === "rent" || property.listingMode === "both") && property.rentPriceEuro ? (
               <span className="rent-price-tag">
-                {formatOptionalPrice(property.rentPriceEuro)} {property.rentPricePeriod ? getLocalizedRentPricePeriodLabel(locale, property.rentPricePeriod) : ""}
+                {formatOptionalPrice(property.rentPriceEuro)}{" "}
+                {property.rentPricePeriod ? getLocalizedRentPricePeriodLabel(locale, property.rentPricePeriod) : ""}
+              </span>
+            ) : property.listingMode === "sale" ? (
+              <span aria-hidden="true" className="rent-price-tag rent-price-tag-placeholder">
+                &nbsp;
               </span>
             ) : null}
           </div>
