@@ -13,6 +13,7 @@ type InquiryPayload = {
   phone?: string;
   propertyId?: string;
   propertyTitle?: string;
+  timeline?: string;
 };
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -26,6 +27,7 @@ function normalizeInput(payload: InquiryPayload) {
     message: payload.message?.trim() ?? "",
     propertyId: payload.propertyId?.trim() ?? "",
     propertyTitle: payload.propertyTitle?.trim() ?? "",
+    timeline: payload.timeline?.trim() ?? "",
   };
 }
 
@@ -88,6 +90,7 @@ export async function POST(request: Request) {
     name: inquiry.name,
     email: inquiry.email,
     phone: inquiry.phone || null,
+    timeline: inquiry.timeline || null,
     message: inquiry.message,
     property_id: inquiry.propertyId || null,
     property_title: inquiry.propertyTitle || null,
@@ -107,13 +110,11 @@ export async function POST(request: Request) {
     locale: inquiry.locale,
     message: inquiry.message,
     propertyTitle: inquiry.propertyTitle,
+    timeline: inquiry.timeline,
   });
 
-  if (!emailResult.ok) {
-    return NextResponse.json(
-      { error: copy.inquiry.error },
-      { status: emailResult.reason === "missing-config" ? 503 : 500 },
-    );
+  if (!emailResult.ok && emailResult.reason !== "missing-config") {
+    console.error("Inquiry saved, but email delivery failed.", emailResult.reason);
   }
 
   return NextResponse.json({

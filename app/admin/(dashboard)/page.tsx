@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { adminCopy, resolveAdminLocale } from "@/lib/admin-copy";
+import { getAdminInquiries } from "@/lib/inquiries";
 import { formatPrice } from "@/lib/property-shared";
 import { getAdminProperties } from "@/lib/properties";
 
@@ -10,7 +11,7 @@ export default async function AdminDashboardPage() {
   const cookieStore = await cookies();
   const locale = resolveAdminLocale(cookieStore.get("verdant-locale")?.value);
   const copy = adminCopy[locale];
-  const properties = await getAdminProperties();
+  const [properties, inquiries] = await Promise.all([getAdminProperties(), getAdminInquiries()]);
   const liveProperties = properties.filter(
     (property) => property.status === "available" || property.status === "reserved",
   );
@@ -117,6 +118,41 @@ export default async function AdminDashboardPage() {
             <Link className="button button-primary" href="/admin/properties/new">
               {copy.dashboard.actions.createFirst}
             </Link>
+          </div>
+        )}
+      </div>
+
+      <div className="admin-card">
+        <div className="admin-card-header">
+          <div>
+            <p className="eyebrow">{copy.dashboard.inquiries.eyebrow}</p>
+            <h2>{copy.dashboard.inquiries.title}</h2>
+          </div>
+        </div>
+
+        {inquiries.length > 0 ? (
+          <div className="admin-inquiry-list">
+            {inquiries.map((inquiry) => (
+              <article className="admin-inquiry-card" key={inquiry.id}>
+                <div className="admin-inquiry-topline">
+                  <strong>{inquiry.name}</strong>
+                  <span>{new Date(inquiry.createdAt).toLocaleString(locale)}</span>
+                </div>
+                <div className="admin-inquiry-meta">
+                  <span><strong>{copy.dashboard.inquiries.property}:</strong> {inquiry.propertyTitle ?? "General inquiry"}</span>
+                  <span><strong>{copy.dashboard.inquiries.email}:</strong> {inquiry.email}</span>
+                  {inquiry.phone ? <span><strong>{copy.dashboard.inquiries.phone}:</strong> {inquiry.phone}</span> : null}
+                  {inquiry.timeline ? <span><strong>{copy.dashboard.inquiries.preferredTime}:</strong> {inquiry.timeline}</span> : null}
+                </div>
+                <p className="admin-inquiry-message">
+                  <strong>{copy.dashboard.inquiries.message}:</strong> {inquiry.message}
+                </p>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="admin-empty-state">
+            <p>{copy.dashboard.inquiries.empty}</p>
           </div>
         )}
       </div>
