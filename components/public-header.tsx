@@ -9,7 +9,6 @@ import { type PublicLocale } from "@/lib/public-copy";
 
 type PublicHeaderProps = {
   adminLabel?: string;
-  brandSubtitle: string;
   compact?: boolean;
   currentLocale: PublicLocale;
   languageLabel: string;
@@ -21,7 +20,6 @@ type PublicHeaderProps = {
 
 export function PublicHeader({
   adminLabel,
-  brandSubtitle,
   compact = false,
   currentLocale,
   languageLabel,
@@ -34,7 +32,7 @@ export function PublicHeader({
   return (
     <header className={`public-header ${compact ? "compact-header" : ""}`}>
       <Link className="brand-link" href="/">
-        <BrandLogo priority={compact} showSubtitle subtitle={brandSubtitle} />
+        <BrandLogo priority={compact} />
       </Link>
 
       <button

@@ -22,7 +22,6 @@ export default async function PropertiesPage() {
     <main className="site-shell section-stack" data-locale={locale} lang={locale}>
       <PublicHeader
         adminLabel={authState.status === "authorized" ? adminCopy[adminLocale].layout.adminLabel : undefined}
-        brandSubtitle={copy.brandSubtitle}
         compact
         currentLocale={locale}
         languageLabel={copy.languageLabel}

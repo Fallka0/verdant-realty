@@ -2,11 +2,9 @@ import Image from "next/image";
 
 type BrandLogoProps = {
   priority?: boolean;
-  showSubtitle?: boolean;
-  subtitle?: string;
 };
 
-export function BrandLogo({ priority = false, showSubtitle = false, subtitle }: BrandLogoProps) {
+export function BrandLogo({ priority = false }: BrandLogoProps) {
   return (
     <span className="brand-logo-lockup">
       <Image
@@ -17,7 +15,6 @@ export function BrandLogo({ priority = false, showSubtitle = false, subtitle }: 
         height={2000}
         priority={priority}
       />
-      {showSubtitle && subtitle ? <small>{subtitle}</small> : null}
     </span>
   );
 }

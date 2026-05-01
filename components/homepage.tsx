@@ -40,7 +40,6 @@ export function Homepage({ adminLabel, copy, currentLocale, featuredProperties, 
     <main className="site-shell section-stack" data-locale={currentLocale} lang={currentLocale}>
       <PublicHeader
         adminLabel={adminLabel}
-        brandSubtitle={copy.brandSubtitle}
         compact
         currentLocale={currentLocale}
         languageLabel={copy.languageLabel}
