@@ -24,6 +24,10 @@ import { getPropertyBySlug, localizeProperty } from "@/lib/properties";
 
 export const dynamic = "force-dynamic";
 
+function normalizeComparableText(value: string) {
+  return value.replace(/\s+/g, " ").trim();
+}
+
 function formatListingDate(value: string, locale: string) {
   const date = new Date(value);
 
@@ -57,6 +61,10 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
   }
 
   const localizedProperty = localizeProperty(property, locale);
+  const heroSummary = localizedProperty.shortDescription || localizedProperty.description;
+  const shouldShowFullDescription =
+    Boolean(localizedProperty.description) &&
+    normalizeComparableText(localizedProperty.description) !== normalizeComparableText(heroSummary);
 
   const gallery = [localizedProperty.mainImageUrl, ...localizedProperty.galleryUrls];
 
@@ -78,7 +86,7 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
           <div className="section-heading">
             <p className="eyebrow">{localizedProperty.location}</p>
             <h1>{localizedProperty.title}</h1>
-            <p>{localizedProperty.description}</p>
+            <p>{heroSummary}</p>
             <div className="detail-hero-meta">
               <span className={`pill status-${localizedProperty.status}`}>
                 {getLocalizedPropertyStatusLabel(locale, localizedProperty.status)}
@@ -162,8 +170,8 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
           <article className="detail-copy-card">
             <p className="eyebrow">{copy.detail.listingOverview}</p>
             <h2>{copy.detail.whyPause}</h2>
-            <p>{localizedProperty.shortDescription}</p>
-            <p>{localizedProperty.description}</p>
+            <p>{heroSummary}</p>
+            {shouldShowFullDescription ? <p>{localizedProperty.description}</p> : null}
             {localizedProperty.features.length > 0 ? (
               <>
                 <p className="eyebrow">{copy.detail.features}</p>

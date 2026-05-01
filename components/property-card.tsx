@@ -11,6 +11,7 @@ import {
 import {
   formatPrice,
   formatOptionalPrice,
+  getPropertyPreviewImageUrl,
   type PropertyRecord,
 } from "@/lib/property-shared";
 
@@ -32,6 +33,7 @@ export function PropertyCard({
   const hasSalePrice = property.listingMode === "sale" || property.listingMode === "both";
   const hasRentPrice =
     (property.listingMode === "rent" || property.listingMode === "both") && Boolean(property.rentPriceEuro);
+  const previewImageUrl = getPropertyPreviewImageUrl(property) ?? "/logos/verdant-seal.svg";
 
   return (
     <Link className="property-card-link" href={`/properties/${property.slug}`}>
@@ -39,7 +41,7 @@ export function PropertyCard({
         <div className="property-image-wrap">
           <Image
             className="property-image"
-            src={property.mainImageUrl}
+            src={previewImageUrl}
             alt={property.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

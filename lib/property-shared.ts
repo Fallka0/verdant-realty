@@ -73,6 +73,30 @@ export type PropertyRecord = {
   updatedAt: string;
 };
 
+const videoAssetExtensions = new Set(["m4v", "mov", "mp4", "ogg", "webm"]);
+
+export function isVideoAssetUrl(url: string) {
+  try {
+    const pathname = new URL(url).pathname;
+    const extension = pathname.split(".").pop()?.toLowerCase();
+
+    return Boolean(extension && videoAssetExtensions.has(extension));
+  } catch {
+    const sanitizedUrl = url.split("?")[0] ?? "";
+    const extension = sanitizedUrl.split(".").pop()?.toLowerCase();
+
+    return Boolean(extension && videoAssetExtensions.has(extension));
+  }
+}
+
+export function getPropertyPreviewImageUrl(property: Pick<PropertyRecord, "galleryUrls" | "mainImageUrl">) {
+  if (property.mainImageUrl && !isVideoAssetUrl(property.mainImageUrl)) {
+    return property.mainImageUrl;
+  }
+
+  return property.galleryUrls.find((url) => !isVideoAssetUrl(url)) ?? null;
+}
+
 export function formatPrice(value: number) {
   return new Intl.NumberFormat("de-DE", {
     style: "currency",

@@ -6,6 +6,7 @@ import { adminCopy, resolveAdminLocale } from "@/lib/admin-copy";
 import { getAdminAuthState } from "@/lib/auth";
 import { publicCopy, resolvePublicLocale } from "@/lib/public-copy";
 import { getFeaturedProperties, getLatestPublicProperties, localizeProperties } from "@/lib/properties";
+import { getPropertyPreviewImageUrl } from "@/lib/property-shared";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = resolvePublicLocale(cookieStore.get("verdant-locale")?.value);
   const copy = publicCopy[locale];
   const [featuredProperty] = localizeProperties(await getFeaturedProperties(1), locale);
+  const featuredPreviewImage = featuredProperty ? getPropertyPreviewImageUrl(featuredProperty) ?? "/logos/verdant-seal.svg" : null;
 
   return {
     title: copy.seo.title,
@@ -37,11 +39,11 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "Verdant Realty",
       locale: getOpenGraphLocale(locale),
       type: "website",
-      images: featuredProperty
+      images: featuredPreviewImage && featuredProperty
         ? [
             {
               alt: featuredProperty.title,
-              url: featuredProperty.mainImageUrl,
+              url: featuredPreviewImage,
             },
           ]
         : undefined,
@@ -50,7 +52,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: copy.seo.ogTitle,
       description: copy.seo.ogDescription,
-      images: featuredProperty ? [featuredProperty.mainImageUrl] : undefined,
+      images: featuredPreviewImage ? [featuredPreviewImage] : undefined,
     },
   };
 }

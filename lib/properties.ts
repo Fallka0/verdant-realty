@@ -20,6 +20,8 @@ import {
 } from "@/lib/property-shared";
 import { createAdminClient } from "@/lib/supabase/server";
 
+const propertyTranslationVersion = "v2-per-field-language-detection";
+
 type PropertyRow = {
   availability_end: string | null;
   availability_start: string | null;
@@ -550,7 +552,7 @@ export function buildPropertyContentFromInput(input: ReturnType<typeof parseProp
 
 export function createPropertyContentHash(content: PropertyContentFields) {
   return createHash("sha256")
-    .update(JSON.stringify(content))
+    .update(JSON.stringify({ content, propertyTranslationVersion }))
     .digest("hex");
 }
 

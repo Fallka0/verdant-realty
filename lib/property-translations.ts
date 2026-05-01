@@ -1,6 +1,7 @@
 import { type PropertyContentFields, type PropertyContentTranslations } from "@/lib/property-shared";
 
 const targetLocales = ["en", "es", "ru", "de"] as const;
+const contentFieldKeys = ["title", "shortDescription", "description"] as const;
 
 const deeplTargetLanguageMap: Record<(typeof targetLocales)[number], string> = {
   en: "EN",
@@ -34,16 +35,18 @@ function buildFallbackTranslations(content: PropertyContentFields): PropertyCont
   return Object.fromEntries(targetLocales.map((locale) => [locale, content])) as PropertyContentTranslations;
 }
 
-async function translateWithDeepL(
+type TranslatedTextResult = {
+  detectedSourceLocale: (typeof targetLocales)[number] | null;
+  text: string;
+};
+
+async function translateTextWithDeepL(
   apiUrl: string,
   apiKey: string,
-  content: PropertyContentFields,
+  text: string,
   targetLocale: (typeof targetLocales)[number],
   sourceLocale?: (typeof targetLocales)[number],
-): Promise<{
-  detectedSourceLocale: (typeof targetLocales)[number] | null;
-  content: PropertyContentFields;
-} | null> {
+) : Promise<TranslatedTextResult | null> {
   const response = await fetch(`${apiUrl}/v2/translate`, {
     method: "POST",
     headers: {
@@ -51,10 +54,10 @@ async function translateWithDeepL(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      text: [content.title, content.shortDescription, content.description],
+      text: [text],
       ...(sourceLocale ? { source_lang: deeplSourceRequestLanguageMap[sourceLocale] } : {}),
       target_lang: deeplTargetLanguageMap[targetLocale],
-      context: `${content.title}\n\n${content.shortDescription}\n\n${content.description}`,
+      context: text,
     }),
   });
 
@@ -71,26 +74,17 @@ async function translateWithDeepL(
       }
     | null;
 
-  const translations = data?.translations;
+  const translation = data?.translations?.[0];
+  const translatedText = translation?.text?.trim() ?? "";
+  const detectedSourceLanguage = translation?.detected_source_language ?? null;
 
-  if (!translations || translations.length < 3) {
-    return null;
-  }
-
-  const [title, shortDescription, description] = translations.map((entry) => entry.text?.trim() ?? "");
-  const detectedSourceLanguage = translations[0]?.detected_source_language ?? null;
-
-  if (!title || !shortDescription || !description) {
+  if (!translatedText) {
     return null;
   }
 
   return {
     detectedSourceLocale: detectedSourceLanguage ? deeplSourceLanguageMap[detectedSourceLanguage] ?? null : null,
-    content: {
-      title,
-      shortDescription,
-      description,
-    },
+    text: translatedText,
   };
 }
 
@@ -104,22 +98,74 @@ export async function generatePropertyTranslations(
   }
 
   try {
-    const englishResult = await translateWithDeepL(apiUrl, apiKey, content, "en");
-    const sourceLocale = englishResult?.detectedSourceLocale ?? null;
+    const englishFieldResults = await Promise.all(
+      contentFieldKeys.map(async (fieldKey) => {
+        const originalText = content[fieldKey].trim();
+
+        if (!originalText) {
+          return [
+            fieldKey,
+            {
+              detectedSourceLocale: null,
+              englishText: "",
+              originalText,
+            },
+          ] as const;
+        }
+
+        const englishResult = await translateTextWithDeepL(apiUrl, apiKey, originalText, "en");
+
+        return [
+          fieldKey,
+          {
+            detectedSourceLocale: englishResult?.detectedSourceLocale ?? null,
+            englishText: englishResult?.text ?? originalText,
+            originalText,
+          },
+        ] as const;
+      }),
+    );
+
+    const fieldResultMap = Object.fromEntries(englishFieldResults) as Record<
+      (typeof contentFieldKeys)[number],
+      {
+        detectedSourceLocale: (typeof targetLocales)[number] | null;
+        englishText: string;
+        originalText: string;
+      }
+    >;
 
     const translations = await Promise.all(
       targetLocales.map(async (locale) => {
-        if (locale === sourceLocale) {
-          return [locale, content] as const;
-        }
+        const translatedEntries = await Promise.all(
+          contentFieldKeys.map(async (fieldKey) => {
+            const fieldResult = fieldResultMap[fieldKey];
 
-        if (locale === "en" && englishResult && sourceLocale === "en") {
-          return [locale, englishResult.content] as const;
-        }
+            if (!fieldResult.originalText) {
+              return [fieldKey, ""] as const;
+            }
 
-        const translated = await translateWithDeepL(apiUrl, apiKey, content, locale, sourceLocale ?? undefined);
+            if (fieldResult.detectedSourceLocale === locale) {
+              return [fieldKey, fieldResult.originalText] as const;
+            }
 
-        return [locale, translated?.content ?? content] as const;
+            if (locale === "en") {
+              return [fieldKey, fieldResult.englishText] as const;
+            }
+
+            const translated = await translateTextWithDeepL(
+              apiUrl,
+              apiKey,
+              fieldResult.originalText,
+              locale,
+              fieldResult.detectedSourceLocale ?? undefined,
+            );
+
+            return [fieldKey, translated?.text ?? fieldResult.originalText] as const;
+          }),
+        );
+
+        return [locale, Object.fromEntries(translatedEntries)] as const;
       }),
     );
 

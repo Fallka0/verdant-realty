@@ -8,7 +8,7 @@ import { PropertyCard } from "@/components/property-card";
 import { ReactBitsMasonry } from "@/components/react-bits-masonry";
 import { SiteFooter } from "@/components/site-footer";
 import { regions, regionSlugs } from "@/lib/regions";
-import { formatOptionalPrice, formatPrice, type PropertyRecord } from "@/lib/property-shared";
+import { formatOptionalPrice, formatPrice, getPropertyPreviewImageUrl, type PropertyRecord } from "@/lib/property-shared";
 import {
   getLocalizedListingModeLabel,
   getLocalizedRentPricePeriodLabel,
@@ -27,9 +27,10 @@ type HomepageProps = {
 const masonryHeights = [300, 420, 340, 390, 460, 320];
 
 export function Homepage({ adminLabel, copy, currentLocale, featuredProperties, latestProperties }: HomepageProps) {
+  const fallbackPreviewImage = "/logos/verdant-seal.svg";
   const masonryItems = latestProperties.map((property, index) => ({
     id: property.id,
-    img: property.mainImageUrl,
+    img: getPropertyPreviewImageUrl(property) ?? fallbackPreviewImage,
     title: property.title,
     url: `/properties/${property.slug}`,
     height: masonryHeights[index % masonryHeights.length],
@@ -71,7 +72,7 @@ export function Homepage({ adminLabel, copy, currentLocale, featuredProperties, 
                 <Link className="hero-side-image-link" href={`/properties/${featuredProperties[0].slug}`}>
                   <Image
                     className="hero-side-image"
-                    src={featuredProperties[0].mainImageUrl}
+                    src={getPropertyPreviewImageUrl(featuredProperties[0]) ?? fallbackPreviewImage}
                     alt={featuredProperties[0].title}
                     fill
                     sizes="(max-width: 768px) 100vw, 360px"

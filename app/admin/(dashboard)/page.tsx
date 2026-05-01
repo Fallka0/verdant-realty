@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { adminCopy, resolveAdminLocale } from "@/lib/admin-copy";
 import { getAdminInquiries } from "@/lib/inquiries";
-import { formatPrice } from "@/lib/property-shared";
+import { formatPrice, getPropertyPreviewImageUrl } from "@/lib/property-shared";
 import { getAdminProperties } from "@/lib/properties";
 
 export default async function AdminDashboardPage() {
@@ -81,7 +81,7 @@ export default async function AdminDashboardPage() {
                     <td>
                       <div className="admin-listing-cell">
                         <div className="admin-listing-thumb">
-                          <Image src={property.mainImageUrl} alt="" fill sizes="72px" />
+                          <Image src={getPropertyPreviewImageUrl(property) ?? "/logos/verdant-seal.svg"} alt="" fill sizes="72px" />
                         </div>
                         <div className="admin-listing-title">
                           <strong>{property.title}</strong>

@@ -248,7 +248,7 @@ export function PropertyForm({
 
         <div className="full-span">
           <ImageUploadField
-            accept="image/*"
+            accept="image/*,video/mp4,video/webm,video/ogg,video/quicktime,video/x-m4v"
             defaultValue={property?.mainImageUrl ?? ""}
             label={copy.fields.mainImage}
             mode="single"
