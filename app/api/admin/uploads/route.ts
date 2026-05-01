@@ -52,13 +52,15 @@ async function ensureBucket(
   bucketName: string,
   allowedMimeTypes: string[],
 ) {
-  const { data: bucket, error: bucketLookupError } = await supabase.storage.getBucket(bucketName);
+  const { data: buckets, error: bucketListError } = await supabase.storage.listBuckets();
 
-  if (bucketLookupError) {
-    throw new Error(bucketLookupError.message);
+  if (bucketListError) {
+    throw new Error(bucketListError.message);
   }
 
-  if (bucket) {
+  const bucketExists = (buckets ?? []).some((bucket) => bucket.id === bucketName || bucket.name === bucketName);
+
+  if (bucketExists) {
     return;
   }
 
