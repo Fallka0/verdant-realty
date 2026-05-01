@@ -12,6 +12,27 @@ type ImageCarouselProps = {
   title: string;
 };
 
+type CarouselMediaItem = {
+  type: "image" | "video";
+  url: string;
+};
+
+const videoExtensions = new Set(["m4v", "mov", "mp4", "ogg", "webm"]);
+
+function getMediaType(url: string): CarouselMediaItem["type"] {
+  try {
+    const pathname = new URL(url).pathname;
+    const extension = pathname.split(".").pop()?.toLowerCase();
+
+    return extension && videoExtensions.has(extension) ? "video" : "image";
+  } catch {
+    const sanitizedUrl = url.split("?")[0] ?? "";
+    const extension = sanitizedUrl.split(".").pop()?.toLowerCase();
+
+    return extension && videoExtensions.has(extension) ? "video" : "image";
+  }
+}
+
 export function ImageCarousel({ copy, images, title }: ImageCarouselProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
@@ -22,8 +43,15 @@ export function ImageCarousel({ copy, images, title }: ImageCarouselProps) {
     align: "start",
   });
 
-  const hasMultipleImages = images.length > 1;
-  const activeImage = images[selectedIndex];
+  const mediaItems: CarouselMediaItem[] = images.map((url) => ({
+    type: getMediaType(url),
+    url,
+  }));
+  const hasMultipleImages = mediaItems.length > 1;
+  const activeMedia = mediaItems[selectedIndex] ?? mediaItems[0];
+  const visibleThumbnailIndexes = hasMultipleImages
+    ? Array.from({ length: Math.min(4, mediaItems.length - 1) }, (_, offset) => (selectedIndex + offset + 1) % mediaItems.length)
+    : [];
 
   useEffect(() => {
     if (!emblaApi) {
@@ -31,9 +59,15 @@ export function ImageCarousel({ copy, images, title }: ImageCarouselProps) {
     }
 
     const onSelect = () => {
-      setSelectedIndex(emblaApi.selectedScrollSnap());
+      const nextIndex = emblaApi.selectedScrollSnap();
+
+      setSelectedIndex(nextIndex);
       setCanScrollPrev(emblaApi.canScrollPrev());
       setCanScrollNext(emblaApi.canScrollNext());
+
+      if (isZoomed && mediaItems[nextIndex]?.type === "video") {
+        setIsZoomed(false);
+      }
     };
 
     onSelect();
@@ -44,7 +78,7 @@ export function ImageCarousel({ copy, images, title }: ImageCarouselProps) {
       emblaApi.off("select", onSelect);
       emblaApi.off("reInit", onSelect);
     };
-  }, [emblaApi]);
+  }, [emblaApi, isZoomed, mediaItems]);
 
   useEffect(() => {
     if (!isZoomed) {
@@ -83,23 +117,36 @@ export function ImageCarousel({ copy, images, title }: ImageCarouselProps) {
           <div className="embla-frame">
             <div className="embla__viewport" ref={emblaRef}>
               <div className="embla__container">
-                {images.map((image, index) => (
-                  <div className="embla__slide" key={`${image}-${index}`}>
-                    <button
-                      className="carousel-image-button"
-                      type="button"
-                      onClick={() => setIsZoomed(true)}
-                      aria-label={`${copy.carousel.enlargeImage} ${index + 1}`}
-                    >
-                      <Image
-                        className="carousel-image"
-                        src={image}
-                        alt={`${title} image ${index + 1}`}
-                        fill
-                        sizes="(max-width: 1024px) 100vw, 70vw"
-                        priority={index === 0}
-                      />
-                    </button>
+                {mediaItems.map((mediaItem, index) => (
+                  <div className="embla__slide" key={`${mediaItem.url}-${index}`}>
+                    {mediaItem.type === "image" ? (
+                      <button
+                        className="carousel-image-button"
+                        type="button"
+                        onClick={() => setIsZoomed(true)}
+                        aria-label={`${copy.carousel.enlargeImage} ${index + 1}`}
+                      >
+                        <Image
+                          className="carousel-image"
+                          src={mediaItem.url}
+                          alt={`${title} image ${index + 1}`}
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 70vw"
+                          priority={index === 0}
+                        />
+                      </button>
+                    ) : (
+                      <div className="carousel-video-shell">
+                        <video
+                          aria-label={`${title} video ${index + 1}`}
+                          className="carousel-video"
+                          controls
+                          playsInline
+                          preload="metadata"
+                          src={mediaItem.url}
+                        />
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -141,23 +188,42 @@ export function ImageCarousel({ copy, images, title }: ImageCarouselProps) {
 
         {hasMultipleImages ? (
           <div className="carousel-thumbnails" aria-label={copy.carousel.thumbnailsLabel}>
-            {images.map((image, index) => (
-              <button
-                key={`${image}-thumb-${index}`}
-                className={`carousel-thumb ${index === selectedIndex ? "active" : ""}`}
-                type="button"
-                onClick={() => scrollTo(index)}
-                aria-label={`${copy.carousel.showImage} ${index + 1}`}
-                aria-pressed={index === selectedIndex}
-              >
-                <Image className="carousel-thumb-image" src={image} alt="" fill sizes="120px" />
-              </button>
-            ))}
+            {visibleThumbnailIndexes.map((index) => {
+              const mediaItem = mediaItems[index];
+
+              return (
+                <button
+                  key={`${mediaItem.url}-thumb-${index}`}
+                  className="carousel-thumb"
+                  type="button"
+                  onClick={() => scrollTo(index)}
+                  aria-label={`${copy.carousel.showImage} ${index + 1}`}
+                >
+                  {mediaItem.type === "image" ? (
+                    <Image className="carousel-thumb-image" src={mediaItem.url} alt="" fill sizes="120px" />
+                  ) : (
+                    <>
+                      <video
+                        aria-hidden="true"
+                        className="carousel-thumb-video"
+                        muted
+                        playsInline
+                        preload="metadata"
+                        src={mediaItem.url}
+                      />
+                      <span className="carousel-thumb-video-indicator" aria-hidden="true">
+                        ▶
+                      </span>
+                    </>
+                  )}
+                </button>
+              );
+            })}
           </div>
         ) : null}
       </section>
 
-      {isZoomed ? (
+      {isZoomed && activeMedia?.type === "image" ? (
         <div
           className="zoom-overlay"
           role="dialog"
@@ -178,7 +244,7 @@ export function ImageCarousel({ copy, images, title }: ImageCarouselProps) {
             <div className="zoom-image-frame">
               <Image
                 className="zoom-image"
-                src={activeImage}
+                src={activeMedia.url}
                 alt={`${title} image ${selectedIndex + 1}`}
                 fill
                 sizes="100vw"

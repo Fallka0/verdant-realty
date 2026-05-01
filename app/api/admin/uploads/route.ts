@@ -4,7 +4,23 @@ import { getAdminAuthState } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/server";
 
 const bucketName = "property-images";
-const maxFileSizeBytes = 8 * 1024 * 1024;
+const maxFileSizeBytes = 50 * 1024 * 1024;
+const allowedMimeTypes = [
+  "image/avif",
+  "image/gif",
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "video/mp4",
+  "video/ogg",
+  "video/quicktime",
+  "video/webm",
+  "video/x-m4v",
+];
+
+function isSupportedUploadType(file: File) {
+  return allowedMimeTypes.includes(file.type);
+}
 
 function getExtension(file: File) {
   const fromName = file.name.split(".").pop()?.toLowerCase();
@@ -28,11 +44,11 @@ export async function POST(request: Request) {
   const authState = await getAdminAuthState();
 
   if (authState.status === "unauthenticated") {
-    return NextResponse.json({ error: "You must be signed in to upload images." }, { status: 401 });
+    return NextResponse.json({ error: "You must be signed in to upload media." }, { status: 401 });
   }
 
   if (authState.status === "unauthorized") {
-    return NextResponse.json({ error: "This account is not allowed to upload images." }, { status: 403 });
+    return NextResponse.json({ error: "This account is not allowed to upload media." }, { status: 403 });
   }
 
   if (authState.status === "missing-config") {
@@ -50,35 +66,32 @@ export async function POST(request: Request) {
   const title = String(formData.get("title") ?? "property").trim();
 
   if (!(file instanceof File)) {
-    return NextResponse.json({ error: "No image file was provided." }, { status: 400 });
+    return NextResponse.json({ error: "No media file was provided." }, { status: 400 });
   }
 
-  if (!file.type.startsWith("image/")) {
-    return NextResponse.json({ error: "Only image uploads are supported." }, { status: 400 });
+  if (!isSupportedUploadType(file)) {
+    return NextResponse.json({ error: "Only image and video uploads are supported." }, { status: 400 });
   }
 
   if (file.size > maxFileSizeBytes) {
-    return NextResponse.json({ error: "Images must be smaller than 8 MB." }, { status: 400 });
+    return NextResponse.json({ error: "Media files must be smaller than 50 MB." }, { status: 400 });
   }
 
   const { data: bucket } = await supabase.storage.getBucket(bucketName);
+  const bucketConfig = {
+    public: true,
+    fileSizeLimit: maxFileSizeBytes,
+    allowedMimeTypes,
+  };
 
   if (!bucket) {
-    const { error: bucketError } = await supabase.storage.createBucket(bucketName, {
-      public: true,
-      fileSizeLimit: maxFileSizeBytes,
-      allowedMimeTypes: ["image/jpeg", "image/png", "image/webp", "image/gif"],
-    });
+    const { error: bucketError } = await supabase.storage.createBucket(bucketName, bucketConfig);
 
     if (bucketError) {
       return NextResponse.json({ error: bucketError.message }, { status: 500 });
     }
-  } else if (!bucket.public) {
-    const { error: bucketError } = await supabase.storage.updateBucket(bucketName, {
-      public: true,
-      fileSizeLimit: maxFileSizeBytes,
-      allowedMimeTypes: ["image/jpeg", "image/png", "image/webp", "image/gif"],
-    });
+  } else {
+    const { error: bucketError } = await supabase.storage.updateBucket(bucketName, bucketConfig);
 
     if (bucketError) {
       return NextResponse.json({ error: bucketError.message }, { status: 500 });

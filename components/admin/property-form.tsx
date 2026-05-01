@@ -248,6 +248,7 @@ export function PropertyForm({
 
         <div className="full-span">
           <ImageUploadField
+            accept="image/*"
             defaultValue={property?.mainImageUrl ?? ""}
             label={copy.fields.mainImage}
             mode="single"
@@ -331,6 +332,7 @@ export function PropertyForm({
 
         <div className="full-span">
           <ImageUploadField
+            accept="image/*,video/mp4,video/webm,video/ogg,video/quicktime,video/x-m4v"
             defaultValue={property?.galleryUrls.join("\n") ?? ""}
             label={copy.fields.galleryImages}
             mode="gallery"

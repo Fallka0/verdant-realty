@@ -3,6 +3,7 @@
 import { ChangeEvent, useRef, useState } from "react";
 
 type ImageUploadFieldProps = {
+  accept?: string;
   defaultValue?: string;
   label: string;
   mode: "gallery" | "single";
@@ -31,6 +32,7 @@ const initialState: UploadState = {
 };
 
 export function ImageUploadField({
+  accept = "image/*",
   defaultValue = "",
   label,
   mode,
@@ -135,7 +137,7 @@ export function ImageUploadField({
         <input
           ref={inputRef}
           type="file"
-          accept="image/*"
+          accept={accept}
           multiple={mode === "gallery"}
           onChange={handleUpload}
         />
