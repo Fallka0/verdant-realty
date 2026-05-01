@@ -31,7 +31,7 @@ export default async function AdminLoginPage({ searchParams }: AdminLoginPagePro
           <Link className="brand-link" href="/">
             <span className="brand-mark" />
             <span>
-              <strong>Verdant Realty</strong>
+              <strong>Milla Homes</strong>
               <small>{copy.layout.adminLabel}</small>
             </span>
           </Link>

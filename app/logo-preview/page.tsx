@@ -51,7 +51,7 @@ export default function LogoPreviewPage() {
               margin: "12px 0 16px",
             }}
           >
-            Verdant Realty logo sketches
+            Milla Homes logo sketches
           </h1>
           <p
             style={{

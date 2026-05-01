@@ -41,7 +41,7 @@ export default async function AdminDashboardLayout({
     <main className="admin-shell" lang={locale}>
       <header className="admin-topbar">
         <div>
-          <p className="eyebrow">Verdant Realty {copy.layout.adminLabel}</p>
+          <p className="eyebrow">Milla Homes {copy.layout.adminLabel}</p>
           <h1>{copy.layout.title}</h1>
         </div>
 

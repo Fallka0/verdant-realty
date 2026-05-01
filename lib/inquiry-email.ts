@@ -58,7 +58,7 @@ function escapeHtml(value: string) {
 
 function buildTextBody(input: InquiryEmailInput) {
   return [
-    "New Verdant Realty inquiry",
+    "New Milla Homes inquiry",
     "",
     `Name: ${input.name}`,
     `Email: ${input.email}`,
@@ -75,7 +75,7 @@ function buildTextBody(input: InquiryEmailInput) {
 function buildHtmlBody(input: InquiryEmailInput) {
   return `
     <div style="font-family: Arial, sans-serif; color: #163728; line-height: 1.6;">
-      <h2 style="margin: 0 0 16px;">New Verdant Realty inquiry</h2>
+      <h2 style="margin: 0 0 16px;">New Milla Homes inquiry</h2>
       <p style="margin: 0 0 8px;"><strong>Name:</strong> ${escapeHtml(input.name)}</p>
       <p style="margin: 0 0 8px;"><strong>Email:</strong> ${escapeHtml(input.email)}</p>
       <p style="margin: 0 0 8px;"><strong>Phone:</strong> ${escapeHtml(input.phone || "Not provided")}</p>
@@ -120,7 +120,7 @@ export async function sendInquiryEmail(input: InquiryEmailInput) {
       replyTo: input.email,
       subject: input.propertyTitle
         ? `New inquiry: ${input.propertyTitle}`
-        : "New inquiry from Verdant Realty website",
+        : "New inquiry from Milla Homes website",
       text: buildTextBody(input),
       html: buildHtmlBody(input),
     });

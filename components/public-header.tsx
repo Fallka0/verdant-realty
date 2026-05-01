@@ -35,7 +35,7 @@ export function PublicHeader({
       <Link className="brand-link" href="/">
         <span className="brand-mark" />
         <span>
-          <strong>Verdant Realty</strong>
+          <strong>Milla Homes</strong>
           <small>{brandSubtitle}</small>
         </span>
       </Link>

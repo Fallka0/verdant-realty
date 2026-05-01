@@ -11,7 +11,7 @@ export function SiteFooter({ copy }: SiteFooterProps) {
   return (
     <footer className="site-footer">
       <div className="site-footer-copy">
-        <strong>Verdant Realty</strong>
+        <strong>Milla Homes</strong>
         <p>{copy.footer.blurb}</p>
       </div>
 

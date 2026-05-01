@@ -36,7 +36,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: copy.seo.ogTitle,
       description: copy.seo.ogDescription,
       url: "/",
-      siteName: "Verdant Realty",
+      siteName: "Milla Homes",
       locale: getOpenGraphLocale(locale),
       type: "website",
       images: featuredPreviewImage && featuredProperty

@@ -135,7 +135,7 @@ export default async function AdminDashboardPage() {
             {inquiries.map((inquiry) => {
               const subject = inquiry.propertyTitle
                 ? `Re: ${inquiry.propertyTitle}`
-                : "Re: Verdant Realty inquiry";
+                : "Re: Milla Homes inquiry";
               const replyBody = [
                 `Hello ${inquiry.name},`,
                 "",
@@ -145,7 +145,7 @@ export default async function AdminDashboardPage() {
                 inquiry.timeline ? `Preferred viewing time: ${inquiry.timeline}` : "",
                 "",
                 "Kind regards,",
-                "Verdant Realty",
+                "Milla Homes",
               ]
                 .filter(Boolean)
                 .join("\n");

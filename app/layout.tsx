@@ -23,9 +23,9 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Verdant Realty",
+  title: "Milla Homes",
   description:
-    "Verdant Realty is a boutique real estate brand with calm strategy, polished presentation, and concierge-level client care.",
+    "Milla Homes is a boutique real estate brand with calm strategy, polished presentation, and concierge-level client care.",
 };
 
 export default function RootLayout({

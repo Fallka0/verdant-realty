@@ -248,7 +248,7 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       phoneLabel: "Phone",
       summary: "When a property stands out, direct contact helps answer the practical questions without delay.",
       title: "Speak with your agent when you want clarity, availability, or a quick next step.",
-      whatsappMessage: "Hello, I am interested in a property from Verdant Realty and would like more information.",
+      whatsappMessage: "Hello, I am interested in a property from Milla Homes and would like more information.",
     },
     coverage: {
       eyebrow: "A More Personal Search",
@@ -309,7 +309,7 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     hero: {
       eyebrow: "Homes for sale and rent in Torrevieja and nearby coastal areas",
       text:
-        "Verdant Realty offers a more personal way to search across the Costa Blanca: carefully selected homes, clearer guidance, and support that stays close from the first shortlist to the first viewing.",
+        "Milla Homes offers a more personal way to search across the Costa Blanca: carefully selected homes, clearer guidance, and support that stays close from the first shortlist to the first viewing.",
       title: "Find a place to buy or rent with guidance that feels calm, personal, and genuinely attentive.",
     },
     inquiry: {
@@ -340,9 +340,9 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       title: "Browse current sale and rental listings and open the homes that best match your timing and priorities.",
     },
     footer: {
-      blurb: "Verdant Realty offers a calmer, more personal way to explore homes for sale and rent in Torrevieja and the surrounding coast.",
+      blurb: "Milla Homes offers a calmer, more personal way to explore homes for sale and rent in Torrevieja and the surrounding coast.",
       browseLabel: "Browse Listings",
-      copyright: "© Verdant Realty",
+      copyright: "© Milla Homes",
     },
     neighborhoods: {
       cards: [
@@ -400,10 +400,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       title: "Available homes for sale and rent in Torrevieja and across the surrounding coast.",
     },
     seo: {
-      description: "Browse homes for sale and rent in Torrevieja, La Mata, Orihuela Costa, and nearby coastal areas with personal guidance from Verdant Realty.",
+      description: "Browse homes for sale and rent in Torrevieja, La Mata, Orihuela Costa, and nearby coastal areas with personal guidance from Milla Homes.",
       ogDescription: "Discover carefully presented sale and rental listings across Torrevieja and the surrounding coast.",
-      ogTitle: "Verdant Realty | Homes For Sale And Rent In Torrevieja",
-      title: "Verdant Realty | Homes For Sale And Rent In Torrevieja",
+      ogTitle: "Milla Homes | Homes For Sale And Rent In Torrevieja",
+      title: "Milla Homes | Homes For Sale And Rent In Torrevieja",
     },
     propertyMeta: {
       bathroomsShort: "bath",
@@ -472,7 +472,7 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       phoneLabel: "Teléfono",
       summary: "Cuando una propiedad encaja de verdad, el contacto directo ayuda a resolver dudas prácticas sin demora.",
       title: "Habla con tu agente cuando necesites claridad, disponibilidad o un siguiente paso rápido.",
-      whatsappMessage: "Hola, me interesa una propiedad de Verdant Realty y me gustaría recibir más información.",
+      whatsappMessage: "Hola, me interesa una propiedad de Milla Homes y me gustaría recibir más información.",
     },
     coverage: {
       eyebrow: "Una búsqueda más personal",
@@ -533,7 +533,7 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     hero: {
       eyebrow: "Viviendas en venta y alquiler en Torrevieja y la costa cercana",
       text:
-        "Verdant Realty ofrece una forma más personal de buscar en la Costa Blanca: viviendas bien seleccionadas, orientación más clara y acompañamiento cercano desde la primera selección hasta la visita.",
+        "Milla Homes ofrece una forma más personal de buscar en la Costa Blanca: viviendas bien seleccionadas, orientación más clara y acompañamiento cercano desde la primera selección hasta la visita.",
       title: "Encuentra una vivienda para comprar o alquilar con una guía serena, cercana y realmente atenta.",
     },
     inquiry: {
@@ -564,9 +564,9 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       title: "Recorre la selección actual de venta y alquiler y abre las propiedades que mejor encajen con tu momento y tus prioridades.",
     },
     footer: {
-      blurb: "Verdant Realty ofrece una forma más tranquila y personal de explorar viviendas en venta y alquiler en Torrevieja y la costa cercana.",
+      blurb: "Milla Homes ofrece una forma más tranquila y personal de explorar viviendas en venta y alquiler en Torrevieja y la costa cercana.",
       browseLabel: "Ver propiedades",
-      copyright: "© Verdant Realty",
+      copyright: "© Milla Homes",
     },
     neighborhoods: {
       cards: [
@@ -624,10 +624,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       title: "Viviendas disponibles en venta y alquiler en Torrevieja y en la costa cercana.",
     },
     seo: {
-      description: "Descubre propiedades en venta y alquiler en Torrevieja, La Mata, Orihuela Costa y otras zonas cercanas con la atención personal de Verdant Realty.",
+      description: "Descubre propiedades en venta y alquiler en Torrevieja, La Mata, Orihuela Costa y otras zonas cercanas con la atención personal de Milla Homes.",
       ogDescription: "Explora una selección cuidada de viviendas en venta y alquiler en Torrevieja y la costa cercana.",
-      ogTitle: "Verdant Realty | Viviendas En Venta Y Alquiler En Torrevieja",
-      title: "Verdant Realty | Viviendas En Venta Y Alquiler En Torrevieja",
+      ogTitle: "Milla Homes | Viviendas En Venta Y Alquiler En Torrevieja",
+      title: "Milla Homes | Viviendas En Venta Y Alquiler En Torrevieja",
     },
     propertyMeta: {
       bathroomsShort: "baño",
@@ -696,7 +696,7 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       phoneLabel: "Телефон",
       summary: "Когда объект действительно подходит, прямой разговор помогает быстрее закрыть практические вопросы.",
       title: "Свяжитесь с агентом, когда вам нужна ясность по объекту, доступности или следующему шагу.",
-      whatsappMessage: "Здравствуйте, меня заинтересовал объект на Verdant Realty. Хотелось бы получить больше информации.",
+      whatsappMessage: "Здравствуйте, меня заинтересовал объект на Milla Homes. Хотелось бы получить больше информации.",
     },
     coverage: {
       eyebrow: "Более личный поиск",
@@ -757,7 +757,7 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     hero: {
       eyebrow: "Объекты для продажи и аренды в Торревьехе и рядом с побережьем",
       text:
-        "Verdant Realty предлагает более личный подход к поиску на Коста-Бланке: тщательно подобранные объекты, более понятное сопровождение и прямую связь от первого шорт-листа до просмотра.",
+        "Milla Homes предлагает более личный подход к поиску на Коста-Бланке: тщательно подобранные объекты, более понятное сопровождение и прямую связь от первого шорт-листа до просмотра.",
       title: "Найдите недвижимость для покупки или аренды с сопровождением, которое ощущается спокойным, личным и внимательным.",
     },
     inquiry: {
@@ -788,9 +788,9 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       title: "Изучайте актуальные предложения по продаже и аренде и открывайте объекты, которые лучше всего подходят по срокам и приоритетам.",
     },
     footer: {
-      blurb: "Verdant Realty помогает искать жилье для покупки и аренды в Торревьехе и на побережье рядом спокойнее, внимательнее и более лично.",
+      blurb: "Milla Homes помогает искать жилье для покупки и аренды в Торревьехе и на побережье рядом спокойнее, внимательнее и более лично.",
       browseLabel: "Смотреть объекты",
-      copyright: "© Verdant Realty",
+      copyright: "© Milla Homes",
     },
     neighborhoods: {
       cards: [
@@ -848,10 +848,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       title: "Доступные объекты для продажи и аренды в Торревьехе и на побережье рядом.",
     },
     seo: {
-      description: "Смотрите объекты на продажу и в аренду в Торревьехе, Ла Мата, Ориуэла Коста и соседних прибрежных районах вместе с Verdant Realty.",
+      description: "Смотрите объекты на продажу и в аренду в Торревьехе, Ла Мата, Ориуэла Коста и соседних прибрежных районах вместе с Milla Homes.",
       ogDescription: "Подборка объектов для продажи и аренды у побережья Торревьехи с более ясной, личной и спокойной подачей.",
-      ogTitle: "Verdant Realty | Продажа И Аренда В Торревьехе",
-      title: "Verdant Realty | Недвижимость Для Продажи И Аренды В Торревьехе",
+      ogTitle: "Milla Homes | Продажа И Аренда В Торревьехе",
+      title: "Milla Homes | Недвижимость Для Продажи И Аренды В Торревьехе",
     },
     propertyMeta: {
       bathroomsShort: "ван.",
@@ -920,7 +920,7 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       phoneLabel: "Telefon",
       summary: "Wenn eine Immobilie wirklich interessant wirkt, lassen sich praktische Fragen im direkten Gespräch meist schneller klären.",
       title: "Sprechen Sie direkt mit Ihrer Ansprechpartnerin, wenn Sie Klarheit zu Objekt, Verfügbarkeit oder dem nächsten Schritt möchten.",
-      whatsappMessage: "Hallo, ich interessiere mich für eine Immobilie von Verdant Realty und hätte gern weitere Informationen.",
+      whatsappMessage: "Hallo, ich interessiere mich für eine Immobilie von Milla Homes und hätte gern weitere Informationen.",
     },
     coverage: {
       eyebrow: "Eine persönlichere Suche",
@@ -981,7 +981,7 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
     hero: {
       eyebrow: "Immobilien zum Kauf und zur Miete in Torrevieja und an der nahen Küste",
       text:
-        "Verdant Realty steht für einen persönlicheren Weg der Suche an der Costa Blanca: sorgfältig ausgewählte Angebote, klarere Begleitung und direkte Unterstützung vom ersten Shortlist-Moment bis zur Besichtigung.",
+        "Milla Homes steht für einen persönlicheren Weg der Suche an der Costa Blanca: sorgfältig ausgewählte Angebote, klarere Begleitung und direkte Unterstützung vom ersten Shortlist-Moment bis zur Besichtigung.",
       title: "Finden Sie ein Zuhause zum Kauf oder zur Miete mit einer Begleitung, die ruhig, persönlich und aufmerksam wirkt.",
     },
     inquiry: {
@@ -1012,9 +1012,9 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       title: "Durchstöbern Sie aktuelle Kauf- und Mietangebote und öffnen Sie die Objekte, die am besten zu Ihrem Zeitplan und Ihren Prioritäten passen.",
     },
     footer: {
-      blurb: "Verdant Realty begleitet die Suche nach Kauf- und Mietimmobilien in Torrevieja und an der nahen Küste auf eine persönlichere und ruhigere Weise.",
+      blurb: "Milla Homes begleitet die Suche nach Kauf- und Mietimmobilien in Torrevieja und an der nahen Küste auf eine persönlichere und ruhigere Weise.",
       browseLabel: "Immobilien ansehen",
-      copyright: "© Verdant Realty",
+      copyright: "© Milla Homes",
     },
     neighborhoods: {
       cards: [
@@ -1072,10 +1072,10 @@ export const publicCopy: Record<PublicLocale, PublicCopy> = {
       title: "Verfügbare Immobilien zum Kauf und zur Miete in Torrevieja und an der umliegenden Küste.",
     },
     seo: {
-      description: "Entdecken Sie Kauf- und Mietimmobilien in Torrevieja, La Mata, Orihuela Costa und weiteren Küstenlagen mit persönlicher Begleitung von Verdant Realty.",
+      description: "Entdecken Sie Kauf- und Mietimmobilien in Torrevieja, La Mata, Orihuela Costa und weiteren Küstenlagen mit persönlicher Begleitung von Milla Homes.",
       ogDescription: "Ausgewählte Kauf- und Mietimmobilien an der Costa Blanca, klar, persönlich und hochwertig präsentiert.",
-      ogTitle: "Verdant Realty | Immobilien Zum Kauf Und Zur Miete In Torrevieja",
-      title: "Verdant Realty | Immobilien Zum Kauf Und Zur Miete In Torrevieja",
+      ogTitle: "Milla Homes | Immobilien Zum Kauf Und Zur Miete In Torrevieja",
+      title: "Milla Homes | Immobilien Zum Kauf Und Zur Miete In Torrevieja",
     },
     propertyMeta: {
       bathroomsShort: "Bad",
