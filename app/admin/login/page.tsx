@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { AdminLoginForm } from "@/components/admin/login-form";
+import { BrandLogo } from "@/components/brand-logo";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { adminCopy, adminLocales, resolveAdminLocale } from "@/lib/admin-copy";
 import { getAdminAuthState } from "@/lib/auth";
@@ -29,11 +30,7 @@ export default async function AdminLoginPage({ searchParams }: AdminLoginPagePro
       <div className="admin-login-card">
         <div className="admin-login-topline">
           <Link className="brand-link" href="/">
-            <span className="brand-mark" />
-            <span>
-              <strong>Milla Homes</strong>
-              <small>{copy.layout.adminLabel}</small>
-            </span>
+            <BrandLogo />
           </Link>
           <LanguageSwitcher currentLocale={locale} label={copy.languageLabel} locales={adminLocales} />
         </div>

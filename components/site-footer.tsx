@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { BrandLogo } from "@/components/brand-logo";
 import { ContactActions } from "@/components/contact-actions";
 import { type PublicCopy } from "@/lib/public-copy";
 
@@ -11,7 +12,7 @@ export function SiteFooter({ copy }: SiteFooterProps) {
   return (
     <footer className="site-footer">
       <div className="site-footer-copy">
-        <strong>Milla Homes</strong>
+        <BrandLogo />
         <p>{copy.footer.blurb}</p>
       </div>
 

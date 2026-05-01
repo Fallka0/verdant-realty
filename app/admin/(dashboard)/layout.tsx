@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { BrandLogo } from "@/components/brand-logo";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { SignOutButton } from "@/components/admin/sign-out-button";
 import { adminCopy, adminLocales, resolveAdminLocale } from "@/lib/admin-copy";
@@ -40,8 +41,9 @@ export default async function AdminDashboardLayout({
   return (
     <main className="admin-shell" lang={locale}>
       <header className="admin-topbar">
-        <div>
-          <p className="eyebrow">Milla Homes {copy.layout.adminLabel}</p>
+        <div className="admin-brand-block">
+          <BrandLogo />
+          <p className="eyebrow">{copy.layout.adminLabel}</p>
           <h1>{copy.layout.title}</h1>
         </div>
 
