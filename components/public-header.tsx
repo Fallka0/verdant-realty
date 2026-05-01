@@ -6,6 +6,7 @@ import { useState } from "react";
 import { BrandLogo } from "@/components/brand-logo";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { type PublicLocale } from "@/lib/public-copy";
+import { getAdminSiteUrl } from "@/lib/site-urls";
 
 type PublicHeaderProps = {
   adminLabel?: string;
@@ -57,7 +58,7 @@ export function PublicHeader({
             {nav.properties}
           </Link>
           {adminLabel ? (
-            <Link href="/admin" onClick={() => setIsMenuOpen(false)}>
+            <Link href={getAdminSiteUrl("/admin")} onClick={() => setIsMenuOpen(false)}>
               {adminLabel}
             </Link>
           ) : null}

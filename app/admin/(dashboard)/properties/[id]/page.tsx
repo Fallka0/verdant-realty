@@ -6,6 +6,7 @@ import { deletePropertyAction, updatePropertyAction } from "@/app/admin/(dashboa
 import { PropertyForm } from "@/components/admin/property-form";
 import { adminCopy, resolveAdminLocale } from "@/lib/admin-copy";
 import { getAdminPropertyById } from "@/lib/properties";
+import { getPublicSiteUrl } from "@/lib/site-urls";
 
 type EditPropertyPageProps = {
   params: Promise<{
@@ -34,7 +35,7 @@ export default async function EditPropertyPage({ params }: EditPropertyPageProps
           <h2>{property.title}</h2>
           <p>{copy.form.editBody}</p>
         </div>
-        <Link className="button button-secondary" href={`/properties/${property.slug}`}>
+        <Link className="button button-secondary" href={getPublicSiteUrl(`/properties/${property.slug}`)}>
           {copy.form.actions.viewPublicPage}
         </Link>
       </div>

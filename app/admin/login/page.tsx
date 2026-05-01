@@ -7,6 +7,7 @@ import { BrandLogo } from "@/components/brand-logo";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { adminCopy, adminLocales, resolveAdminLocale } from "@/lib/admin-copy";
 import { getAdminAuthState } from "@/lib/auth";
+import { getPublicSiteUrl } from "@/lib/site-urls";
 
 export const dynamic = "force-dynamic";
 
@@ -29,7 +30,7 @@ export default async function AdminLoginPage({ searchParams }: AdminLoginPagePro
     <main className="admin-login-shell" lang={locale}>
       <div className="admin-login-card">
         <div className="admin-login-topline">
-          <Link className="brand-link" href="/">
+          <Link className="brand-link" href={getPublicSiteUrl("/")}>
             <BrandLogo />
           </Link>
           <LanguageSwitcher currentLocale={locale} label={copy.languageLabel} locales={adminLocales} />

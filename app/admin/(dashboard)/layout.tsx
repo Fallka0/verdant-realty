@@ -7,6 +7,7 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { SignOutButton } from "@/components/admin/sign-out-button";
 import { adminCopy, adminLocales, resolveAdminLocale } from "@/lib/admin-copy";
 import { getAdminAuthState } from "@/lib/auth";
+import { getAdminSiteUrl, getPublicSiteUrl } from "@/lib/site-urls";
 
 export const dynamic = "force-dynamic";
 
@@ -49,9 +50,9 @@ export default async function AdminDashboardLayout({
 
         <div className="admin-topbar-actions">
           <nav className="primary-nav" aria-label={copy.layout.adminLabel}>
-            <Link href="/admin">{copy.layout.dashboard}</Link>
-            <Link href="/admin/properties/new">{copy.layout.newListing}</Link>
-            <Link href="/properties">{copy.layout.viewSite}</Link>
+            <Link href={getAdminSiteUrl("/admin")}>{copy.layout.dashboard}</Link>
+            <Link href={getAdminSiteUrl("/admin/properties/new")}>{copy.layout.newListing}</Link>
+            <Link href={getPublicSiteUrl("/properties")}>{copy.layout.viewSite}</Link>
           </nav>
           <LanguageSwitcher currentLocale={locale} label={copy.languageLabel} locales={adminLocales} />
           <SignOutButton label={copy.layout.signOut} />
