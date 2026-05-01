@@ -3,14 +3,17 @@ import { NextResponse } from "next/server";
 import { getAdminAuthState } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/server";
 
-const bucketName = "property-images";
+const imageBucketName = "property-images";
+const videoBucketName = "property-videos";
 const maxFileSizeBytes = 50 * 1024 * 1024;
-const allowedMimeTypes = [
+const allowedImageMimeTypes = [
   "image/avif",
   "image/gif",
   "image/jpeg",
   "image/png",
   "image/webp",
+];
+const allowedVideoMimeTypes = [
   "video/mp4",
   "video/ogg",
   "video/quicktime",
@@ -19,7 +22,11 @@ const allowedMimeTypes = [
 ];
 
 function isSupportedUploadType(file: File) {
-  return allowedMimeTypes.includes(file.type);
+  return allowedImageMimeTypes.includes(file.type) || allowedVideoMimeTypes.includes(file.type);
+}
+
+function isVideoUpload(file: File) {
+  return allowedVideoMimeTypes.includes(file.type);
 }
 
 function getExtension(file: File) {
@@ -38,6 +45,32 @@ function slugify(value: string) {
     .trim()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
+}
+
+async function ensureBucket(
+  supabase: NonNullable<ReturnType<typeof createAdminClient>>,
+  bucketName: string,
+  allowedMimeTypes: string[],
+) {
+  const { data: bucket, error: bucketLookupError } = await supabase.storage.getBucket(bucketName);
+
+  if (bucketLookupError) {
+    throw new Error(bucketLookupError.message);
+  }
+
+  if (bucket) {
+    return;
+  }
+
+  const { error: bucketCreateError } = await supabase.storage.createBucket(bucketName, {
+    public: true,
+    fileSizeLimit: maxFileSizeBytes,
+    allowedMimeTypes,
+  });
+
+  if (bucketCreateError) {
+    throw new Error(bucketCreateError.message);
+  }
 }
 
 export async function POST(request: Request) {
@@ -77,25 +110,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Media files must be smaller than 50 MB." }, { status: 400 });
   }
 
-  const { data: bucket } = await supabase.storage.getBucket(bucketName);
-  const bucketConfig = {
-    public: true,
-    fileSizeLimit: maxFileSizeBytes,
-    allowedMimeTypes,
-  };
+  const bucketName = isVideoUpload(file) ? videoBucketName : imageBucketName;
+  const allowedMimeTypes = isVideoUpload(file) ? allowedVideoMimeTypes : allowedImageMimeTypes;
 
-  if (!bucket) {
-    const { error: bucketError } = await supabase.storage.createBucket(bucketName, bucketConfig);
-
-    if (bucketError) {
-      return NextResponse.json({ error: bucketError.message }, { status: 500 });
-    }
-  } else {
-    const { error: bucketError } = await supabase.storage.updateBucket(bucketName, bucketConfig);
-
-    if (bucketError) {
-      return NextResponse.json({ error: bucketError.message }, { status: 500 });
-    }
+  try {
+    await ensureBucket(supabase, bucketName, allowedMimeTypes);
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Could not prepare upload storage." },
+      { status: 500 },
+    );
   }
 
   const extension = getExtension(file);
