@@ -150,6 +150,8 @@ export type AdminCopy = {
     villa: string;
   };
   upload: {
+    compressingImage: string;
+    fileTooLarge: string;
     galleryPlaceholder: string;
     imagePlaceholder: string;
     imageUploaded: string;
@@ -158,6 +160,7 @@ export type AdminCopy = {
     uploadImage: string;
     uploading: string;
     uploadedCount: string;
+    videoTooLarge: string;
   };
 };
 
@@ -318,6 +321,8 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
     statusLabels: { available: "Available", draft: "Draft", reserved: "Reserved", sold: "Sold" },
     typeLabels: { apartment: "Apartment", bungalow: "Bungalow", finca: "Finca", penthouse: "Penthouse", townhouse: "Townhouse", villa: "Villa" },
     upload: {
+      compressingImage: "Compressing large image before upload...",
+      fileTooLarge: "Files must be 50 MB or smaller after compression.",
       galleryPlaceholder: "Upload images or videos, or paste one media URL per line.",
       imagePlaceholder: "Upload an image or paste an image URL",
       imageUploaded: "Image uploaded.",
@@ -326,6 +331,7 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
       uploadImage: "Upload image",
       uploading: "Uploading...",
       uploadedCount: "{count} files uploaded.",
+      videoTooLarge: "Videos must be 50 MB or smaller. Please compress the video before uploading.",
     },
   },
   es: {
@@ -476,6 +482,8 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
     statusLabels: { available: "Disponible", draft: "Borrador", reserved: "Reservada", sold: "Vendida" },
     typeLabels: { apartment: "Apartamento", bungalow: "Bungaló", finca: "Finca", penthouse: "Ático", townhouse: "Adosado", villa: "Villa" },
     upload: {
+      compressingImage: "Comprimiendo imagen grande antes de subir...",
+      fileTooLarge: "Los archivos deben quedar en 50 MB o menos después de la compresión.",
       galleryPlaceholder: "Sube imágenes o vídeos, o pega una URL por línea.",
       imagePlaceholder: "Sube una imagen o pega una URL",
       imageUploaded: "Imagen subida.",
@@ -484,6 +492,7 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
       uploadImage: "Subir imagen",
       uploading: "Subiendo...",
       uploadedCount: "{count} archivos subidos.",
+      videoTooLarge: "Los vídeos deben pesar 50 MB o menos. Comprímelo antes de subirlo.",
     },
   },
   ru: {
@@ -634,6 +643,8 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
     statusLabels: { available: "Доступно", draft: "Черновик", reserved: "Забронировано", sold: "Продано" },
     typeLabels: { apartment: "Апартаменты", bungalow: "Бунгало", finca: "Финка", penthouse: "Пентхаус", townhouse: "Таунхаус", villa: "Вилла" },
     upload: {
+      compressingImage: "Сжимаем большое изображение перед загрузкой...",
+      fileTooLarge: "Файл должен быть не больше 50 МБ после сжатия.",
       galleryPlaceholder: "Загрузите фото или видео либо вставьте по одной ссылке в строку.",
       imagePlaceholder: "Загрузите фото или вставьте URL",
       imageUploaded: "Фото загружено.",
@@ -642,6 +653,7 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
       uploadImage: "Загрузить фото",
       uploading: "Загрузка...",
       uploadedCount: "Загружено файлов: {count}.",
+      videoTooLarge: "Видео должно быть не больше 50 МБ. Сожмите его перед загрузкой.",
     },
   },
   de: {} as AdminCopy,

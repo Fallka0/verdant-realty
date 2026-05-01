@@ -29,14 +29,14 @@ function isVideoUpload(file: File) {
   return allowedVideoMimeTypes.includes(file.type);
 }
 
-function getExtension(file: File) {
-  const fromName = file.name.split(".").pop()?.toLowerCase();
+function getExtensionFromName(fileName: string, contentType: string) {
+  const fromName = fileName.split(".").pop()?.toLowerCase();
 
   if (fromName && /^[a-z0-9]+$/.test(fromName)) {
     return fromName;
   }
 
-  return file.type.split("/").pop() ?? "jpg";
+  return contentType.split("/").pop() ?? "bin";
 }
 
 function slugify(value: string) {
@@ -94,24 +94,33 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Supabase service role key is missing." }, { status: 500 });
   }
 
-  const formData = await request.formData();
-  const file = formData.get("file");
-  const title = String(formData.get("title") ?? "property").trim();
+  const body = (await request.json().catch(() => null)) as
+    | {
+        contentType?: string;
+        fileName?: string;
+        title?: string;
+      }
+    | null;
 
-  if (!(file instanceof File)) {
-    return NextResponse.json({ error: "No media file was provided." }, { status: 400 });
+  const contentType = String(body?.contentType ?? "").trim().toLowerCase();
+  const fileName = String(body?.fileName ?? "").trim();
+  const title = String(body?.title ?? "property").trim();
+
+  if (!contentType || !fileName) {
+    return NextResponse.json({ error: "Missing upload file details." }, { status: 400 });
   }
 
-  if (!isSupportedUploadType(file)) {
+  const fileLike = {
+    name: fileName,
+    type: contentType,
+  } as File;
+
+  if (!isSupportedUploadType(fileLike)) {
     return NextResponse.json({ error: "Only image and video uploads are supported." }, { status: 400 });
   }
 
-  if (file.size > maxFileSizeBytes) {
-    return NextResponse.json({ error: "Media files must be smaller than 50 MB." }, { status: 400 });
-  }
-
-  const bucketName = isVideoUpload(file) ? videoBucketName : imageBucketName;
-  const allowedMimeTypes = isVideoUpload(file) ? allowedVideoMimeTypes : allowedImageMimeTypes;
+  const bucketName = isVideoUpload(fileLike) ? videoBucketName : imageBucketName;
+  const allowedMimeTypes = isVideoUpload(fileLike) ? allowedVideoMimeTypes : allowedImageMimeTypes;
 
   try {
     await ensureBucket(supabase, bucketName, allowedMimeTypes);
@@ -122,23 +131,25 @@ export async function POST(request: Request) {
     );
   }
 
-  const extension = getExtension(file);
+  const extension = getExtensionFromName(fileName, contentType);
   const safeTitle = slugify(title) || "property";
-  const fileName = `${safeTitle}/${Date.now()}-${Math.random().toString(36).slice(2)}.${extension}`;
-  const buffer = Buffer.from(await file.arrayBuffer());
+  const storagePath = `${safeTitle}/${Date.now()}-${Math.random().toString(36).slice(2)}.${extension}`;
+  const { data: signedUploadData, error: signedUploadError } = await supabase.storage
+    .from(bucketName)
+    .createSignedUploadUrl(storagePath);
 
-  const { error: uploadError } = await supabase.storage.from(bucketName).upload(fileName, buffer, {
-    contentType: file.type,
-    upsert: false,
-  });
-
-  if (uploadError) {
-    return NextResponse.json({ error: uploadError.message }, { status: 500 });
+  if (signedUploadError || !signedUploadData?.token) {
+    return NextResponse.json({ error: signedUploadError?.message ?? "Could not create a signed upload URL." }, { status: 500 });
   }
 
   const {
     data: { publicUrl },
-  } = supabase.storage.from(bucketName).getPublicUrl(fileName);
+  } = supabase.storage.from(bucketName).getPublicUrl(storagePath);
 
-  return NextResponse.json({ url: publicUrl });
+  return NextResponse.json({
+    bucketName,
+    path: storagePath,
+    token: signedUploadData.token,
+    url: publicUrl,
+  });
 }
