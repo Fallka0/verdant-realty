@@ -12,6 +12,7 @@ import {
   formatPrice,
   formatOptionalPrice,
   getPropertyPreviewImageUrl,
+  isVideoAssetUrl,
   type PropertyRecord,
 } from "@/lib/property-shared";
 
@@ -33,19 +34,41 @@ export function PropertyCard({
   const hasSalePrice = property.listingMode === "sale" || property.listingMode === "both";
   const hasRentPrice =
     (property.listingMode === "rent" || property.listingMode === "both") && Boolean(property.rentPriceEuro);
-  const previewImageUrl = getPropertyPreviewImageUrl(property) ?? "/logos/verdant-seal.svg";
+  const previewImageUrl = getPropertyPreviewImageUrl(property);
+  const previewVideoUrl = !previewImageUrl && isVideoAssetUrl(property.mainImageUrl) ? property.mainImageUrl : null;
 
   return (
     <Link className="property-card-link" href={`/properties/${property.slug}`}>
       <article className="property-card">
         <div className="property-image-wrap">
-          <Image
-            className="property-image"
-            src={previewImageUrl}
-            alt={property.title}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+          {previewImageUrl ? (
+            <Image
+              className="property-image"
+              src={previewImageUrl}
+              alt={property.title}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          ) : previewVideoUrl ? (
+            <video
+              aria-label={property.title}
+              className="property-video-preview"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              src={previewVideoUrl}
+            />
+          ) : (
+            <Image
+              className="property-image"
+              src="/logos/verdant-seal.svg"
+              alt={property.title}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          )}
           <div className="property-badges">
             <span className={`pill status-${property.status}`}>{getLocalizedPropertyStatusLabel(locale, property.status)}</span>
             <span className="pill pill-secondary">{getLocalizedListingModeLabel(locale, property.listingMode)}</span>

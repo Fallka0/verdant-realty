@@ -1330,8 +1330,17 @@ textarea {
   transition: transform 400ms ease;
 }
 
+.property-video-preview {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .property-card-link:hover .property-image,
-.property-card-link:focus-visible .property-image {
+.property-card-link:focus-visible .property-image,
+.property-card-link:hover .property-video-preview,
+.property-card-link:focus-visible .property-video-preview {
   transform: scale(1.04);
 }
 
