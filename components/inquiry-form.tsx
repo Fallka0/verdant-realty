@@ -66,6 +66,7 @@ export function InquiryForm({ copy, locale, property }: InquiryFormProps) {
         body: JSON.stringify({
           name: formData.get("name"),
           email: formData.get("email"),
+          company: formData.get("company"),
           locale,
           phone: formData.get("phone"),
           message,
@@ -105,6 +106,12 @@ export function InquiryForm({ copy, locale, property }: InquiryFormProps) {
 
   return (
     <form className="inquiry-form" onSubmit={handleSubmit}>
+      <div className="form-honeypot" aria-hidden="true">
+        <label>
+          Company
+          <input name="company" tabIndex={-1} autoComplete="off" />
+        </label>
+      </div>
       {property ? (
         <div className="inquiry-context">
           <p className="eyebrow">{copy.inquiry.propertyInquiry}</p>

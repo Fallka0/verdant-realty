@@ -1993,6 +1993,14 @@ textarea {
   width: 100%;
 }
 
+.form-honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .admin-topbar {
   display: flex;
   align-items: center;

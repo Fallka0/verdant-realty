@@ -6,6 +6,7 @@ import { consumeInquiryRateLimit } from "@/lib/rate-limit";
 import { createAdminClient } from "@/lib/supabase/server";
 
 type InquiryPayload = {
+  company?: string;
   email?: string;
   locale?: string;
   message?: string;
@@ -21,6 +22,7 @@ const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 function normalizeInput(payload: InquiryPayload) {
   return {
     name: payload.name?.trim() ?? "",
+    company: payload.company?.trim() ?? "",
     email: payload.email?.trim().toLowerCase() ?? "",
     locale: resolvePublicLocale(payload.locale),
     phone: payload.phone?.trim() ?? "",
@@ -42,6 +44,11 @@ export async function POST(request: Request) {
 
   const inquiry = normalizeInput(payload);
   const copy = publicCopy[inquiry.locale];
+
+  if (inquiry.company) {
+    return NextResponse.json({ message: copy.inquiry.success });
+  }
+
   const forwardedFor = request.headers.get("x-forwarded-for");
   const ip =
     forwardedFor?.split(",")[0]?.trim() ||
