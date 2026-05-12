@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 
+import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -12,6 +13,7 @@ import { getAdminAuthState } from "@/lib/auth";
 import { getRegionBySlug, regionSlugs, type RegionSlug } from "@/lib/regions";
 import { publicCopy, resolvePublicLocale } from "@/lib/public-copy";
 import { getPublicProperties, localizeProperties } from "@/lib/properties";
+import { getCanonicalUrl, getOpenGraphLocale, truncateSeoDescription } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +25,52 @@ type RegionPageProps = {
 
 export function generateStaticParams() {
   return regionSlugs.map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({ params }: RegionPageProps): Promise<Metadata> {
+  const cookieStore = await cookies();
+  const locale = resolvePublicLocale(cookieStore.get("verdant-locale")?.value);
+  const { slug } = await params;
+  const region = getRegionBySlug(slug as RegionSlug);
+
+  if (!region) {
+    return {
+      title: "Region not found | Milla Homes",
+    };
+  }
+
+  const content = region.localeContent[locale];
+  const title = `${content.areaLabel} real estate | Milla Homes`;
+  const description = truncateSeoDescription(content.body);
+  const canonicalUrl = getCanonicalUrl(`/regions/${region.slug}`);
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: "Milla Homes",
+      locale: getOpenGraphLocale(locale),
+      type: "website",
+      images: [
+        {
+          alt: content.areaLabel,
+          url: region.imageUrl,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [region.imageUrl],
+    },
+  };
 }
 
 export default async function RegionPage({ params }: RegionPageProps) {

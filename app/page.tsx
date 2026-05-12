@@ -7,17 +7,9 @@ import { getAdminAuthState } from "@/lib/auth";
 import { publicCopy, resolvePublicLocale } from "@/lib/public-copy";
 import { getFeaturedProperties, getLatestPublicProperties, localizeProperties } from "@/lib/properties";
 import { getPropertyPreviewImageUrl } from "@/lib/property-shared";
+import { getCanonicalUrl, getOpenGraphLocale } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
-
-function getOpenGraphLocale(locale: string) {
-  return {
-    de: "de_DE",
-    en: "en_US",
-    es: "es_ES",
-    ru: "ru_RU",
-  }[locale] ?? "en_US";
-}
 
 export async function generateMetadata(): Promise<Metadata> {
   const cookieStore = await cookies();
@@ -30,12 +22,12 @@ export async function generateMetadata(): Promise<Metadata> {
     title: copy.seo.title,
     description: copy.seo.description,
     alternates: {
-      canonical: "/",
+      canonical: getCanonicalUrl("/"),
     },
     openGraph: {
       title: copy.seo.ogTitle,
       description: copy.seo.ogDescription,
-      url: "/",
+      url: getCanonicalUrl("/"),
       siteName: "Milla Homes",
       locale: getOpenGraphLocale(locale),
       type: "website",

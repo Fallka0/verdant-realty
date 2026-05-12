@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { cookies } from "next/headers";
 
 import { notFound } from "next/navigation";
@@ -19,8 +20,9 @@ import {
   publicCopy,
   resolvePublicLocale,
 } from "@/lib/public-copy";
-import { formatOptionalPrice, formatPrice } from "@/lib/property-shared";
+import { formatOptionalPrice, formatPrice, getPropertyPreviewImageUrl } from "@/lib/property-shared";
 import { getPropertyBySlug, localizeProperty } from "@/lib/properties";
+import { getCanonicalUrl, getOpenGraphLocale, truncateSeoDescription } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -48,6 +50,55 @@ type PropertyDetailPageProps = {
   }>;
 };
 
+export async function generateMetadata({ params }: PropertyDetailPageProps): Promise<Metadata> {
+  const cookieStore = await cookies();
+  const locale = resolvePublicLocale(cookieStore.get("verdant-locale")?.value);
+  const { slug } = await params;
+  const property = await getPropertyBySlug(slug);
+
+  if (!property) {
+    return {
+      title: "Property not found | Milla Homes",
+    };
+  }
+
+  const localizedProperty = localizeProperty(property, locale);
+  const title = `${localizedProperty.title} | Milla Homes`;
+  const description = truncateSeoDescription(localizedProperty.shortDescription || localizedProperty.description);
+  const canonicalUrl = getCanonicalUrl(`/properties/${localizedProperty.slug}`);
+  const previewImage = getPropertyPreviewImageUrl(localizedProperty);
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: "Milla Homes",
+      locale: getOpenGraphLocale(locale),
+      type: "website",
+      images: previewImage
+        ? [
+            {
+              alt: localizedProperty.title,
+              url: previewImage,
+            },
+          ]
+        : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: previewImage ? [previewImage] : undefined,
+    },
+  };
+}
+
 export default async function PropertyDetailPage({ params }: PropertyDetailPageProps) {
   const cookieStore = await cookies();
   const locale = resolvePublicLocale(cookieStore.get("verdant-locale")?.value);
@@ -67,9 +118,53 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
     normalizeComparableText(localizedProperty.description) !== normalizeComparableText(heroSummary);
 
   const gallery = [localizedProperty.mainImageUrl, ...localizedProperty.galleryUrls];
+  const previewImage = getPropertyPreviewImageUrl(localizedProperty);
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Residence",
+    name: localizedProperty.title,
+    description: normalizeComparableText(localizedProperty.description || heroSummary),
+    image: previewImage ? [previewImage] : undefined,
+    url: getCanonicalUrl(`/properties/${localizedProperty.slug}`),
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: localizedProperty.location,
+      addressCountry: "ES",
+    },
+    numberOfBathroomsTotal: localizedProperty.bathrooms,
+    numberOfBedrooms: localizedProperty.bedrooms,
+    floorSize: localizedProperty.interiorSqm
+      ? {
+          "@type": "QuantitativeValue",
+          unitCode: "MTK",
+          value: localizedProperty.interiorSqm,
+        }
+      : undefined,
+    offers:
+      localizedProperty.listingMode === "rent" && localizedProperty.rentPriceEuro
+        ? {
+            "@type": "Offer",
+            availability: "https://schema.org/InStock",
+            price: localizedProperty.rentPriceEuro,
+            priceCurrency: "EUR",
+            url: getCanonicalUrl(`/properties/${localizedProperty.slug}`),
+          }
+        : {
+            "@type": "Offer",
+            availability: "https://schema.org/InStock",
+            price: localizedProperty.priceEuro,
+            priceCurrency: "EUR",
+            url: getCanonicalUrl(`/properties/${localizedProperty.slug}`),
+          },
+  };
 
   return (
     <main className="site-shell section-stack" data-locale={locale} lang={locale}>
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <PublicHeader
         adminLabel={authState.status === "authorized" ? adminCopy[adminLocale].layout.adminLabel : undefined}
         compact
