@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 
 import { createPropertyAction } from "@/app/admin/(dashboard)/actions";
-import { PropertyForm } from "@/components/admin/property-form";
+import { PropertyComposer } from "@/components/admin/property-composer";
 import { adminCopy, resolveAdminLocale } from "@/lib/admin-copy";
 import { getAdminProperties } from "@/lib/properties";
 
@@ -29,7 +29,7 @@ export default async function NewPropertyPage() {
         <p>{copy.form.newBody}</p>
       </div>
 
-      <PropertyForm
+      <PropertyComposer
         action={createPropertyAction}
         copy={copy.form}
         localeLabels={{ statuses: copy.statusLabels, types: copy.typeLabels }}

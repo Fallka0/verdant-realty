@@ -94,6 +94,13 @@ export type AdminCopy = {
       rentalPeriods: string;
       slug: string;
     };
+    importer: {
+      body: string;
+      cta: string;
+      placeholder: string;
+      reset: string;
+      title: string;
+    };
     listingModeLabels: Record<string, string>;
     newBody: string;
     newEyebrow: string;
@@ -269,6 +276,13 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
         rentalPeriods: "Choose the rental arrangements this property can support.",
         slug: "Used in the public page URL.",
       },
+      importer: {
+        body: "Paste a public property link and we will prefill the form with title, pricing, rooms, description, and media when the source allows it.",
+        cta: "Import from link",
+        placeholder: "https://info-home.link/app/whatsapp/...",
+        reset: "Clear imported draft",
+        title: "Start from a source link",
+      },
       listingModeLabels: { both: "Sale and rent", rent: "Rent only", sale: "Sale only" },
       newBody:
         "Start with the title, then add sale or rent settings, availability dates, descriptions, and photos. Mark it available only when it is ready to show.",
@@ -432,6 +446,13 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
         rentalPeriods: "Elige las modalidades de alquiler que admite esta propiedad.",
         slug: "Se usa en la URL pública de la propiedad.",
       },
+      importer: {
+        body: "Pega un enlace público de una propiedad y rellenaremos el formulario con título, precio, habitaciones, descripción y medios cuando la fuente lo permita.",
+        cta: "Importar desde enlace",
+        placeholder: "https://info-home.link/app/whatsapp/...",
+        reset: "Borrar borrador importado",
+        title: "Empezar desde un enlace",
+      },
       listingModeLabels: { both: "Venta y alquiler", rent: "Solo alquiler", sale: "Solo venta" },
       newBody: "Empieza con el título, luego añade venta o alquiler, fechas disponibles, descripciones y fotos. Márcala disponible solo cuando esté lista.",
       newEyebrow: "Nueva propiedad",
@@ -592,6 +613,13 @@ export const adminCopy: Record<PublicLocale, AdminCopy> = {
         reference: "Создается из названия. Можно изменить вручную.",
         rentalPeriods: "Выберите форматы аренды, которые поддерживает объект.",
         slug: "Используется в публичной ссылке объекта.",
+      },
+      importer: {
+        body: "Вставьте публичную ссылку на объект, и мы заполним форму названием, ценой, комнатами, описанием и медиа, если источник это позволяет.",
+        cta: "Импортировать по ссылке",
+        placeholder: "https://info-home.link/app/whatsapp/...",
+        reset: "Очистить импортированный черновик",
+        title: "Начать со ссылки",
       },
       listingModeLabels: { both: "Продажа и аренда", rent: "Только аренда", sale: "Только продажа" },
       newBody: "Начните с названия, затем добавьте продажу или аренду, даты доступности, описания и фото. Отмечайте доступным только готовый объект.",
