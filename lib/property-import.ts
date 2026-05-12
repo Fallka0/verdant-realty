@@ -21,7 +21,7 @@ const ignoredImagePatterns = [
 export type ImportedPropertyPayload = {
   notes: string[];
   property: PropertyRecord;
-  provider: "inmovilla";
+  provider: "dropbox" | "generic" | "idealista" | "inmovilla";
   resolvedUrl: string;
   sourceUrl: string;
 };
@@ -30,7 +30,7 @@ export async function importPropertyFromUrl(rawUrl: string): Promise<ImportedPro
   const sourceUrl = normalizeSourceUrl(rawUrl);
 
   if (!isInmovillaUrl(sourceUrl)) {
-    throw new Error("Only public Inmovilla or info-home property links are supported right now.");
+    return importGenericPropertyFromUrl(sourceUrl);
   }
 
   const resolvedUrl = await resolveInmovillaPropertyUrl(sourceUrl);
@@ -73,6 +73,52 @@ function isInmovillaUrl(url: URL) {
   const hostname = url.hostname.toLowerCase();
 
   return hostname.includes("info-home.link") || hostname.includes("inmovilla.com");
+}
+
+function getGenericProvider(url: URL): ImportedPropertyPayload["provider"] {
+  const hostname = url.hostname.toLowerCase();
+
+  if (hostname.includes("dropbox.com")) {
+    return "dropbox";
+  }
+
+  if (hostname.includes("idealista.")) {
+    return "idealista";
+  }
+
+  return "generic";
+}
+
+async function importGenericPropertyFromUrl(sourceUrl: URL) {
+  const resolvedUrl = sourceUrl.toString();
+  const [htmlResult, markdownResult] = await Promise.allSettled([
+    fetchText(resolvedUrl),
+    fetchReaderMarkdown(resolvedUrl),
+  ]);
+  const html = htmlResult.status === "fulfilled" ? htmlResult.value : "";
+  const markdown = markdownResult.status === "fulfilled" ? markdownResult.value : "";
+
+  if (!html && !markdown) {
+    if (sourceUrl.hostname.toLowerCase().includes("idealista.")) {
+      throw new Error("Idealista blocked the importer request with anti-bot protection. Paste another public source or import the details manually.");
+    }
+
+    throw new Error("The source page could not be fetched.");
+  }
+
+  if (/Target URL returned error 403|requiring CAPTCHA|Forbidden/i.test(markdown)) {
+    throw new Error("The source page blocked the importer request with anti-bot protection.");
+  }
+
+  const imported = parseGenericPropertyPage({
+    html,
+    markdown,
+    provider: getGenericProvider(sourceUrl),
+    resolvedUrl,
+    sourceUrl: sourceUrl.toString(),
+  });
+
+  return mirrorImportedImages(imported);
 }
 
 async function resolveInmovillaPropertyUrl(sourceUrl: URL) {
@@ -353,6 +399,75 @@ function parseInmovillaMarkdown(input: {
   };
 }
 
+function parseGenericPropertyPage(input: {
+  html: string;
+  markdown: string;
+  provider: ImportedPropertyPayload["provider"];
+  resolvedUrl: string;
+  sourceUrl: string;
+}): ImportedPropertyPayload {
+  const { html, markdown, provider, resolvedUrl, sourceUrl } = input;
+  const fullText = htmlToText(`${html}\n${markdown}`);
+  const metaTitle = getMetaContent(html, "og:title") ?? getTitleTag(html) ?? getMarkdownTitle(markdown);
+  const title = cleanTitle(metaTitle) || createFallbackTitle(new URL(resolvedUrl));
+  const metaDescription =
+    getMetaContent(html, "og:description") ??
+    getMetaContent(html, "description") ??
+    getMarkdownDescription(markdown) ??
+    title;
+  const description = truncateText(metaDescription, 1200);
+  const images = mergeImageUrls(
+    extractHtmlImageUrls(html, resolvedUrl),
+    extractMarkdownImageUrls(markdown),
+  );
+  const mainImageUrl = images[0] ?? "/logos/verdant-seal.svg";
+  const priceEuro = extractPrice(fullText) ?? 0;
+  const rentPriceEuro = inferRentPrice(fullText);
+  const listingMode = deriveListingMode(priceEuro, rentPriceEuro);
+  const bedrooms = extractLabeledNumber(fullText, ["bedroom", "bedrooms", "bed", "beds", "habitaciones", "dormitorios"]) ?? 0;
+  const bathrooms = extractLabeledNumber(fullText, ["bathroom", "bathrooms", "bath", "baths", "baños", "banos"]) ?? 0;
+  const interiorSqm = extractSquareMeters(fullText);
+  const location = extractGenericLocation(title, description) ?? "Costa Blanca";
+
+  const property = createImportedPropertyRecord({
+    bathrooms,
+    bedrooms,
+    description,
+    features: inferFeatures(fullText),
+    galleryUrls: images.slice(1),
+    interiorSqm,
+    listingMode,
+    location,
+    mainImageUrl,
+    plotSqm: null,
+    priceEuro,
+    referenceCode: createReferenceCodeFromUrl(resolvedUrl),
+    rentPriceEuro,
+    rentPricePeriod: rentPriceEuro ? "month" : null,
+    shortDescription: truncateText(description, 220),
+    title,
+    type: mapPropertyType(`${title} ${description}`),
+  });
+
+  const notes = [
+    `Imported from ${resolvedUrl}`,
+    provider === "dropbox"
+      ? "Dropbox folder imports usually include media only. Review and complete property details before publishing."
+      : null,
+    images.length === 0
+      ? "No public source images were found. A placeholder image was used."
+      : null,
+  ].filter((note): note is string => Boolean(note));
+
+  return {
+    notes,
+    property,
+    provider,
+    resolvedUrl,
+    sourceUrl,
+  };
+}
+
 function createImportedPropertyRecord(input: {
   bathrooms: number;
   bedrooms: number;
@@ -573,6 +688,14 @@ function inferRentPricePeriod(lines: string[]): RentPricePeriod | null {
   return null;
 }
 
+function inferRentPrice(text: string) {
+  if (!/\b(rent|rental|alquiler|alquilar)\b/i.test(text)) {
+    return null;
+  }
+
+  return extractPrice(text);
+}
+
 function deriveListingMode(salePrice: number, rentPrice: number | null): ListingMode {
   if (salePrice > 0 && rentPrice) {
     return "both";
@@ -597,12 +720,20 @@ function extractHtmlImageUrls(html: string, baseUrl: string) {
 
   const candidates = [
     ...extractAttributeImageUrls(html),
+    ...extractJsonImageUrls(html),
     ...extractSrcsetImageUrls(html),
     ...extractCssImageUrls(html),
     ...extractEscapedImageUrls(html),
   ];
 
   return dedupeImageUrls(candidates.flatMap((url) => normalizeImageCandidate(url, baseUrl)));
+}
+
+function extractJsonImageUrls(html: string) {
+  return Array.from(
+    html.matchAll(/(?:&quot;|["'])(?:url|image|imageUrl|src|full)(?:&quot;|["'])\s*:\s*(?:&quot;|["'])(https?:\\?\/\\?\/.*?\.(?:avif|gif|jpe?g|png|webp)(?:\?[^"'&<]*)?)(?:&quot;|["'])/gi),
+    (match) => match[1],
+  );
 }
 
 function extractAttributeImageUrls(html: string) {
@@ -632,6 +763,8 @@ function extractEscapedImageUrls(html: string) {
 function normalizeImageCandidate(candidate: string, baseUrl: string) {
   const decoded = decodeHtmlEntities(candidate)
     .replace(/\\\//g, "/")
+    .split(/["'<>\s]/)[0]
+    .replace(/,$/, "")
     .trim();
 
   if (
@@ -650,6 +783,129 @@ function normalizeImageCandidate(candidate: string, baseUrl: string) {
   } catch {
     return [];
   }
+}
+
+function getMetaContent(html: string, key: string) {
+  const escapedKey = escapeForRegExp(key);
+  const patterns = [
+    new RegExp(`<meta[^>]+(?:property|name)=["']${escapedKey}["'][^>]+content=["']([^"']+)["'][^>]*>`, "i"),
+    new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+(?:property|name)=["']${escapedKey}["'][^>]*>`, "i"),
+  ];
+
+  for (const pattern of patterns) {
+    const match = html.match(pattern);
+
+    if (match?.[1]) {
+      return decodeHtmlEntities(match[1]).trim();
+    }
+  }
+
+  return null;
+}
+
+function getTitleTag(html: string) {
+  const title = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1];
+
+  return title ? decodeHtmlEntities(title).replace(/\s+/g, " ").trim() : null;
+}
+
+function getMarkdownTitle(markdown: string) {
+  return markdown.match(/^Title:\s*(.+)$/im)?.[1]?.trim() ?? null;
+}
+
+function getMarkdownDescription(markdown: string) {
+  const content = markdown.split(/Markdown Content:\s*/i)[1] ?? markdown;
+  const paragraph = content
+    .split(/\n{2,}/)
+    .map((item) => item.replace(/\[[^\]]+\]\([^)]+\)/g, "").trim())
+    .find((item) => item.length > 40 && !/^!?\[/.test(item));
+
+  return paragraph ?? null;
+}
+
+function cleanTitle(value: string | null) {
+  return (value ?? "")
+    .replace(/\s+[|–-]\s+(idealista|Dropbox|Navasaez|Beach Home Lux|EspanaTour).*$/i, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function createFallbackTitle(url: URL) {
+  const pathPart = url.pathname
+    .split("/")
+    .filter(Boolean)
+    .at(-1)
+    ?.replace(/[-_]+/g, " ");
+
+  return pathPart || `${url.hostname} import`;
+}
+
+function truncateText(value: string, maxLength: number) {
+  const normalized = htmlToText(value);
+
+  if (normalized.length <= maxLength) {
+    return normalized;
+  }
+
+  return `${normalized.slice(0, maxLength - 1).trimEnd()}…`;
+}
+
+function htmlToText(value: string) {
+  return decodeHtmlEntities(value)
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function extractPrice(text: string) {
+  const match =
+    text.match(/(?:€|EUR)\s*([0-9][0-9.,\s]*)/i) ??
+    text.match(/([0-9][0-9.,\s]*)\s*(?:€|EUR)/i);
+
+  if (!match?.[1]) {
+    return null;
+  }
+
+  const value = Number(match[1].replace(/\s/g, "").replace(/\.(?=\d{3})/g, "").replace(",", "."));
+
+  return Number.isFinite(value) ? Math.round(value) : null;
+}
+
+function extractLabeledNumber(text: string, labels: string[]) {
+  const labelPattern = labels.map(escapeForRegExp).join("|");
+  const beforeLabel = text.match(new RegExp(`(\\d+)\\s*(?:${labelPattern})`, "i"));
+  const afterLabel = text.match(new RegExp(`(?:${labelPattern})\\D{0,20}(\\d+)`, "i"));
+  const value = beforeLabel?.[1] ?? afterLabel?.[1];
+
+  return value ? Number(value) : null;
+}
+
+function extractSquareMeters(text: string) {
+  const match =
+    text.match(/(?:built|constructed|area|superficie|sup\.?\s*construida|área construida)\D{0,30}(\d+(?:[.,]\d+)?)\s*m(?:2|²)?/i) ??
+    text.match(/(\d+(?:[.,]\d+)?)\s*m(?:2|²)/i);
+
+  return match?.[1] ? Number(match[1].replace(",", ".")) : null;
+}
+
+function extractGenericLocation(title: string, description: string) {
+  const text = `${title}. ${description}`;
+  const match =
+    text.match(/\b(?:in|en)\s+([A-ZÁÉÍÓÚÑ][\p{L}\s-]{2,50})(?:[.,|-]|$)/u) ??
+    text.match(/\b(Torrevieja|Orihuela Costa|Guardamar del Segura|Cala de Finestrat|Finestrat|Alicante|Costa Blanca)\b/i);
+
+  return match?.[1]?.trim() ?? null;
+}
+
+function createReferenceCodeFromUrl(value: string) {
+  const url = new URL(value);
+  const pathParts = url.pathname.split("/").filter(Boolean);
+  const lastPart = pathParts.at(-1) ?? url.hostname;
+  const compact = lastPart.replace(/[^a-z0-9]/gi, "").toUpperCase().slice(-10);
+
+  return `IMP-${compact || Date.now()}`;
 }
 
 function decodeHtmlEntities(value: string) {
