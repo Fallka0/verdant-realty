@@ -363,11 +363,26 @@ function parseInmovillaMarkdown(input: {
     throw new Error("We could not extract any property images from that source.");
   }
 
+  const features = inferFeatures(markdown);
+  const generatedContent = generateImportedPropertyContent({
+    bathrooms,
+    bedrooms,
+    features,
+    interiorSqm: usableSqm ?? builtSqm,
+    listingMode,
+    location,
+    priceEuro: salePrice,
+    rentPriceEuro: rentPrice,
+    sourceDescription: description,
+    sourceTitle: title,
+    type,
+  });
+
   const property = createImportedPropertyRecord({
     bathrooms,
     bedrooms,
-    description,
-    features: inferFeatures(markdown),
+    description: generatedContent.description,
+    features,
     galleryUrls: images.slice(1),
     interiorSqm: usableSqm ?? builtSqm,
     listingMode,
@@ -378,8 +393,8 @@ function parseInmovillaMarkdown(input: {
     referenceCode,
     rentPriceEuro: rentPrice,
     rentPricePeriod: rentPrice ? inferRentPricePeriod(lines) : null,
-    shortDescription,
-    title,
+    shortDescription: generatedContent.shortDescription || shortDescription,
+    title: generatedContent.title,
     type,
   });
 
@@ -428,12 +443,27 @@ function parseGenericPropertyPage(input: {
   const bathrooms = extractLabeledNumber(fullText, ["bathroom", "bathrooms", "bath", "baths", "baños", "banos"]) ?? 0;
   const interiorSqm = extractSquareMeters(fullText);
   const location = extractGenericLocation(title, description) ?? "Costa Blanca";
+  const type = mapPropertyType(`${title} ${description}`);
+  const features = inferFeatures(fullText);
+  const generatedContent = generateImportedPropertyContent({
+    bathrooms,
+    bedrooms,
+    features,
+    interiorSqm,
+    listingMode,
+    location,
+    priceEuro,
+    rentPriceEuro,
+    sourceDescription: description,
+    sourceTitle: title,
+    type,
+  });
 
   const property = createImportedPropertyRecord({
     bathrooms,
     bedrooms,
-    description,
-    features: inferFeatures(fullText),
+    description: generatedContent.description,
+    features,
     galleryUrls: images.slice(1),
     interiorSqm,
     listingMode,
@@ -444,9 +474,9 @@ function parseGenericPropertyPage(input: {
     referenceCode: createReferenceCodeFromUrl(resolvedUrl),
     rentPriceEuro,
     rentPricePeriod: rentPriceEuro ? "month" : null,
-    shortDescription: truncateText(description, 220),
-    title,
-    type: mapPropertyType(`${title} ${description}`),
+    shortDescription: generatedContent.shortDescription,
+    title: generatedContent.title,
+    type,
   });
 
   const notes = [
@@ -466,6 +496,155 @@ function parseGenericPropertyPage(input: {
     resolvedUrl,
     sourceUrl,
   };
+}
+
+type ImportedContentFacts = {
+  bathrooms: number;
+  bedrooms: number;
+  features: PropertyFeature[];
+  interiorSqm: number | null;
+  listingMode: ListingMode;
+  location: string;
+  priceEuro: number;
+  rentPriceEuro: number | null;
+  sourceDescription: string;
+  sourceTitle: string | null;
+  type: PropertyType;
+};
+
+function generateImportedPropertyContent(facts: ImportedContentFacts) {
+  const sourceText = htmlToText(`${facts.sourceTitle ?? ""}. ${facts.sourceDescription}`);
+  const typeLabel = getImportedPropertyTypeLabel(facts.type);
+  const featureLabels = facts.features.map(getImportedFeatureLabel);
+  const qualityPrefix = inferQualityPrefix(sourceText);
+  const titleParts = [
+    qualityPrefix,
+    facts.bedrooms > 0 ? `${facts.bedrooms}-bedroom` : null,
+    typeLabel,
+    facts.location ? `in ${facts.location}` : null,
+  ].filter((item): item is string => Boolean(item));
+  const title = titleParts.join(" ").replace(/\s+/g, " ").trim() || cleanTitle(facts.sourceTitle) || "Imported property";
+  const detailFacts = [
+    facts.bedrooms > 0 ? `${facts.bedrooms} bedroom${facts.bedrooms === 1 ? "" : "s"}` : null,
+    facts.bathrooms > 0 ? `${facts.bathrooms} bathroom${facts.bathrooms === 1 ? "" : "s"}` : null,
+    facts.interiorSqm ? `${facts.interiorSqm} m2 interior` : null,
+  ].filter((item): item is string => Boolean(item));
+  const priceLine = facts.listingMode === "rent" && facts.rentPriceEuro
+    ? `available to rent from ${formatImportedPrice(facts.rentPriceEuro)}`
+    : facts.priceEuro > 0
+      ? `listed for ${formatImportedPrice(facts.priceEuro)}`
+      : "ready for review";
+  const featureSentence = featureLabels.length > 0
+    ? `Standout features include ${formatList(featureLabels.slice(0, 5))}.`
+    : "The listing has been imported for review with the available source details.";
+  const sourceSummary = cleanSourceDescription(facts.sourceDescription, facts.sourceTitle);
+  const shortDescription = truncateText(
+    [
+      `${title} ${priceLine}.`,
+      detailFacts.length > 0 ? `It includes ${formatList(detailFacts)}.` : null,
+      featureLabels[0] ? `Highlights include ${formatList(featureLabels.slice(0, 3))}.` : null,
+    ].filter((item): item is string => Boolean(item)).join(" "),
+    220,
+  );
+  const description = [
+    `${title} is a ${typeLabel} ${facts.location ? `in ${facts.location}` : "on the Costa Blanca"} ${priceLine}.`,
+    detailFacts.length > 0
+      ? `The imported details show ${formatList(detailFacts)}, giving the draft a practical starting point for qualification and presentation.`
+      : "The imported source did not expose a full room breakdown, so the draft should be reviewed before publishing.",
+    featureSentence,
+    sourceSummary
+      ? `Source notes: ${sourceSummary}`
+      : "Review the original source link and complete any missing lifestyle, condition, community, and availability details before publishing.",
+  ].join("\n\n");
+
+  return {
+    description,
+    features: facts.features,
+    shortDescription,
+    title,
+  };
+}
+
+function inferQualityPrefix(text: string) {
+  const normalized = normalizeText(text);
+
+  if (/renovated|reformad|reform|capitalnogo|modern|nuevo|new build|obra nueva/.test(normalized)) {
+    return "Renovated";
+  }
+
+  if (/luxury|lux|premium|exclusive/.test(normalized)) {
+    return "Luxury";
+  }
+
+  if (/sea view|vistas al mar|sea-view|frontline|beachfront/.test(normalized)) {
+    return "Sea-view";
+  }
+
+  return "Imported";
+}
+
+function getImportedPropertyTypeLabel(type: PropertyType) {
+  return {
+    apartment: "apartment",
+    bungalow: "bungalow",
+    finca: "finca",
+    penthouse: "penthouse",
+    townhouse: "townhouse",
+    villa: "villa",
+  }[type];
+}
+
+function getImportedFeatureLabel(feature: PropertyFeature) {
+  return {
+    air_conditioning: "air conditioning",
+    furnished: "furnishing",
+    garage: "garage parking",
+    garden: "garden space",
+    gated_community: "a gated community",
+    heating: "heating",
+    lift: "lift access",
+    new_build: "new-build condition",
+    parking: "parking",
+    pet_friendly: "pet-friendly potential",
+    pool: "a pool",
+    sauna: "sauna facilities",
+    sea_view: "sea views",
+    terrace: "a terrace",
+    tourist_license: "tourist licence potential",
+  }[feature];
+}
+
+function formatImportedPrice(value: number) {
+  return new Intl.NumberFormat("en-US", {
+    currency: "EUR",
+    maximumFractionDigits: 0,
+    style: "currency",
+  }).format(value);
+}
+
+function formatList(items: string[]) {
+  if (items.length <= 1) {
+    return items[0] ?? "";
+  }
+
+  if (items.length === 2) {
+    return `${items[0]} and ${items[1]}`;
+  }
+
+  return `${items.slice(0, -1).join(", ")}, and ${items.at(-1)}`;
+}
+
+function cleanSourceDescription(description: string, title: string | null) {
+  const cleaned = htmlToText(description)
+    .replace(title ?? "", "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!cleaned || cleaned.length < 40) {
+    return "";
+  }
+
+  return truncateText(cleaned, 420);
 }
 
 function createImportedPropertyRecord(input: {
