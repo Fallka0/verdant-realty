@@ -19,6 +19,14 @@ type PropertyImportAssistantProps = {
 
 type ImportResponse = ImportedPropertyPayload | { error: string };
 
+function getImportError(payload: ImportResponse | null) {
+  if (!payload) {
+    return "The property could not be imported.";
+  }
+
+  return "error" in payload ? payload.error : "The property could not be imported.";
+}
+
 export function PropertyImportAssistant({
   copy,
   hasImportedDraft,
@@ -46,7 +54,7 @@ export function PropertyImportAssistant({
         const payload = (await response.json().catch(() => null)) as ImportResponse | null;
 
         if (!response.ok || !payload || "error" in payload) {
-          throw new Error(payload?.error ?? "The property could not be imported.");
+          throw new Error(getImportError(payload));
         }
 
         onImported(payload);
