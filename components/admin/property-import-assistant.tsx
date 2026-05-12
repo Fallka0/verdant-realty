@@ -1,6 +1,7 @@
 "use client";
 
 import { type FormEvent, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 
 import { type ImportedPropertyPayload } from "@/lib/property-import";
 
@@ -18,13 +19,32 @@ type PropertyImportAssistantProps = {
 };
 
 type ImportResponse = ImportedPropertyPayload | { error: string };
+type BulkImportResponse = {
+  created: Array<{
+    id: string;
+    slug: string;
+    title: string;
+    url: string;
+  }>;
+  errors: Array<{
+    error: string;
+    url: string;
+  }>;
+};
 
-function getImportError(payload: ImportResponse | null) {
+function getImportError(payload: ImportResponse | BulkImportResponse | null) {
   if (!payload) {
     return "The property could not be imported.";
   }
 
   return "error" in payload ? payload.error : "The property could not be imported.";
+}
+
+function extractUrls(value: string) {
+  return value
+    .split(/[\s,]+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
 }
 
 export function PropertyImportAssistant({
@@ -33,6 +53,7 @@ export function PropertyImportAssistant({
   onImported,
   onReset,
 }: PropertyImportAssistantProps) {
+  const router = useRouter();
   const [url, setUrl] = useState("");
   const [feedback, setFeedback] = useState<string>("");
   const [isPending, startTransition] = useTransition();
@@ -43,18 +64,31 @@ export function PropertyImportAssistant({
 
     startTransition(async () => {
       try {
+        const urls = extractUrls(url);
+        const shouldCreateDrafts = urls.length > 1;
         const response = await fetch("/api/admin/property-import", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ url }),
+          body: JSON.stringify(shouldCreateDrafts ? { createDrafts: true, urls } : { url }),
         });
 
-        const payload = (await response.json().catch(() => null)) as ImportResponse | null;
+        const payload = (await response.json().catch(() => null)) as ImportResponse | BulkImportResponse | null;
 
         if (!response.ok || !payload || "error" in payload) {
           throw new Error(getImportError(payload));
+        }
+
+        if ("created" in payload) {
+          setFeedback(
+            `${payload.created.length} draft listing${payload.created.length === 1 ? "" : "s"} created.${
+              payload.errors.length > 0 ? ` ${payload.errors.length} link${payload.errors.length === 1 ? "" : "s"} failed.` : ""
+            }`,
+          );
+          setUrl("");
+          router.refresh();
+          return;
         }
 
         onImported(payload);
@@ -74,13 +108,13 @@ export function PropertyImportAssistant({
       </div>
 
       <form className="property-import-form" onSubmit={handleSubmit}>
-        <input
+        <textarea
           aria-label={copy.cta}
           autoCapitalize="off"
           autoCorrect="off"
           onChange={(event) => setUrl(event.target.value)}
           placeholder={copy.placeholder}
-          type="url"
+          rows={4}
           value={url}
         />
         <div className="property-import-actions">

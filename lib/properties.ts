@@ -550,6 +550,14 @@ export function buildPropertyContentFromInput(input: ReturnType<typeof parseProp
   };
 }
 
+export function buildPropertyContentFromRecord(property: PropertyRecord): PropertyContentFields {
+  return {
+    title: property.title,
+    shortDescription: property.shortDescription,
+    description: property.description,
+  };
+}
+
 export function createPropertyContentHash(content: PropertyContentFields) {
   return createHash("sha256")
     .update(JSON.stringify({ content, propertyTranslationVersion }))
