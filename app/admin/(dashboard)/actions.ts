@@ -12,6 +12,7 @@ import {
   parsePropertyFormData,
   validatePropertyInput,
 } from "@/lib/properties";
+import { propertyStatuses, type PropertyStatus } from "@/lib/property-shared";
 
 function getConfiguredAdminClient() {
   const supabase = createAdminClient();
@@ -130,6 +131,30 @@ export async function updatePropertyAvailabilityAction(propertyId: string, slug:
     .update({
       availability_end: availabilityEnd,
       availability_start: availabilityStart,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", propertyId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  revalidatePropertyPaths(slug);
+}
+
+export async function updatePropertyStatusAction(propertyId: string, slug: string, formData: FormData) {
+  await requireAdminUser();
+  const supabase = getConfiguredAdminClient();
+  const status = String(formData.get("status") ?? "");
+
+  if (!propertyStatuses.includes(status as PropertyStatus)) {
+    throw new Error("Invalid property status.");
+  }
+
+  const { error } = await supabase
+    .from("properties")
+    .update({
+      status,
       updated_at: new Date().toISOString(),
     })
     .eq("id", propertyId);

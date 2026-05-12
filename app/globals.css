@@ -2276,6 +2276,29 @@ textarea {
   color: var(--muted);
 }
 
+.admin-status-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 14rem;
+}
+
+.admin-status-select {
+  min-height: 2.35rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid rgba(18, 53, 36, 0.12);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  outline: none;
+  text-transform: uppercase;
+}
+
+.admin-status-form .button {
+  min-height: 2.35rem;
+  padding: 0.45rem 0.8rem;
+}
+
 .table-link {
   display: inline-flex;
   align-items: center;

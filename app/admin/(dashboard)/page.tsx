@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { PropertyAvailabilityForm } from "@/components/admin/property-availability-form";
+import { PropertyStatusForm } from "@/components/admin/property-status-form";
 import { adminCopy, resolveAdminLocale } from "@/lib/admin-copy";
 import { getAdminInquiries } from "@/lib/inquiries";
 import { formatPrice, getPropertyPreviewImageUrl } from "@/lib/property-shared";
@@ -94,9 +95,7 @@ export default async function AdminDashboardPage() {
                       </div>
                     </td>
                     <td>
-                      <span className={`admin-status-pill admin-status-${property.status}`}>
-                        {copy.statusLabels[property.status]}
-                      </span>
+                      <PropertyStatusForm copy={copy} property={property} />
                     </td>
                     <td>{copy.typeLabels[property.type]}</td>
                     <td>{property.location}</td>
