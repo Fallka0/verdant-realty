@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
+import { cookies } from "next/headers";
+
+import { resolvePublicLocale } from "@/lib/public-copy";
 
 import "./globals.css";
 
@@ -28,15 +31,18 @@ export const metadata: Metadata = {
     "Milla Homes is a boutique real estate brand with calm strategy, polished presentation, and concierge-level client care.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const locale = resolvePublicLocale(cookieStore.get("verdant-locale")?.value);
+
   return (
     // cormorant.variable puts --font-display on <html> for heading CSS rules
     // dmSans.className applies DM Sans directly — no variable indirection needed
-    <html lang="en" className={cormorant.variable}>
+    <html lang={locale} className={cormorant.variable}>
       <body className={dmSans.className}>{children}</body>
     </html>
   );
