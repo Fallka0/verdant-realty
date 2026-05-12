@@ -2,7 +2,6 @@ import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 
-import { PropertyAvailabilityForm } from "@/components/admin/property-availability-form";
 import { PropertyStatusForm } from "@/components/admin/property-status-form";
 import { adminCopy, resolveAdminLocale } from "@/lib/admin-copy";
 import { getAdminInquiries } from "@/lib/inquiries";
@@ -74,7 +73,6 @@ export default async function AdminDashboardPage() {
                   <th>{copy.dashboard.table.type}</th>
                   <th>{copy.dashboard.table.location}</th>
                   <th>{copy.dashboard.table.price}</th>
-                  <th>{copy.form.fields.availabilityStart}</th>
                   <th />
                 </tr>
               </thead>
@@ -101,9 +99,6 @@ export default async function AdminDashboardPage() {
                     <td>{property.location}</td>
                     <td>
                       <strong>{formatPrice(property.priceEuro)}</strong>
-                    </td>
-                    <td>
-                      <PropertyAvailabilityForm copy={copy.form} property={property} />
                     </td>
                     <td>
                       <Link className="table-link" href={`/admin/properties/${property.id}`}>

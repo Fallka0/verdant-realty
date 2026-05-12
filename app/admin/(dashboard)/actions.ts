@@ -120,28 +120,6 @@ export async function deletePropertyAction(propertyId: string, slug: string) {
   redirect("/admin");
 }
 
-export async function updatePropertyAvailabilityAction(propertyId: string, slug: string, formData: FormData) {
-  await requireAdminUser();
-  const supabase = getConfiguredAdminClient();
-  const availabilityStart = String(formData.get("availabilityStart") ?? "").trim() || null;
-  const availabilityEnd = String(formData.get("availabilityEnd") ?? "").trim() || null;
-
-  const { error } = await supabase
-    .from("properties")
-    .update({
-      availability_end: availabilityEnd,
-      availability_start: availabilityStart,
-      updated_at: new Date().toISOString(),
-    })
-    .eq("id", propertyId);
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  revalidatePropertyPaths(slug);
-}
-
 export async function updatePropertyStatusAction(propertyId: string, slug: string, formData: FormData) {
   await requireAdminUser();
   const supabase = getConfiguredAdminClient();
