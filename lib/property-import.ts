@@ -5,9 +5,12 @@ import {
   type PropertyType,
   type RentPricePeriod,
 } from "@/lib/property-shared";
+import { createAdminClient } from "@/lib/supabase/server";
 
 const importUserAgent =
   "Mozilla/5.0 (compatible; VerdantRealtyImporter/1.0; +https://github.com/Fallka0/verdant-realty)";
+const bucketName = "property-images";
+const maxImageSizeBytes = 8 * 1024 * 1024;
 
 const ignoredImagePatterns = [
   /\/new\/app\/images\/nofoto\.jpg/i,
@@ -31,17 +34,23 @@ export async function importPropertyFromUrl(rawUrl: string): Promise<ImportedPro
   }
 
   const resolvedUrl = await resolveInmovillaPropertyUrl(sourceUrl);
-  const markdown = await fetchReaderMarkdown(resolvedUrl);
+  const [markdown, html] = await Promise.all([
+    fetchReaderMarkdown(resolvedUrl),
+    fetchText(resolvedUrl).catch(() => ""),
+  ]);
 
   if (/Propiedad no disponible/i.test(markdown)) {
     throw new Error("This property is no longer publicly available in the source system.");
   }
 
-  return parseInmovillaMarkdown({
+  const imported = parseInmovillaMarkdown({
+    html,
     markdown,
     resolvedUrl,
     sourceUrl: sourceUrl.toString(),
   });
+
+  return mirrorImportedImages(imported);
 }
 
 function normalizeSourceUrl(rawUrl: string) {
@@ -113,12 +122,166 @@ async function fetchText(url: string, init?: RequestInit) {
   return response.text();
 }
 
+async function mirrorImportedImages(imported: ImportedPropertyPayload) {
+  const imageUrls = [imported.property.mainImageUrl, ...imported.property.galleryUrls];
+
+  try {
+    await ensureImageBucket();
+  } catch {
+    return {
+      ...imported,
+      notes: [
+        ...imported.notes,
+        "Imported images could not be copied into storage and still use the original source URLs.",
+      ],
+    };
+  }
+
+  const mirrorResults = await Promise.all(
+    imageUrls.map(async (imageUrl) => ({
+      originalUrl: imageUrl,
+      mirroredUrl: await uploadImportedImage({
+        imageUrl,
+        referenceCode: imported.property.referenceCode,
+        referer: imported.resolvedUrl,
+        title: imported.property.title,
+      }).catch(() => null),
+    })),
+  );
+  const mirroredUrls = mirrorResults.map((result) => result.mirroredUrl ?? result.originalUrl);
+  const failedCount = mirrorResults.filter((result) => !result.mirroredUrl).length;
+
+  return {
+    ...imported,
+    notes: [
+      ...imported.notes,
+      failedCount > 0
+        ? `${failedCount} imported image${failedCount === 1 ? "" : "s"} could not be copied into storage and still use the original source URL.`
+        : null,
+    ].filter((note): note is string => Boolean(note)),
+    property: {
+      ...imported.property,
+      galleryUrls: mirroredUrls.slice(1),
+      mainImageUrl: mirroredUrls[0] ?? imported.property.mainImageUrl,
+    },
+  };
+}
+
+async function uploadImportedImage(input: {
+  imageUrl: string;
+  referenceCode: string;
+  referer: string;
+  title: string;
+}) {
+  const supabase = createAdminClient();
+
+  if (!supabase) {
+    throw new Error("Supabase service role key is missing.");
+  }
+
+  const response = await fetch(input.imageUrl, {
+    headers: {
+      "User-Agent": importUserAgent,
+      Accept: "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
+      Referer: input.referer,
+    },
+    signal: AbortSignal.timeout(20_000),
+  });
+
+  if (!response.ok) {
+    throw new Error(`The image request failed with status ${response.status}.`);
+  }
+
+  const contentType = response.headers.get("content-type")?.split(";")[0]?.trim().toLowerCase() ?? "";
+
+  if (!/^image\/(?:avif|gif|jpe?g|png|webp)$/.test(contentType)) {
+    throw new Error("The imported image URL did not return an image.");
+  }
+
+  const buffer = Buffer.from(await response.arrayBuffer());
+
+  if (buffer.byteLength > maxImageSizeBytes) {
+    throw new Error("The imported image is larger than the storage upload limit.");
+  }
+
+  const extension = getImageExtension(input.imageUrl, contentType);
+  const folderName = [input.referenceCode, input.title].map(slugify).filter(Boolean).join("-") || "imported-property";
+  const fileName = `${folderName}/${Date.now()}-${Math.random().toString(36).slice(2)}.${extension}`;
+  const { error } = await supabase.storage.from(bucketName).upload(fileName, buffer, {
+    contentType,
+    upsert: false,
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from(bucketName).getPublicUrl(fileName);
+
+  return publicUrl;
+}
+
+async function ensureImageBucket() {
+  const supabase = createAdminClient();
+
+  if (!supabase) {
+    throw new Error("Supabase service role key is missing.");
+  }
+
+  const { data: bucket } = await supabase.storage.getBucket(bucketName);
+
+  if (!bucket) {
+    const { error } = await supabase.storage.createBucket(bucketName, {
+      public: true,
+      fileSizeLimit: maxImageSizeBytes,
+      allowedMimeTypes: ["image/avif", "image/jpeg", "image/png", "image/webp", "image/gif"],
+    });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return;
+  }
+
+  if (!bucket.public) {
+    const { error } = await supabase.storage.updateBucket(bucketName, {
+      public: true,
+      fileSizeLimit: maxImageSizeBytes,
+      allowedMimeTypes: ["image/avif", "image/jpeg", "image/png", "image/webp", "image/gif"],
+    });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+  }
+}
+
+function getImageExtension(imageUrl: string, contentType: string) {
+  const fromUrl = new URL(imageUrl).pathname.split(".").pop()?.toLowerCase();
+
+  if (fromUrl && /^(avif|gif|jpe?g|png|webp)$/.test(fromUrl)) {
+    return fromUrl === "jpeg" ? "jpg" : fromUrl;
+  }
+
+  const fromType = contentType.split("/").pop()?.toLowerCase() ?? "jpg";
+
+  if (fromType === "jpeg") {
+    return "jpg";
+  }
+
+  return /^(avif|gif|jpg|png|webp)$/.test(fromType) ? fromType : "jpg";
+}
+
 function parseInmovillaMarkdown(input: {
+  html: string;
   markdown: string;
   resolvedUrl: string;
   sourceUrl: string;
 }): ImportedPropertyPayload {
-  const { markdown, resolvedUrl, sourceUrl } = input;
+  const { html, markdown, resolvedUrl, sourceUrl } = input;
   const lines = markdown
     .split(/\r?\n/)
     .map((line) => line.trim())
@@ -141,7 +304,10 @@ function parseInmovillaMarkdown(input: {
   const salePrice = extractPriceBetween(lines, "Venta", "Alquilar") ?? 0;
   const rentPrice = extractPriceBetween(lines, "Alquilar", "Traspaso");
   const listingMode = deriveListingMode(salePrice, rentPrice);
-  const images = extractImageUrls(markdown);
+  const images = mergeImageUrls(
+    extractHtmlImageUrls(html, resolvedUrl),
+    extractMarkdownImageUrls(markdown),
+  );
 
   if (!title) {
     throw new Error("We could not extract a property title from that source.");
@@ -419,13 +585,92 @@ function deriveListingMode(salePrice: number, rentPrice: number | null): Listing
   return "sale";
 }
 
-function extractImageUrls(markdown: string) {
+function extractMarkdownImageUrls(markdown: string) {
   const matches = Array.from(markdown.matchAll(/!\[Image \d+\]\((https?:\/\/[^)\s]+)\)/g), (match) => match[1]);
+  return dedupeImageUrls(matches);
+}
+
+function extractHtmlImageUrls(html: string, baseUrl: string) {
+  if (!html) {
+    return [];
+  }
+
+  const candidates = [
+    ...extractAttributeImageUrls(html),
+    ...extractSrcsetImageUrls(html),
+    ...extractCssImageUrls(html),
+    ...extractEscapedImageUrls(html),
+  ];
+
+  return dedupeImageUrls(candidates.flatMap((url) => normalizeImageCandidate(url, baseUrl)));
+}
+
+function extractAttributeImageUrls(html: string) {
+  return Array.from(
+    html.matchAll(
+      /\b(?:src|href|data-src|data-original|data-lazy|data-full|data-image|data-url)=["']([^"']+)["']/gi,
+    ),
+    (match) => match[1],
+  );
+}
+
+function extractSrcsetImageUrls(html: string) {
+  return Array.from(html.matchAll(/\b(?:srcset|data-srcset)=["']([^"']+)["']/gi), (match) => match[1])
+    .flatMap((srcset) => srcset.split(","))
+    .map((candidate) => candidate.trim().split(/\s+/)[0])
+    .filter(Boolean);
+}
+
+function extractCssImageUrls(html: string) {
+  return Array.from(html.matchAll(/url\((["']?)([^"')]+)\1\)/gi), (match) => match[2]);
+}
+
+function extractEscapedImageUrls(html: string) {
+  return Array.from(html.matchAll(/https?:\\?\/\\?\/[^"'\\\s<>)]+/gi), (match) => match[0]);
+}
+
+function normalizeImageCandidate(candidate: string, baseUrl: string) {
+  const decoded = decodeHtmlEntities(candidate)
+    .replace(/\\\//g, "/")
+    .trim();
+
+  if (
+    !decoded ||
+    decoded.startsWith("data:") ||
+    decoded.startsWith("blob:") ||
+    decoded.startsWith("#")
+  ) {
+    return [];
+  }
+
+  try {
+    const url = new URL(decoded, baseUrl);
+    url.hash = "";
+    return [url.toString()];
+  } catch {
+    return [];
+  }
+}
+
+function decodeHtmlEntities(value: string) {
+  return value
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">");
+}
+
+function mergeImageUrls(...groups: string[][]) {
+  return dedupeImageUrls(groups.flat());
+}
+
+function dedupeImageUrls(urls: string[]) {
   const deduped: string[] = [];
   const seen = new Set<string>();
 
-  for (const url of matches) {
-    if (ignoredImagePatterns.some((pattern) => pattern.test(url))) {
+  for (const url of urls) {
+    if (!isImportableImageUrl(url)) {
       continue;
     }
 
@@ -438,6 +683,24 @@ function extractImageUrls(markdown: string) {
   }
 
   return deduped;
+}
+
+function isImportableImageUrl(url: string) {
+  if (ignoredImagePatterns.some((pattern) => pattern.test(url))) {
+    return false;
+  }
+
+  try {
+    const parsed = new URL(url);
+    const pathname = parsed.pathname.toLowerCase();
+
+    return (
+      /\.(?:avif|gif|jpe?g|png|webp)$/i.test(pathname) ||
+      /\/(?:fotos?|images?|imagenes?|photos?)\//i.test(pathname)
+    );
+  } catch {
+    return false;
+  }
 }
 
 function mapPropertyType(value: string | null): PropertyType {
